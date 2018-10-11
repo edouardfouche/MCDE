@@ -42,7 +42,7 @@ The application accepts various arguments. The first two (`-t <task>` and `-f <f
 
 - `-t <task>`: Task to perform. Possible choices:
     - `EstimateDependency`: Estimates the dependency of a single subspace (with 2 or more dimensions).
-    - `EstimateDependencyMatrix`: Estimates the 2-D dependency matrix, i.e., the dependency of every pairs in the data. 
+    - `EstimateDependencyMatrix`: Estimates the 2-D dependency matrix, i.e., the dependency of each pair in the data. 
 - `-f <file>`: the path to the data source (a comma-separated text file  with 1 line header) in your system.
 - `-a <approach>`: The approach to use for dependency estimation. Possible choices: 
     - MCDE approaches: `MWP`(Default)
@@ -83,7 +83,7 @@ Preprocessing time: 	 32.325762 ms (cpu), 36.009404 ms (wall)
 Computation time: 	 37.12567 ms (cpu), 37.323588 ms (wall)
 ```
 
-- Independent dependency (2-D) 
+- Linear dependent data (2-D) 
 
 ```bash
 fouchee@Modena:~/git/MCDE$ java -jar target/scala-2.11/MCDE-1.0.jar -t EstimateDependency -f src/test/resources/data/Linear-2-0.0.csv -a MWP -m 50 -d 0,1
