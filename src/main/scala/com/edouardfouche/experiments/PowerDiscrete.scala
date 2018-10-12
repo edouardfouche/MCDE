@@ -78,9 +78,9 @@ object PowerDiscrete extends Experiment {
 
       var ValueMap = scala.collection.mutable.Map[String, Array[Double]]()
 
-      info(s"Computing Null Distribution")
+      //info(s"Computing Null Distribution")
       for (test <- tests.par) {
-        info(s"Preparing data sets for Computing Null Distribution ($test)")
+        //info(s"Preparing data sets for Computing Null Distribution ($test)")
         val preprocessing = (1 to nRep).map(x => {
           val data = Independent(nDim, 0.0).generate(n)//.transpose
           StopWatch.measureTime(test.preprocess(data))
@@ -89,7 +89,7 @@ object PowerDiscrete extends Experiment {
         val prepCPUtime = preprocessing.map(_._1)
         val prepWalltime = preprocessing.map(_._2)
         val preprocessed = preprocessing.map(_._3)
-        info(s"Done preparing data sets computing Null Distribution ($test)")
+        //info(s"Done preparing data sets computing Null Distribution ($test)")
 
         // I think the collection of datasets is already parallel
         val values = preprocessed.map(x => {
@@ -131,9 +131,9 @@ object PowerDiscrete extends Experiment {
         summary.add("avgPrepCPUtime", mean(prepCPUtime))
         summary.add("stdPrepCPUtime", stddev(prepCPUtime))
         summary.write(summaryPath)
-        info(s"Done Computing Null Distribution ($test)")
+        //info(s"Done Computing Null Distribution ($test)")
       }
-      info(s"Done Computing Null Distribution")
+      //info(s"Done Computing Null Distribution")
 
       generators.par.foreach(x => comparePowerDiscrete(x, nDim, n, disc, tests, ThresholdMap90, ThresholdMap95, ThresholdMap99, noiseLevels))
     }
