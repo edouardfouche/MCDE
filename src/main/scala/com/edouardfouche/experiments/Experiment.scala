@@ -360,6 +360,7 @@ trait Experiment extends LazyLogging {
               test.contrast(x, x.indices.toSet)
             } catch {
               case e: Exception => {
+                // some tests (such as UDS) create much unexpected exceptions. This is just to catch them.
                 // info(s"Weird exception ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id} coerced to 0.0")
                 0.0
               }
