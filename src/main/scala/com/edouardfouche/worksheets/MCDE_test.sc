@@ -53,7 +53,9 @@ MAC().contrast(MAC().preprocess(independent_2D.open()), Set(0, 1))
 MAC().contrast(linear_2D.open(), Set(0, 1))
 
 val independent = Independent(3, 0.0).generate(1000)
-val linear = Linear(3, 0.0).generate(1000)
+val linear = Linear(3, 1.0/30.0).generate(1000)
+UDS().contrast(UDS().preprocess(independent), Set(0, 1, 2))
+UDS().contrast(UDS().preprocess(linear), Set(0, 1, 2))
 MAC().contrast(MAC().preprocess(independent), Set(0, 1, 2))
 MAC().contrast(MAC().preprocess(linear), Set(0, 1, 2))
 

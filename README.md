@@ -172,15 +172,15 @@ Computation time: 	 51.002643 ms (cpu), 1123.108306 ms (wall)
 ## Reproducing the experiments
 
 In this section, we explain how to reproduce the experiments from our paper. 
-The experiments creates about 21Mb of data and require about 14 hours 
-on a server with 16 cores at 2.2 Ghz, Java Open-JDK 8 and Scala 2.11.8. 
+The experiments creates about 20Mb of data and require about 16 hours 
+on a server with 20 cores at 2.2 Ghz, Java Open-JDK 8 and Scala 2.11.8. 
 Results are saved in the folder `experiments` as `.csv` files, along with logs.
 
 ### Power
 
 Evaluate the statistical power of MCDE/MWP and of the benchmark approaches against a panel of dependencies.
 ```
-sbt "run com.edouardfouche.experiments.Power"  # ~ 6.5 hours, 3Mb data
+sbt "run com.edouardfouche.experiments.Power"  # ~ 7 hours, 3Mb data
 ```
 
 ### PowerM
@@ -188,7 +188,7 @@ sbt "run com.edouardfouche.experiments.Power"  # ~ 6.5 hours, 3Mb data
 Evaluate the influence of parameter *M* w.r.t. the statistical power of MCDE/MWP. 
 
 ```
-sbt "run com.edouardfouche.experiments.PowerM" # ~ 8 minutes, 1Mb data
+sbt "run com.edouardfouche.experiments.PowerM" # ~ 10 minutes, 1Mb data
 ```
 
 ### PowerN
@@ -196,7 +196,7 @@ sbt "run com.edouardfouche.experiments.PowerM" # ~ 8 minutes, 1Mb data
 Evaluate the sensitivity of each approach w.r.t. *n*, the number data points. 
 
 ```
-sbt "run com.edouardfouche.experiments.PowerN" # ~ 2.5 hours, 5Mb data
+sbt "run com.edouardfouche.experiments.PowerN" # ~ 2.5 hours, 4Mb data
 ```
 
 ### PowerDiscrete
@@ -212,7 +212,7 @@ sbt "run com.edouardfouche.experiments.PowerDiscrete" # ~ 3 hours, 5Mb data
 Evaluate the scalability of each approach w.r.t. *n*, the number data points. 
 
 ```
-sbt "run com.edouardfouche.experiments.ScalabilityN" # ~ 45 minutes, 2Mb data
+sbt "run com.edouardfouche.experiments.ScalabilityN" # ~ 45 minutes, 5Mb data
 ```
 
 ### ScalabilityD
@@ -220,7 +220,7 @@ sbt "run com.edouardfouche.experiments.ScalabilityN" # ~ 45 minutes, 2Mb data
 Evaluate the scalability of each approach w.r.t. *d*, the number dimensions. 
 
 ```
-sbt "run com.edouardfouche.experiments.ScalabilityD" # ~ 1.5 hours, 2Mb data 
+sbt "run com.edouardfouche.experiments.ScalabilityD" # ~ 2.5 hours, 2Mb data 
 ```
 
 ## Visualize the results
