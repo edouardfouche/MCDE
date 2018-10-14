@@ -117,7 +117,7 @@ Preprocessing time: 	 39.954535 ms (cpu), 39.999726 ms (wall)
 Computation time: 	 85.453125 ms (cpu), 86.205151 ms (wall)
 ```
 
-For larger tables (e.g., with 100 dimensions), parallelism provides a significant runtime imporvement:
+For larger tables (e.g., with 100 dimensions), parallelism provides a significant runtime improvement:
 
 - Independent data (100-D, no parallelism)
 
