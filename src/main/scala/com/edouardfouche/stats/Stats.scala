@@ -24,6 +24,7 @@ trait Stats {
   type PreprocessedData <: Index
   val id: String
   val alpha: Double
+  val beta: Double
   val M: Int
 
   /**
