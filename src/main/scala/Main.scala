@@ -200,6 +200,7 @@ object Main extends LazyLogging {
 
     case "com.edouardfouche.experiments.Power" => Power.run()
     case "com.edouardfouche.experiments.PowerAlpha" => PowerAlpha.run()
+    case "com.edouardfouche.experiments.PowerBeta" => PowerBeta.run()
     case "com.edouardfouche.experiments.PowerDiscrete" => PowerDiscrete.run()
     case "com.edouardfouche.experiments.PowerM" => PowerM.run()
     case "com.edouardfouche.experiments.PowerN" => PowerN.run()

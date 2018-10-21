@@ -23,7 +23,6 @@ import com.typesafe.scalalogging.LazyLogging
   */
 trait Experiment extends LazyLogging {
   val alpha_range: Vector[Double]
-  val beta_range: Vector[Double]
   val M_range: Vector[Int]
   val nRep: Int
   val data: Vector[DataRef]

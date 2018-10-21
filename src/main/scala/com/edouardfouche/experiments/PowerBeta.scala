@@ -16,7 +16,7 @@
  */
 package com.edouardfouche.experiments
 
-object PowerAlpha extends PowerAlphaBeta{
-  val alpha_range = Vector(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
-  val beta_range = Vector(0.5)
+object PowerBeta extends PowerAlphaBeta{
+  val alpha_range = Vector(0.5)
+  val beta_range = Vector(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
 }
