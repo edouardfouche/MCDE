@@ -7,7 +7,7 @@ import com.edouardfouche.stats.StatsFactory
   * The idea is just to look how the number of points in slices deviate from the expected number
   * TODO: Not sure whether this is clever of not.
   */
-case class S(M: Int = 50, alpha: Double = 0.5, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
+case class S(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
   val id = "S"
   type PreprocessedData = AdjustedRankIndex
 
@@ -56,7 +56,7 @@ case class S(M: Int = 50, alpha: Double = 0.5, calibrate: Boolean = false, var p
       math.abs(slice.count(_ == true) - m.numRows * alpha)
     }).sum / M) * 2
     // TODO: I would need some kind of decorator to do that without have to redefine at lower levels
-    if (calibrate) Calibrator.calibrateValue(result, StatsFactory.getTest(this.id, this.M, this.alpha, calibrate = false, parallelize = 0), dimensions.size, m(0).length) // calibrateValue(result, dimensions.size, alpha, M)
+    if (calibrate) Calibrator.calibrateValue(result, StatsFactory.getTest(this.id, this.M, this.alpha, this.beta, calibrate = false, parallelize = 0), dimensions.size, m(0).length) // calibrateValue(result, dimensions.size, alpha, M)
     else result
   }
 }

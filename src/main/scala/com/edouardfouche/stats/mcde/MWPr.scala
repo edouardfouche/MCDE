@@ -24,7 +24,7 @@ import scala.annotation.tailrec
 /**
   * Simply like MWP but not adjusting and correcting for ties
   */
-case class MWPr(M: Int = 50, alpha: Double = 0.5, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
+case class MWPr(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
   override type PreprocessedData = RankIndex
   val id = "MWPr"
 
@@ -49,9 +49,9 @@ case class MWPr(M: Int = 50, alpha: Double = 0.5, calibrate: Boolean = false, va
     //val cut = getSafeCut(scala.util.Random.nextInt(reference.length + 1), reference)
 
     //val cutLength = (indexSelection.length*alpha).toInt
-    val sliceStart = scala.util.Random.nextInt((indexSelection.length * (1-alpha)).toInt)
+    val sliceStart = scala.util.Random.nextInt((indexSelection.length * (1-beta)).toInt)
     //val sliceEndSearchStart = (sliceStart + (indexSelection.length * alpha).toInt).min(indexSelection.length - 1) // this is rather a dirty fix
-    val sliceEnd = sliceStart + (indexSelection.length * alpha).toInt//.min(indexSelection.length - 1)
+    val sliceEnd = sliceStart + (indexSelection.length * beta).toInt//.min(indexSelection.length - 1)
 
     //println(s"sliceStart: $sliceStart, sliceEnd: $sliceEnd, reference: $reference")
 

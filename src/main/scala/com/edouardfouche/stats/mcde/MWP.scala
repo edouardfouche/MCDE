@@ -25,9 +25,10 @@ import scala.annotation.tailrec
   * Compute the average accross the p-values of all the slices, but this time do the tie correction
   * The tie correction is precomputed as a Map, which gives for each distinct rank a corresponding correction
   *
+  * @beta Added to loose the dependence of beta from alpha and in twoSample
   */
 
-case class MWP(M: Int = 50, alpha: Double = 0.5, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
+case class MWP(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5,  calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
   type PreprocessedData = CorrectedRankIndex
   val id = "MWP"
   //val slicer = Slicing3
@@ -47,9 +48,9 @@ case class MWP(M: Int = 50, alpha: Double = 0.5, calibrate: Boolean = false, var
     */
   def twoSample(index: PreprocessedData, reference: Int, indexSelection: Array[Boolean]): Double = {
     //require(reference.length == indexSelection.length, "reference and indexSelection should have the same size")
-    val start = scala.util.Random.nextInt((indexSelection.length * (1-alpha)).toInt)
+    val start = scala.util.Random.nextInt((indexSelection.length * (1-beta)).toInt)
     val sliceStart = index.getSafeCut(start, reference)
-    val sliceEndSearchStart = (sliceStart + (indexSelection.length * alpha).toInt).min(indexSelection.length - 1)
+    val sliceEndSearchStart = (sliceStart + (indexSelection.length * beta).toInt).min(indexSelection.length - 1)
     val sliceEnd = index.getSafeCut(sliceEndSearchStart, reference)
 
     //println(s"indexSelection.length: ${indexSelection.length}, start: $start, actualStart: $sliceStart, sliceEnd: $sliceEnd, reference: $reference")

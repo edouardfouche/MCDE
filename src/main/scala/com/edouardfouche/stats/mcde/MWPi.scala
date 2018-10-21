@@ -8,7 +8,7 @@ import scala.annotation.tailrec
 /**
   * Simply like MWP but does not correct ties (but adjust ranks still)
   */
-case class MWPi(M: Int = 50, alpha: Double = 0.5, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
+case class MWPi(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
   type PreprocessedData = AdjustedRankIndex
   val id = "MWPi"
 
@@ -33,8 +33,8 @@ case class MWPi(M: Int = 50, alpha: Double = 0.5, calibrate: Boolean = false, va
     //val cut = getSafeCut(scala.util.Random.nextInt(reference.length + 1), reference)
 
     //val cutLength = (indexSelection.length*alpha).toInt
-    val sliceStart = index.getSafeCut(scala.util.Random.nextInt((indexSelection.length * (1-alpha)).toInt), reference)
-    val sliceEndSearchStart = (sliceStart + (indexSelection.length * alpha).toInt).min(indexSelection.length - 1)
+    val sliceStart = index.getSafeCut(scala.util.Random.nextInt((indexSelection.length * (1-beta)).toInt), reference)
+    val sliceEndSearchStart = (sliceStart + (indexSelection.length * beta).toInt).min(indexSelection.length - 1)
     val sliceEnd = index.getSafeCut(sliceEndSearchStart, reference)
 
     val ref = index(reference)

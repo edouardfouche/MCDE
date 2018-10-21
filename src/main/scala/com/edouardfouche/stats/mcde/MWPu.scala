@@ -25,7 +25,7 @@ import scala.collection.parallel.ForkJoinTaskSupport
 /**
   * Same as MWP, but without border effects.
   */
-case class MWPu(M: Int = 50, alpha: Double = 0.5, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
+case class MWPu(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
   type PreprocessedData = CorrectedRankIndex
   val id = "MWPu"
   //val slicer = Slicing3
@@ -50,9 +50,9 @@ case class MWPu(M: Int = 50, alpha: Double = 0.5, calibrate: Boolean = false, va
     val flag = scala.util.Random.nextInt(2)
 
     val (sliceStart, sliceEnd) = if(flag == 1) {
-      val start = scala.util.Random.nextInt((indexSelection.length * (1-alpha)).toInt)
+      val start = scala.util.Random.nextInt((indexSelection.length * (1-beta)).toInt)
       val sliceStart = index.getSafeCut(start, reference)
-      val sliceEndSearchStart = (sliceStart + (indexSelection.length * alpha).toInt).min(indexSelection.length - 1)
+      val sliceEndSearchStart = (sliceStart + (indexSelection.length * beta).toInt).min(indexSelection.length - 1)
       val sliceEnd = index.getSafeCut(sliceEndSearchStart, reference)
       (sliceStart, sliceEnd)
     } else {

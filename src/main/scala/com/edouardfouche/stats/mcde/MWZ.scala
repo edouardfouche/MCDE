@@ -26,7 +26,7 @@ import scala.annotation.tailrec
   * Do not repartition on reference attribute
   */
 // Compact and nice explanation of the Z-score: http://ictedusrv.cumbria.ac.uk/maths/SecMaths/U4/page_80.htm
-case class MWZ(M: Int = 50, alpha: Double = 0.5, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
+case class MWZ(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
   type PreprocessedData = CorrectedRankIndex
   val id = "MWZ"
   //val slicer = Slicing3
@@ -51,8 +51,8 @@ case class MWZ(M: Int = 50, alpha: Double = 0.5, calibrate: Boolean = false, var
     //val cut = getSafeCut(scala.util.Random.nextInt(reference.length + 1), reference)
 
     //val cutLength = (indexSelection.length*alpha).toInt
-    val sliceStart = index.getSafeCut(scala.util.Random.nextInt((indexSelection.length * (1-alpha)).toInt), reference)
-    val sliceEndSearchStart = (sliceStart + (indexSelection.length * alpha).toInt).min(indexSelection.length - 1)
+    val sliceStart = index.getSafeCut(scala.util.Random.nextInt((indexSelection.length * (1-beta)).toInt), reference)
+    val sliceEndSearchStart = (sliceStart + (indexSelection.length * beta).toInt).min(indexSelection.length - 1)
     val sliceEnd = index.getSafeCut(sliceEndSearchStart, reference)
 
     val ref = index(reference)
