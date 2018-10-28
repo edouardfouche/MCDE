@@ -33,6 +33,7 @@ trait DataGenerator {
 
     // TODO: This is a duplicate from code in utils package. But somehow did not find how to import it
     def saveDataSet[T](res: Array[Array[T]], path: String): Unit = {
+      val dir = new File(s"${System.getProperty("user.home")}/datagenerator/").mkdirs()
       val file = new File(path)
       val bw = new BufferedWriter(new FileWriter(file))
       bw.write(s"${(1 to res(0).length) mkString ","} \n") // a little header
