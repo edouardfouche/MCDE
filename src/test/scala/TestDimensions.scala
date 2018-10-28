@@ -35,8 +35,9 @@ class TestDimensions extends FunSuite {
 
   val path = s"${System.getProperty("user.home")}/datagenerator_for_scalatest/"
   val indi = Independent(dims, 0.0)
-  indi.saveSample(path) // saveSample is final on Base Class
+  indi.saveSample(path) // saveSample is final on Base Class, dir gets destructed after test
   val data = Preprocess.open(path + indi.id + ".csv", header = 1, separator = ",", excludeIndex = false, dropClass = true)
+  val dataclass = DataRef("Independent-2-0.0", path + indi.id + ".csv", 1, ",", "Test")
 
 
 
@@ -59,7 +60,7 @@ class TestDimensions extends FunSuite {
   }
 
 
-  test("Checking if generated data has the format rows x cols"){
+  test("Checking if generated data is row oriented"){
 
     def test_dim (arr_l: List[Array[Array[Double]]], size: Int = 0, tru: Int = 0): Boolean = {
       if(arr_l == Nil) size == tru
@@ -81,18 +82,17 @@ class TestDimensions extends FunSuite {
     which_row_orient_index(all_indecies).map(x => assert(!x))
   }
 
-  test("Checking if saved no of rows by saveSample != dims"){
+  test("Checking if no of rows in saved data by saveSample != dims"){
     assert(get_dim(data)._1 != dims)
   }
 
   test("Checking if saved data using DataGenerator.saveSample loads row oriented using Preprocess.open() and DataRef(...).open()"){
+    val dataclassData = dataclass.open()
     assert(get_dim(data)._2 == dims)
+    assert(get_dim(dataclassData)._2 == dims)
   }
 
-
-
   test("Checking if DataRef(...).openAndPreprocess() loads col oriented data"){
-    val dataclass = DataRef("Independent-2-0.0", path + indi.id + ".csv", 1, ",", "Test")
 
     for{
       stat <- all_ex_stats ::: all_mcde_stats
