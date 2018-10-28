@@ -3,6 +3,7 @@ import com.edouardfouche.stats.Stats
 import com.edouardfouche.stats.external._
 import com.edouardfouche.stats.mcde._
 import com.edouardfouche.index._
+import com.edouardfouche.preprocess._
 
 // TODO: What if new generators?
 
@@ -87,13 +88,19 @@ noIndex(1).size
 
 // Check for Saved Data
 
+Independent(dims, 0.0).saveSample()
+val data2 = Preprocess.open(getClass.getResource("/data/Independent-2-0.0.csv").getPath, header = 1, separator = ",", excludeIndex = false, dropClass = true)
 
-Independent(dims, 0.0).saveSample() // TODO: If you call this without having a "datagenerator" dir it wont work
+get_dim(data2) // row oriented as should
 
+val dataclass = DataRef("Independent-2-0.0", getClass.getResource("/data/Independent-2-0.0.csv").getPath, 1, ",", "Test")
+val data3 = dataclass.open()
+get_dim(data3) // works as expected -> row oriented
 
+val data4 = dataclass.openAndPreprocess(CMI()).index
+get_dim(data4) // this is incorrect !!! TODO: Fix Bug at openAndPreProcess
 
-
-
+get_dim(exRank.index) // To compare, col oriented -> as it should
 
 
 
