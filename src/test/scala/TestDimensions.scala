@@ -1,9 +1,14 @@
 import com.edouardfouche.generators._
 import com.edouardfouche.index._
+import com.edouardfouche.preprocess._
 import com.edouardfouche.stats.Stats
 import org.scalatest.FunSuite
 import com.edouardfouche.stats.mcde._
 import com.edouardfouche.stats.external._
+import java.io.File
+import java.nio.file.{Paths, Files}
+import org.apache.commons.io.FileUtils
+
 
 
 class TestDimensions extends FunSuite {
@@ -12,9 +17,10 @@ class TestDimensions extends FunSuite {
   val dims = 2
   val arr = Independent(dims, 0.0).generate(rows)
 
-  // TODO: What if new Tests?
-  val all_ex_stats = List(CMI(), HICS(), II(), MAC(), MS(), TC(), UDS())
-  val all_mcde_stats = List(KS(), MWB(), MWP(), MWPi(), MWPr(), MWPs(), MWPu(), MWZ(), S())
+  // TODO: What if new Tests / Generators?
+  val all_ex_stats: List[Stats] = List(CMI(), HICS(), II(), MAC(), MS(), TC(), UDS())
+  val all_mcde_stats:List[Stats] = List(KS(), MWB(), MWP(), MWPi(), MWPr(), MWPs(), MWPu(), MWZ(), S())
+
 
   val all_indecies = List(new AdjustedRankIndex(arr), new CorrectedRankIndex(arr), new ExternalRankIndex(arr),
     new NonIndex(arr), new RankIndex(arr))
@@ -26,6 +32,12 @@ class TestDimensions extends FunSuite {
     NonCoexistence(dims, 0.0).generate(rows), Parabolic(1, dims, 0.0).generate(rows), RandomSteps(4, dims, 0.0).generate(rows),
     Sine(1, dims, 0.0).generate(rows), Sqrt(1, dims, 0.0).generate(rows), Star(dims, 0.0).generate(rows), StraightLines(dims, 0.0).generate(rows),
     Z(dims, 0.0).generate(rows), Zinv(dims, 0.0).generate(rows))
+
+  val path = s"${System.getProperty("user.home")}/datagenerator_for_scalatest/"
+  val indi = Independent(dims, 0.0)
+  indi.saveSample(path) // saveSample is final on Base Class
+  val data = Preprocess.open(path + indi.id + ".csv", header = 1, separator = ",", excludeIndex = false, dropClass = true)
+
 
 
   def get_dim[T](arr: Array[Array[T]]): (Int, Int) = {
@@ -68,4 +80,32 @@ class TestDimensions extends FunSuite {
   test("Checking if val index is col oriented for all Indexstructures"){
     which_row_orient_index(all_indecies).map(x => assert(!x))
   }
+
+  test("Checking if saved no of rows by saveSample != dims"){
+    assert(get_dim(data)._1 != dims)
+  }
+
+  test("Checking if saved data using DataGenerator.saveSample loads row oriented using Preprocess.open() and DataRef(...).open()"){
+    assert(get_dim(data)._2 == dims)
+  }
+
+
+
+  test("Checking if DataRef(...).openAndPreprocess() loads col oriented data"){
+    val dataclass = DataRef("Independent-2-0.0", path + indi.id + ".csv", 1, ",", "Test")
+
+    for{
+      stat <- all_ex_stats ::: all_mcde_stats
+      data = dataclass.openAndPreprocess(stat).index
+    } assert(get_dim(data)._1 == dims)
+  }
+
+
+
+  test("Dir Destructor"){
+    FileUtils.deleteDirectory(new File(path))
+    assert(Files.notExists(Paths.get(path)))
+  }
+
+
 }

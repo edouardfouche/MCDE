@@ -27,13 +27,13 @@ trait DataGenerator {
 
   def generate(n: Int): Array[Array[Double]]
 
-  def saveSample(path: String = s"${System.getProperty("user.home")}/datagenerator/", discretize: Int = 0): Unit = {
+  final def saveSample(path: String = s"${System.getProperty("user.home")}/datagenerator/", discretize: Int = 0): Unit = { // prevent overridding in subclasses so that TestDimensions using IndependentanData are guranteed to be correct. If override is nessesary adjust test.
+    val dir = new File(path).mkdirs()
     val data = if (discretize > 0) this.generate(1000, discretize)
     else this.generate(1000)
 
     // TODO: This is a duplicate from code in utils package. But somehow did not find how to import it
     def saveDataSet[T](res: Array[Array[T]], path: String): Unit = {
-      val dir = new File(s"${System.getProperty("user.home")}/datagenerator/").mkdirs()
       val file = new File(path)
       val bw = new BufferedWriter(new FileWriter(file))
       bw.write(s"${(1 to res(0).length) mkString ","} \n") // a little header
