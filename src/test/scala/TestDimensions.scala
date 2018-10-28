@@ -100,8 +100,6 @@ class TestDimensions extends FunSuite {
     } assert(get_dim(data)._1 == dims)
   }
 
-
-
   test("Dir Destructor"){
     FileUtils.deleteDirectory(new File(path))
     assert(Files.notExists(Paths.get(path)))

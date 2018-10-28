@@ -1,3 +1,5 @@
+import java.io.File
+
 import com.edouardfouche.generators._
 import com.edouardfouche.stats.Stats
 import com.edouardfouche.stats.external._
@@ -84,9 +86,9 @@ exRank(0).size
 noIndex(0).size
 noIndex(1).size
 
-// Check for Saved Data
+////// Check for Saved Data
 
-/*
+// Check own generated file
 Independent(dims, 0.0).saveSample()
 val path = s"${System.getProperty("user.home")}/datagenerator/Independent-2-0.0.csv"
 val data = Preprocess.open(path, header = 1, separator = ",", excludeIndex = false, dropClass = true)
@@ -100,7 +102,7 @@ val data6 = dataclass2.openAndPreprocess(MWP()).index
 get_dim(data6) // here was the bug --> openAndPreprocess applied an transpose
 
 
-
+// Check in getClass.getResource("/data/Independent-2-0.0.csv").getPath
 val data2 = Preprocess.open(getClass.getResource("/data/Independent-2-0.0.csv").getPath, header = 1, separator = ",", excludeIndex = false, dropClass = true)
 get_dim(data2) // row oriented as should
 
@@ -112,9 +114,24 @@ val data4 = dataclass.openAndPreprocess(CMI()).index
 get_dim(data4) // this was incorrect (see above) !!!
 get_dim(exRank.index) // To compare, col oriented -> as it should
 
-*/
 
-val path2 = s"${System.getProperty("user.home")}/datagenerator_for_scalatest/"
-val indi = Independent(dims, 0.0)
-indi.saveSample()
-path2 + indi.id + ".csv"
+// Check if Data in getClass.getResource("/data/").getPath has correct shape
+
+def getListOfFiles(dir: String):List[File] = {
+  val d = new File(dir)
+  if (d.exists && d.isDirectory) {
+    d.listFiles.filter(_.isFile).toList
+  } else {
+    List[File]()
+  }
+}
+
+val lst_of_f = getListOfFiles(getClass.getResource("/data/").getPath).map(x => x.getAbsolutePath)
+
+{for{
+  f <- lst_of_f
+  data = Preprocess.open(f, header = 1, separator = ",", excludeIndex = false, dropClass = true)
+  if get_dim(data)._1 == 1000
+} yield true}.size == lst_of_f.size
+
+// --> Data is correct
