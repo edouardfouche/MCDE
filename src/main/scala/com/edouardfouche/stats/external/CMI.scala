@@ -33,7 +33,7 @@ case class CMI(calibrate:Boolean = false, var parallelize:Int = 0) extends Exter
   }
 
   def contrast(m: PreprocessedData, dimensions: Set[Int]): Double = {
-    val unz = dimensions.toArray.sorted.map(x => m(x).unzip)
+    val unz = dimensions.toArray.sorted.map(x => m(x).unzip) // apply method on Preprocessed Data calls out the nth Dimension of the index
     val data = unz.map(x => x._2)
     val ranks = unz.map(x => x._1)
     val s = score(data.transpose.map(_.map(_.toDouble)), ranks.transpose) // This is not nice to have to map back to Double but I have no choice for now

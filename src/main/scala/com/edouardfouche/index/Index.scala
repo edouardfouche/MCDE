@@ -25,7 +25,7 @@ trait Index {
   type T
   val index: Array[Array[T]] = createIndex(values.transpose) // IMPORTANT: The transpose
 
-  def createIndex(data: Array[Array[Double]]): Array[Array[T]]
+  protected def createIndex(data: Array[Array[Double]]): Array[Array[T]]
 
   def apply(n: Int) = index(n)
 
