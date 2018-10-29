@@ -27,7 +27,7 @@ trait DataGenerator {
 
   def generate(n: Int): Array[Array[Double]]
 
-  final def saveSample(path: String = s"${System.getProperty("user.home")}/datagenerator/", discretize: Int = 0): Unit = { // prevent overridding in subclasses so that TestDimensions using IndependentanData are guranteed to be correct. If override is nessesary adjust test.
+  final def saveSample(path: String = s"${System.getProperty("user.home")}/datagenerator/", discretize: Int = 0): Unit = { // prevent overriding in subclasses so that TestDimensions using IndependentData are guaranteed to be correct. If override is necessary adjust test.
     val dir = new File(path).mkdirs()
     val data = if (discretize > 0) this.generate(1000, discretize)
     else this.generate(1000)
