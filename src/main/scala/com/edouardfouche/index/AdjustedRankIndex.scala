@@ -29,7 +29,7 @@ import com.edouardfouche.preprocess.Preprocess
 class AdjustedRankIndex(val values: Array[Array[Double]], val parallelize: Int = 0) extends Index  {
   type T = (Int, Float)
 
-  def createIndex(input: Array[Array[Double]]): Array[Array[T]] = {
+   def createIndex(input: Array[Array[Double]]): Array[Array[T]] = {
     Preprocess.mwRank(input, parallelize)
   }
 
