@@ -91,8 +91,4 @@ trait ExternalStats extends Stats with LazyLogging {
     matrix
   }
 
-  protected def get_dim[T](arr: Array[Array[T]]): (Int, Int) = {
-    (arr.length, arr(0).length)
-  }
-
 }
