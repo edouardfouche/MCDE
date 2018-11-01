@@ -31,10 +31,10 @@ import com.edouardfouche.utils.StopWatch
   * Check the power of every approach against a selected number of generators
   */
 object Power extends Experiment {
-  override val alpha_range = Vector()
-  override val M_range: Vector[Int] = Vector(50)
-  override val nRep = 500 // number of data sets we use to estimate rejection rate
-  override val data: Vector[DataRef] = Vector()
+  val alpha_range = Vector()
+  val M_range: Vector[Int] = Vector(50)
+  val nRep = 500 // number of data sets we use to estimate rejection rate
+  val data: Vector[DataRef] = Vector()
   val N_range = Vector(1000) // number of data points for each data set
   val dims = Vector(2, 3, 5)
   val noiseLevels = 30

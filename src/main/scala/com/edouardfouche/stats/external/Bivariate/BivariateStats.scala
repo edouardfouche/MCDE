@@ -3,6 +3,8 @@ package com.edouardfouche.stats.external.Bivariate
 import com.edouardfouche.index.NonIndex
 import com.edouardfouche.stats.external.ExternalStats
 
+// TODO: Implement Kendalls Tau
+
 trait BivariateStats extends ExternalStats {
   val id: String
   val calibrate:Boolean = false
