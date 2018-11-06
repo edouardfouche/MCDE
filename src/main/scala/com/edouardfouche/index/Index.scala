@@ -23,11 +23,16 @@ trait Index {
   val parallelize:Int
 
   type T
-  val index: Array[Array[T]] = createIndex(values.transpose) // IMPORTANT: The transpose
+  val index: Array[Array[T]] = createIndex(values.transpose) // IMPORTANT: The transpose, makes the input column-oriented
 
+  /**
+    *
+    * @param data a data set (column-oriented!)
+    * @return An index, which is also column-oriented
+    */
   protected def createIndex(data: Array[Array[Double]]): Array[Array[T]]
 
-  def apply(n: Int) = index(n)
+  def apply(n: Int) = index(n) // access the columns of the index
 
   def indices = index.indices // this is supposed to give the indices of the columns
 

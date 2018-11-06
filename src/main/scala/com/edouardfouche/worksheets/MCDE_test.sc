@@ -27,8 +27,17 @@ Linear(2, 0).saveSample()
 gen1.length
 gen1(0).length
 
+val preprocess = MWP().preprocess(gen1)
+preprocess.values.length
+
 MWP().contrast(gen1, Set(0, 1))
 MWP().contrast(gen2, Set(0, 1))
+
+val IndependentData = independent_2D
+val openedData = independent_2D.open()
+val preprocessedData = independent_2D.openAndPreprocess(MWP())
+MWP(M=1000).contrast(openedData, Set(0,1))
+MWP(M=1000).contrast(preprocessedData, Set(0,1))
 
 val data1 = Preprocess.open(getClass.getResource("/data/Linear-2-0.0.csv").getPath, header = 1, separator = ",", excludeIndex = false, dropClass = true)
 val data2 = Preprocess.open(getClass.getResource("/data/Independent-2-0.0.csv").getPath, header = 1, separator = ",", excludeIndex = false, dropClass = true)

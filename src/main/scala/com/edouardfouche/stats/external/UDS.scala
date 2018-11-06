@@ -34,9 +34,9 @@ case class UDS(calibrate:Boolean = false, var parallelize:Int = 0) extends Exter
 
   def contrast(m: PreprocessedData, dimensions: Set[Int]): Double = {
     val unz = dimensions.toArray.sorted.map(x => m(x).unzip)
-    val data = unz.map(x => x._2)
-    val ranks = unz.map(x => x._1)
-    val s = score(data.transpose.map(_.map(_.toDouble)), ranks.transpose) // This is not nice to have to map back to Double but I have no choice for now
+    val data = unz.map(x => x._2) // it this stage column-oriented
+    val ranks = unz.map(x => x._1) // it this stage column-oriented
+    val s = score(data.map(_.map(_.toDouble)).transpose, ranks.transpose) // This is not nice to have to map back to Double but I have no choice for now
 
     if (s.isNaN | s.isInfinite) {
       logger.info(s"$s value in ${this.getClass.getSimpleName} coerced to 0.0")
@@ -45,9 +45,12 @@ case class UDS(calibrate:Boolean = false, var parallelize:Int = 0) extends Exter
     else s
   }
 
+  /**
+    * @param data the data set (row-oriented)
+    * @param preRank the corresponding ranks (row-oriented)
+    * @return the UDS score
+    */
   def score(data: Array[Array[Double]], preRank: Array[Array[Int]]): Double = {
-    synchronized {
-      UDSFunction.computeScore(data, preRank) // it takes rows and not columns
-    }
+    UDSFunction.computeScore(data, preRank) // it takes rows and not columns
   }
 }

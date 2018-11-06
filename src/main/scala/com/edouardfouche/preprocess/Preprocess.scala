@@ -28,6 +28,7 @@ import scala.collection.parallel.ForkJoinTaskSupport
 object Preprocess extends Preprocessing {
   /**
     * Helper function that redirects to openArff in case an arff is given else openCSV
+    * @return A data set (row oriented)
     */
   def open(path: String, header: Int = 1, separator: String = ",", excludeIndex: Boolean = false, dropClass: Boolean = true, sample1000: Boolean = false): Array[Array[Double]] = {
     require(header >= 0, "header cannot be a negative number")
@@ -220,8 +221,8 @@ object Preprocess extends Preprocessing {
     *
     * Note that the numbers might be different in the case of ties, in comparison with other implementations.
     *
-    * @param input A 2-D Array of Double (data set).
-    * @return A 2-D Array of 2-D Tuple, where the first element is the original index, the second is its value (actually not in used for the KS test)
+    * @param input A 2-D Array of Double (data set, column-oriented).
+    * @return A 2-D Array of Int, where the element is the original index in the unsorted data set
     */
   def ksRankSimple(input: Array[Array[Double]], parallelize: Int = 0): Array[Array[Int]] = {
     //if (parallelize == 0) input.map(_.zipWithIndex.sortBy(_._1).map(x => (x._2, x._1.toFloat, x._1)))
@@ -236,6 +237,12 @@ object Preprocess extends Preprocessing {
     }
   }
 
+  /**
+    * Return the rank index structure for MWP, with adjusted ranks but no correction for ties.
+    *
+    * @param input A 2-D Array of Double (data set, column-oriented).
+    * @return A 2-D Array of 2-D Tuple, where the first element is the original index, the second is its rank.
+    */
   def mwRank(input: Array[Array[Double]], parallelize: Int): Array[Array[(Int, Float)]] = {
     // Create an index for each column with this shape: (original position, adjusted rank, original value)
     // They are ordered by rank
@@ -278,6 +285,13 @@ object Preprocess extends Preprocessing {
     nonadjusted.map(x => x.map(y => (y._1,y._2)))
   }
 
+  /**
+    * Return the rank index structure for MWP, with adjusted ranks AND correction for ties.
+    *
+    * @param input A 2-D Array of Double (data set, column-oriented).
+    * @return A 2-D Array of 3-D Tuple, where the first element is the original index, the second is its rank and the
+    *         the last one a cumulative correction for ties.
+    */
   def mwRankCorrectionCumulative(input: Array[Array[Double]],
                        parallelize: Int): Array[Array[(Int, Float, Double)]] = {
     // Create an index for each column with this shape: (original position, adjusted rank, original value)
@@ -327,56 +341,5 @@ object Preprocess extends Preprocessing {
       }
     }
     nonadjusted
-  }
-
-  // Deprecate
-  def mwRankCorrection(input: Array[Array[Double]],
-                       parallelize: Int): Array[(Array[(Int, Float)],scala.collection.mutable.Map[Float,Float])] = {
-    // Create an index for each column with this shape: (original position, adjusted rank, original value)
-    // They are ordered by rank
-    val nonadjusted = if (parallelize == 0) input.map(x => x.zipWithIndex.sortBy(_._1).zipWithIndex.map(y => (y._1._2, y._2.toFloat, y._1._1)))
-    else {
-      val inputPar = input.par
-      if (parallelize > 1) {
-        inputPar.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(parallelize))
-      }
-      inputPar.map(x => x.zipWithIndex.sortBy(_._1).zipWithIndex.map(y => (y._1._2, y._2.toFloat, y._1._1))).toArray // (i1,i2,realValue)
-    } // Obliged to synchronize here
-
-    val correctionMaps = Array.fill(nonadjusted.length){scala.collection.mutable.Map[Float,Float]()}
-
-    for {
-      i <- if (parallelize == 0) nonadjusted.indices
-      else {
-        val indicesPar = nonadjusted.indices.par
-        if (parallelize > 1) {
-          indicesPar.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(parallelize))
-        }
-        indicesPar
-      }
-    } {
-
-      val m = nonadjusted(i).length - 1
-      var j = 0
-      while (j < m) {
-        var k = j
-        var acc = 0.0
-        // && is quite important here, as if the first condition is false you don't want to evaluate the second
-        while ((k < m) && (nonadjusted(i)(k)._3 == nonadjusted(i)(k + 1)._3)) { // Wooo we are comparing doubles here, is that ok? I guess yes
-          acc += nonadjusted(i)(k)._2
-          k += 1
-        }
-        if (k > j) {
-          val newval = ((acc + nonadjusted(i)(k)._2) / (k - j + 1.0)).toFloat
-          correctionMaps(i)(newval) = {
-            val t = (k - j + 1.0)
-            (math.pow(t , 3) - t).toFloat
-          }
-          (j to k).foreach(y => nonadjusted(i)(y) = (nonadjusted(i)(y)._1, newval, nonadjusted(i)(y)._3))
-          j += k - j + 1 // jump to after the replacement
-        } else j += 1
-      }
-    }
-    nonadjusted.map(x => x.map(y => (y._1, y._2))).zip(correctionMaps)
   }
 }

@@ -27,15 +27,11 @@ import kit.edu.DependencyEstimation.ElkiInteractionInformation
 
 case class II(calibrate:Boolean = false, var parallelize:Int = 0) extends ExternalStats {
   val id = "II"
-  val k = 4
+  val k = 4 // parameter for nearest-neighbor-based entropy estimation
   type PreprocessedData = NonIndex
 
   def preprocess(input: Array[Array[Double]]): PreprocessedData = {
     new NonIndex(input)
-  }
-
-  def score(data: Array[Array[Double]], preRank: Array[Array[Int]] = null): Double = {
-    new ElkiInteractionInformation(data.map(_.map(x => x + Gaussian(0, 1).draw() * 0.0000000001)), k).estimate()
   }
 
   /**
@@ -52,5 +48,15 @@ case class II(calibrate:Boolean = false, var parallelize:Int = 0) extends Extern
       0.0
     }
     else s
+  }
+
+  /**
+    *
+    * @param data A row-oriented data set
+    * @param preRank not used here
+    * @return the II score
+    */
+  def score(data: Array[Array[Double]], preRank: Array[Array[Int]] = null): Double = {
+    new ElkiInteractionInformation(data.map(_.map(x => x + Gaussian(0, 1).draw() * 0.0000000001)), k).estimate()
   }
 }

@@ -25,7 +25,7 @@ case class DataRef(id: String, path: String, header: Int, separator: String, cat
     *
     * @param dropClass Whether to drop the "class" column if there is one. (assumes it is the last one)
     * @param max1000   cap the opened data to 1000 rows. If the original data has more rows, sample 1000 without replacement
-    * @return A 2-D Array of Double containing the values from the csv. (column oriented)
+    * @return A 2-D Array of Double containing the values from the csv. (row oriented)
     */
   def open(dropClass: Boolean = true, max1000: Boolean = false): Array[Array[Double]] = {
     try {
@@ -40,9 +40,7 @@ case class DataRef(id: String, path: String, header: Int, separator: String, cat
     *
     * @param dropClass Whether to drop the "class" column if there is one. (assumes it is the last one)
     * @param max1000   cap the opened data to 1000 rows. If the original data has more rows, sample 1000 without replacement
-    * @return A 2-D Array of Double containing the values from the csv, preprocessed.
-    *
-    * note: I put transpose here, because preprocess expected a list of records, while preprocess.openm returns a list of columns
+    * @return A 2-D Array of Double containing the values from the csv, preprocessed. (column oriented)
     */
   def openAndPreprocess(test: Stats, dropClass: Boolean = true, max1000: Boolean = false): test.PreprocessedData = {
     test.preprocess(Preprocess.open(path, header, separator, excludeIndex, dropClass, max1000))
