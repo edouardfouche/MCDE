@@ -164,17 +164,34 @@ trait Experiment extends LazyLogging {
         val preprocessed = preprocessing.map(_._3)
 
         val values = preprocessed.map(x => {
-          StopWatch.measureTime(
+          StopWatch.measureTime( {
+            // Since some external stats randomly launch exceptions, we need to handle them
+            // We make three attempts, after which the value is coerced to 0.0
             try {
               test.contrast(x, x.indices.toSet)
-            } catch {
+            } catch{
               case e: Exception => {
-                info(s"Weird exception ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id} coerced to 0.0")
-                0.0
+                info(s"Attempt1, Unexpected Exception: ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id}")
+                try {
+                  test.contrast(x, x.indices.toSet)
+                } catch{
+                  case e: Exception => {
+                    info(s"Attempt2, Unexpected Exception: ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id}")
+                    try {
+                      test.contrast(x, x.indices.toSet)
+                    } catch{
+                      case e: Exception => {
+                        info(s"Attempt3, Unexpected Exception: ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id}, coerced to 0.0")
+                        0.0
+                      }
+                    }
+                  }
+                }
               }
             }
+          }
           )
-        }).toArray
+        })
 
         val CPUtime = values.map(_._1)
         val Walltime = values.map(_._2)
@@ -239,12 +256,28 @@ trait Experiment extends LazyLogging {
       val preprocessed = preprocessing._3
 
       val values = StopWatch.measureTime(
+        // Since some external stats randomly launch exceptions, we need to handle them
+        // We make three attempts, after which the value is coerced to 0.0
         try {
           test.contrast(preprocessed, preprocessed.indices.toSet)
-        } catch {
+        } catch{
           case e: Exception => {
-            info(s"Weird exception ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id} coerced to 0.0")
-            0.0
+            info(s"Attempt1, Unexpected Exception: ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id}")
+            try {
+              test.contrast(preprocessed, preprocessed.indices.toSet)
+            } catch{
+              case e: Exception => {
+                info(s"Attempt2, Unexpected Exception: ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id}")
+                try {
+                  test.contrast(preprocessed, preprocessed.indices.toSet)
+                } catch{
+                  case e: Exception => {
+                    info(s"Attempt3, Unexpected Exception: ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id}, coerced to 0.0")
+                    0.0
+                  }
+                }
+              }
+            }
           }
         }
         )
@@ -299,12 +332,28 @@ trait Experiment extends LazyLogging {
       val preprocessed = preprocessing._3
 
       val values = StopWatch.measureTime(
+        // Since some external stats randomly launch exceptions, we need to handle them
+        // We make three attempts, after which the value is coerced to 0.0
         try {
           test.contrast(preprocessed, preprocessed.indices.toSet)
-        } catch {
+        } catch{
           case e: Exception => {
-            info(s"Weird exception ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id} coerced to 0.0")
-            0.0
+            info(s"Attempt1, Unexpected Exception: ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id}")
+            try {
+              test.contrast(preprocessed, preprocessed.indices.toSet)
+            } catch{
+              case e: Exception => {
+                info(s"Attempt2, Unexpected Exception: ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id}")
+                try {
+                  test.contrast(preprocessed, preprocessed.indices.toSet)
+                } catch{
+                  case e: Exception => {
+                    info(s"Attempt3, Unexpected Exception: ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id}, coerced to 0.0")
+                    0.0
+                  }
+                }
+              }
+            }
           }
         }
         )
@@ -363,17 +412,32 @@ trait Experiment extends LazyLogging {
 
         val values = preprocessed.map(x => {
           StopWatch.measureTime(
+            // Since some external stats randomly launch exceptions, we need to handle them
+            // We make three attempts, after which the value is coerced to 0.0
             try {
               test.contrast(x, x.indices.toSet)
-            } catch {
+            } catch{
               case e: Exception => {
-                // some tests (such as UDS) create much unexpected exceptions. This is just to catch them.
-                // info(s"Weird exception ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id} coerced to 0.0")
-                0.0
+                info(s"Attempt1, Unexpected Exception: ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id}")
+                try {
+                  test.contrast(x, x.indices.toSet)
+                } catch{
+                  case e: Exception => {
+                    info(s"Attempt2, Unexpected Exception: ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id}")
+                    try {
+                      test.contrast(x, x.indices.toSet)
+                    } catch{
+                      case e: Exception => {
+                        info(s"Attempt3, Unexpected Exception: ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id}, coerced to 0.0")
+                        0.0
+                      }
+                    }
+                  }
+                }
               }
             }
             )
-        }).toArray
+        })
 
         val CPUtime = values.map(_._1)
         val Walltime = values.map(_._2)

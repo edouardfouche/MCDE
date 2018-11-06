@@ -218,6 +218,19 @@ object Main extends LazyLogging {
       ScalabilityD.run()
       ScalabilityN.run()
     }
+    case "com.edouardfouche.experiments.BiVarPower" => BiVarPower.run()
+    case "com.edouardfouche.experiments.BiVarPowerDiscrete" => BiVarPowerDiscrete.run()
+    case "com.edouardfouche.experiments.BiVarPowerM" => BiVarPowerM.run()
+    case "com.edouardfouche.experiments.BiVarPowerN" => BiVarPowerN.run()
+    case "com.edouardfouche.experiments.BiVarScalabilityN" => BiVarScalabilityN.run()
+
+    case "com.edouardfouche.experiments.BiVar" => {
+      BiVarPower.run()
+      BiVarPowerDiscrete.run()
+      BiVarPowerM.run()
+      BiVarPowerN.run()
+      BiVarScalabilityN.run()
+    }
 
     case "com.edouardfouche.experiments.MCDE" => {
       Power.run()
@@ -226,6 +239,7 @@ object Main extends LazyLogging {
       PowerDiscrete.run()
       ScalabilityN.run()
       ScalabilityD.run()
+
       // ParallelizationN.run()
     }
 

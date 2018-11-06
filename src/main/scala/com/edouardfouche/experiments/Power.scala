@@ -39,10 +39,11 @@ object Power extends Experiment {
     * @alpha_range Use to run for differentte levels of Alpha
     * Adjust info for Alpha
     */
-  override val alpha_range = Vector()
-  override val M_range: Vector[Int] = Vector(50)
-  override val nRep = 500 // number of data sets we use to estimate rejection rate
-  override val data: Vector[DataRef] = Vector()
+  val alpha_range = Vector()
+  val M_range: Vector[Int] = Vector(50)
+  val nRep = 500 // number of data sets we use to estimate rejection rate
+  val data: Vector[DataRef] = Vector()
+
   val N_range = Vector(1000) // number of data points for each data set
   val dims = Vector(2, 3, 5)
   val noiseLevels = 30
@@ -88,7 +89,9 @@ object Power extends Experiment {
       val mac = MAC()
 
       val tests = Vector(mwp, uds, cmi, hics, ii, tc, ms, mac)
-      // val tests = Vector(mwp, mwpr, mwpu)
+
+      //val tests = Vector(uds)
+      //val tests = Vector(mwp, mwpr, mwpu)
 
       var ThresholdMap90 = scala.collection.mutable.Map[String, Double]()
       var ThresholdMap95 = scala.collection.mutable.Map[String, Double]()

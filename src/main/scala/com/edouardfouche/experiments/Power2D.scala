@@ -21,57 +21,57 @@ import breeze.stats.{mean, stddev}
 import com.edouardfouche.generators.{DataGenerator, GeneratorFactory, Independent}
 import com.edouardfouche.preprocess.DataRef
 import com.edouardfouche.stats.external._
-import com.edouardfouche.stats.mcde.{KS, MWP, MWPr}
+import com.edouardfouche.stats.mcde.McdeStats
+import com.edouardfouche.stats.mcde.{KS, MWP, MWPr, MWPu}
 import com.edouardfouche.utils.StopWatch
+
 
 /**
   * Created by fouchee on 12.07.17.
-  * Compare the power of approaches w.r.t. to different discretization levels
+  * Check the power of every approach using a selected number of bivariate generators against bivariate dependency measures
   */
-object PowerDiscrete extends Experiment {
-  val alpha_range = Vector(0.5)
-  val M_range: Vector[Int] = Vector(50)
-  val nRep = 500 // number of data sets we use to estimate rejection rate
-  val data: Vector[DataRef] = Vector()
+object Power2D extends Experiment {
+  override val alpha_range = Vector()
+  override val M_range: Vector[Int] = Vector(50)
+  override val nRep = 500 // number of data sets we use to estimate rejection rate
+  override val data: Vector[DataRef] = Vector()
   val N_range = Vector(1000) // number of data points for each data set
-  val dims = Vector(3)
-  val discrete_range = Vector(100, 50, 10, 5, 3, 1) // 200, 20, 4, 2,
+  val dims = Vector(2)
   val noiseLevels = 30
   val generators: Vector[(Int) => (Double) => DataGenerator] = GeneratorFactory.selected
 
   def run(): Unit = {
-    info(s"Starting com.edouardfouche.experiments - ${this.getClass.getSimpleName}")
+    info(s"${formatter.format(java.util.Calendar.getInstance().getTime)} - Starting com.edouardfouche.experiments - ${this.getClass.getSimpleName}")
     info(s"Parameters:")
-    info(s"alpha_range: q${alpha_range mkString ","}")
     info(s"M_range: q${M_range mkString ","}")
     info(s"nrep: $nRep")
     info(s"Datasets: ${data.map(_.id) mkString ","}")
     info(s"N_range: ${N_range mkString ","}")
     info(s"dims: ${dims mkString ","}")
     info(s"noiseLevels: $noiseLevels")
-    info(s"discrete_range: q${discrete_range mkString ","}")
     info(s"Started on: ${java.net.InetAddress.getLocalHost.getHostName}")
 
     for {
       m <- M_range
-      disc <- discrete_range
       nDim <- dims
       n <- N_range
     } yield {
-      info(s"Starting com.edouardfouche.experiments with configuration M: ${m}, nDim: disc: ${disc}, nDim: $nDim, n: $n")
+      info(s"Starting com.edouardfouche.experiments with configuration M: ${m}, nDim: $nDim, n: $n")
 
-      //val ks = KS(m, 0.1)
-      val mwp = MWP(m, 0.5)
-      //val mwpr = MWPr(m, 0.5)
+      //val ks = KS(50, 0.1)
+      val mwp = MWP(50, 0.5)
+      //val mwpr = MWPr(50, 0.5)
+      //val mwpu = MWPu(50, 0.5)
       val uds = UDS()
       val cmi = CMI()
       val hics = HICS()
-      // val ii = II() // not robust
-      // val tc = TC() // not robust
+      val ii = II()
+      val tc = TC()
       val ms = MS()
       val mac = MAC()
 
-      val tests = Vector(mwp, uds, cmi, hics, ms, mac)
+      val tests = Vector(mwp, uds, cmi, hics, ii, tc, ms, mac)
+      //val tests = Vector(mwp, mwpr, mwpu)
 
       var ThresholdMap90 = scala.collection.mutable.Map[String, Double]()
       var ThresholdMap95 = scala.collection.mutable.Map[String, Double]()
@@ -79,18 +79,19 @@ object PowerDiscrete extends Experiment {
 
       var ValueMap = scala.collection.mutable.Map[String, Array[Double]]()
 
-      //info(s"Computing Null Distribution")
+      info(s"Computing Null Distribution")
+
       for (test <- tests.par) {
-        //info(s"Preparing data sets for Computing Null Distribution ($test)")
+        info(s"Preparing data sets for Computing Null Distribution")
         val preprocessing = (1 to nRep).map(x => {
-          val data = Independent(nDim, 0.0).generate(n)//.transpose
+          val data = Independent(nDim, 0).generate(n) // Careful here: not transpose
           StopWatch.measureTime(test.preprocess(data))
-        }).toArray
+        })
 
         val prepCPUtime = preprocessing.map(_._1)
         val prepWalltime = preprocessing.map(_._2)
         val preprocessed = preprocessing.map(_._3)
-        //info(s"Done preparing data sets computing Null Distribution ($test)")
+        info(s"Done preparing data sets computing Null Distribution")
 
         // I think the collection of datasets is already parallel
         val values = preprocessed.map(x => {
@@ -102,21 +103,33 @@ object PowerDiscrete extends Experiment {
         val contrast = values.map(_._3)
         //println(s"${test.id}: ${values.take(10) mkString ";"}")
 
-        ThresholdMap90 += (test.id -> percentile(contrast, 0.90))
-        ThresholdMap95 += (test.id -> percentile(contrast, 0.95))
-        ThresholdMap99 += (test.id -> percentile(contrast, 0.99))
+        val abscontrast = contrast.map(x => math.abs(x))
+        ThresholdMap90 += (test.id -> percentile(abscontrast, 0.90))
+        ThresholdMap95 += (test.id -> percentile(abscontrast, 0.95))
+        ThresholdMap99 += (test.id -> percentile(abscontrast, 0.99))
 
         val summary = ExperimentSummary()
         summary.add("refId", "0-Hypothesis")
         summary.add("nDim", nDim)
         summary.add("noise", 0)
         summary.add("n", n)
-        summary.add("d", disc)
         summary.add("nRep", nRep)
         summary.add("testId", test.id)
-        summary.add("powerAt90", contrast.count(_ > ThresholdMap90(test.id)).toDouble / nRep.toDouble)
-        summary.add("powerAt95", contrast.count(_ > ThresholdMap95(test.id)).toDouble / nRep.toDouble)
-        summary.add("powerAt99", contrast.count(_ > ThresholdMap99(test.id)).toDouble / nRep.toDouble)
+
+        test match {
+          case x: McdeStats => {
+            summary.add("alpha", x.alpha)
+            summary.add("M", x.M)
+          }
+          case _ => {
+            summary.add("alpha", "NULL")
+            summary.add("M", "NULL")
+          }
+        }
+
+        summary.add("powerAt90", abscontrast.count(_ > ThresholdMap90(test.id)).toDouble / nRep.toDouble)
+        summary.add("powerAt95", abscontrast.count(_ > ThresholdMap95(test.id)).toDouble / nRep.toDouble)
+        summary.add("powerAt99", abscontrast.count(_ > ThresholdMap99(test.id)).toDouble / nRep.toDouble)
         summary.add("thresholdAt90", ThresholdMap90(test.id))
         summary.add("thresholdAt95", ThresholdMap95(test.id))
         summary.add("thresholdAt99", ThresholdMap99(test.id))
@@ -132,11 +145,11 @@ object PowerDiscrete extends Experiment {
         summary.add("avgPrepCPUtime", mean(prepCPUtime))
         summary.add("stdPrepCPUtime", stddev(prepCPUtime))
         summary.write(summaryPath)
-        //info(s"Done Computing Null Distribution ($test)")
+        info(s"test.id: ${test.id} -> ${mean(contrast)} - p90: ${ThresholdMap90(test.id)} - p95: ${ThresholdMap95(test.id)} - p99: ${ThresholdMap99(test.id)}")
       }
-      //info(s"Done Computing Null Distribution")
+      info(s"Done Computing Null Distribution: p95: ${ThresholdMap90}")
 
-      generators.par.foreach(x => comparePowerDiscrete(x, nDim, n, disc, tests, ThresholdMap90, ThresholdMap95, ThresholdMap99, noiseLevels))
+      generators.par.foreach(x => comparePower(x, nDim, n, tests, ThresholdMap90, ThresholdMap95, ThresholdMap99, noiseLevels))
     }
     info(s"End of experiment ${this.getClass.getSimpleName} - ${formatter.format(java.util.Calendar.getInstance().getTime)}")
   }

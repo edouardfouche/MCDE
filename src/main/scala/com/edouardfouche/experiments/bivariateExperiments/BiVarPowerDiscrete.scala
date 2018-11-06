@@ -1,40 +1,17 @@
-/*
- * Copyright (C) 2018 Edouard Fouché
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package com.edouardfouche.experiments
 
 import breeze.stats.DescriptiveStats.percentile
 import breeze.stats.{mean, stddev}
 import com.edouardfouche.generators.{DataGenerator, GeneratorFactory, Independent}
 import com.edouardfouche.preprocess.DataRef
-import com.edouardfouche.stats.external._
-import com.edouardfouche.stats.mcde.{KS, MWP, MWPr}
 import com.edouardfouche.utils.StopWatch
 
-/**
-  * Created by fouchee on 12.07.17.
-  * Compare the power of approaches w.r.t. to different discretization levels
-  */
-object PowerDiscrete extends Experiment {
+object BiVarPowerDiscrete extends BiVarExperiments {
+
   val alpha_range = Vector(0.5)
-  val M_range: Vector[Int] = Vector(50)
   val nRep = 500 // number of data sets we use to estimate rejection rate
   val data: Vector[DataRef] = Vector()
   val N_range = Vector(1000) // number of data points for each data set
-  val dims = Vector(3)
   val discrete_range = Vector(100, 50, 10, 5, 3, 1) // 200, 20, 4, 2,
   val noiseLevels = 30
   val generators: Vector[(Int) => (Double) => DataGenerator] = GeneratorFactory.selected
@@ -53,25 +30,11 @@ object PowerDiscrete extends Experiment {
     info(s"Started on: ${java.net.InetAddress.getLocalHost.getHostName}")
 
     for {
-      m <- M_range
       disc <- discrete_range
       nDim <- dims
       n <- N_range
     } yield {
       info(s"Starting com.edouardfouche.experiments with configuration M: ${m}, nDim: disc: ${disc}, nDim: $nDim, n: $n")
-
-      //val ks = KS(m, 0.1)
-      val mwp = MWP(m, 0.5)
-      //val mwpr = MWPr(m, 0.5)
-      val uds = UDS()
-      val cmi = CMI()
-      val hics = HICS()
-      // val ii = II() // not robust
-      // val tc = TC() // not robust
-      val ms = MS()
-      val mac = MAC()
-
-      val tests = Vector(mwp, uds, cmi, hics, ms, mac)
 
       var ThresholdMap90 = scala.collection.mutable.Map[String, Double]()
       var ThresholdMap95 = scala.collection.mutable.Map[String, Double]()
