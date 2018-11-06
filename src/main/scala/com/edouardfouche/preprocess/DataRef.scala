@@ -45,7 +45,7 @@ case class DataRef(id: String, path: String, header: Int, separator: String, cat
     * note: I put transpose here, because preprocess expected a list of records, while preprocess.openm returns a list of columns
     */
   def openAndPreprocess(test: Stats, dropClass: Boolean = true, max1000: Boolean = false): test.PreprocessedData = {
-    test.preprocess(Preprocess.open(path, header, separator, excludeIndex, dropClass, max1000).transpose)
+    test.preprocess(Preprocess.open(path, header, separator, excludeIndex, dropClass, max1000))
     // In case preprocess does wrong, this block becomes useful
     //try {
     //  test.preprocess(Preprocess.open(path, header, separator, excludeIndex, dropClass, max1000))
