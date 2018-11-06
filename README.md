@@ -61,7 +61,9 @@ Additional argument for `MWP`:
 
 Additional argument for `EstimateDependency`:
 
-- `-d <dimensions>`: Dimensions of the subspace on which the dependency should be estimated (a list of integers, comma-separated, starting from 0). If not specified, the dependency is estimated on the full space. 
+- `-d <dimensions>`: Dimensions of the subspace on which the dependency should be estimated (a list of integers, comma-separated, starting from 0). 
+For instance, if `0,1` is selected only the first two columns of the data are taken into account, if `0,2` is selected only column 1 and 3.
+If not specified, the dependency is estimated on the full space. 
 
 ## Examples
 
