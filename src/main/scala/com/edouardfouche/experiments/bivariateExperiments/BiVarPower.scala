@@ -1,42 +1,22 @@
-/*
- * Copyright (C) 2018 Edouard Fouché
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package com.edouardfouche.experiments
 
 import breeze.stats.DescriptiveStats.percentile
 import breeze.stats.{mean, stddev}
 import com.edouardfouche.generators.{DataGenerator, GeneratorFactory, Independent}
 import com.edouardfouche.preprocess.DataRef
-import com.edouardfouche.stats.external._
 import com.edouardfouche.stats.mcde.McdeStats
-import com.edouardfouche.stats.mcde.{KS, MWP, MWPr, MWPu}
 import com.edouardfouche.utils.StopWatch
 
 
 /**
-  * Created by fouchee on 12.07.17.
-  * Check the power of every approach against a selected number of generators
+  * Bivariate Version of Power Experiment
   */
-object Power extends Experiment {
+
+object BiVarPower extends BiVarExperiments {
   val alpha_range = Vector()
-  val M_range: Vector[Int] = Vector(50)
   val nRep = 500 // number of data sets we use to estimate rejection rate
   val data: Vector[DataRef] = Vector()
   val N_range = Vector(1000) // number of data points for each data set
-  val dims = Vector(2, 3, 5)
   val noiseLevels = 30
   val generators: Vector[(Int) => (Double) => DataGenerator] = GeneratorFactory.selected
 
@@ -52,27 +32,11 @@ object Power extends Experiment {
     info(s"Started on: ${java.net.InetAddress.getLocalHost.getHostName}")
 
     for {
-      m <- M_range
       nDim <- dims
       n <- N_range
     } yield {
       info(s"Starting com.edouardfouche.experiments with configuration M: ${m}, nDim: $nDim, n: $n")
 
-      //val ks = KS(50, 0.1)
-      val mwp = MWP(50, 0.5)
-      //val mwpr = MWPr(50, 0.5)
-      //val mwpu = MWPu(50, 0.5)
-      val uds = UDS()
-      val cmi = CMI()
-      val hics = HICS()
-      val ii = II()
-      val tc = TC()
-      val ms = MS()
-      val mac = MAC()
-
-      val tests = Vector(mwp, uds, cmi, hics, ii, tc, ms, mac)
-      //val tests = Vector(uds)
-      //val tests = Vector(mwp, mwpr, mwpu)
 
       var ThresholdMap90 = scala.collection.mutable.Map[String, Double]()
       var ThresholdMap95 = scala.collection.mutable.Map[String, Double]()
@@ -155,3 +119,4 @@ object Power extends Experiment {
     info(s"End of experiment ${this.getClass.getSimpleName} - ${formatter.format(java.util.Calendar.getInstance().getTime)}")
   }
 }
+

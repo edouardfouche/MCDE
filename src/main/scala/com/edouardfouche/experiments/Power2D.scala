@@ -28,15 +28,15 @@ import com.edouardfouche.utils.StopWatch
 
 /**
   * Created by fouchee on 12.07.17.
-  * Check the power of every approach against a selected number of generators
+  * Check the power of every approach using a selected number of bivariate generators against bivariate dependency measures
   */
-object Power extends Experiment {
-  val alpha_range = Vector()
-  val M_range: Vector[Int] = Vector(50)
-  val nRep = 500 // number of data sets we use to estimate rejection rate
-  val data: Vector[DataRef] = Vector()
+object Power2D extends Experiment {
+  override val alpha_range = Vector()
+  override val M_range: Vector[Int] = Vector(50)
+  override val nRep = 500 // number of data sets we use to estimate rejection rate
+  override val data: Vector[DataRef] = Vector()
   val N_range = Vector(1000) // number of data points for each data set
-  val dims = Vector(2, 3, 5)
+  val dims = Vector(2)
   val noiseLevels = 30
   val generators: Vector[(Int) => (Double) => DataGenerator] = GeneratorFactory.selected
 
@@ -71,7 +71,6 @@ object Power extends Experiment {
       val mac = MAC()
 
       val tests = Vector(mwp, uds, cmi, hics, ii, tc, ms, mac)
-      //val tests = Vector(uds)
       //val tests = Vector(mwp, mwpr, mwpu)
 
       var ThresholdMap90 = scala.collection.mutable.Map[String, Double]()
