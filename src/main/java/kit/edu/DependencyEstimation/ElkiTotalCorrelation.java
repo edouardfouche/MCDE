@@ -23,7 +23,7 @@ public class ElkiTotalCorrelation extends MultidimensionalDependency {
     private double[][] KNNDistances;
 
     /**
-     * @param values are the values of the dataset of which we want to calculate the total correlation
+     * @param values are the values of the dataset of which we want to calculate the total correlation (row-oriented)
      * @param k      parameter for k-nearest neighbour (we use k+1 because each object is it's own 1NN)
      */
 

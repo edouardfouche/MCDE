@@ -31,9 +31,6 @@ case class MS(calibrate:Boolean = false, var parallelize:Int = 0) extends Extern
   def preprocess(input: Array[Array[Double]]): PreprocessedData = {
     new NonIndex(input)
   }
-  def score(data: Array[Array[Double]], preRank: Array[Array[Int]] = null): Double = {
-    new MultivariateSpearman(data).estimate()
-  }
 
   /**
     * Compute the score
@@ -49,5 +46,15 @@ case class MS(calibrate:Boolean = false, var parallelize:Int = 0) extends Extern
       0.0
     }
     else s
+  }
+
+  /**
+    *
+    * @param data A row-oriented data set
+    * @param preRank not used here
+    * @return the MS score
+    */
+  def score(data: Array[Array[Double]], preRank: Array[Array[Int]] = null): Double = {
+    new MultivariateSpearman(data).estimate()
   }
 }

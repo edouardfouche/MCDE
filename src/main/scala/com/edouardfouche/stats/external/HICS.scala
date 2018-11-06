@@ -35,7 +35,7 @@ case class HICS(calibrate:Boolean = false, var parallelize:Int = 0) extends Exte
     val unz = dimensions.toArray.sorted.map(x => m(x).unzip)
     val data = unz.map(x => x._2)
     val ranks = unz.map(x => x._1)
-    val s = score(data.transpose.map(_.map(_.toDouble)), ranks.transpose) // This is not nice to have to map back to Double but I have no choice for now
+    val s = score(data.map(_.map(_.toDouble)).transpose, ranks.transpose) // This is not nice to have to map back to Double but I have no choice for now
 
     if (s.isNaN | s.isInfinite) {
       logger.info(s"$s value in ${this.getClass.getSimpleName} coerced to 0.0")
@@ -44,6 +44,11 @@ case class HICS(calibrate:Boolean = false, var parallelize:Int = 0) extends Exte
     else s
   }
 
+  /**
+    * @param data the data set (row-oriented)
+    * @param preRank the corresponding ranks (row-oriented)
+    * @return the HiCS score
+    */
   def score(data: Array[Array[Double]], preRank: Array[Array[Int]] = null): Double = {
     HICSFunction.computeScore(data, preRank)
   }

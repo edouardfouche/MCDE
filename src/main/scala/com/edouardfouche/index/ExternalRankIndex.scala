@@ -20,7 +20,7 @@ import uds.score.UDSFunction
 
 /**
   * Compute an index from a given data set
-  * The index is "external", so to satify the needs of the external measures (i.e., not from us)
+  * The index is "external", so to satisfy the needs of the external measures (i.e., not from us)
   *
   * @param values A row-oriented data set
   * @param parallelize Whether to parallelize or not the index computation (beta)

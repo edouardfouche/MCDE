@@ -71,6 +71,7 @@ object Power extends Experiment {
       val mac = MAC()
 
       val tests = Vector(mwp, uds, cmi, hics, ii, tc, ms, mac)
+      //val tests = Vector(uds)
       //val tests = Vector(mwp, mwpr, mwpu)
 
       var ThresholdMap90 = scala.collection.mutable.Map[String, Double]()

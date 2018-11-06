@@ -162,17 +162,21 @@ trait Experiment extends LazyLogging {
         val preprocessed = preprocessing.map(_._3)
 
         val values = preprocessed.map(x => {
-          StopWatch.measureTime(
+          StopWatch.measureTime( {
+            test.contrast(x, x.indices.toSet)
+            /*
             try {
               test.contrast(x, x.indices.toSet)
             } catch {
               case e: Exception => {
-                info(s"Weird exception ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id} coerced to 0.0")
-                0.0
+                info(s"Weird exception ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id} , $a coerced to 0.0")
+                throw e
               }
             }
+            */
+          }
           )
-        }).toArray
+        })
 
         val CPUtime = values.map(_._1)
         val Walltime = values.map(_._2)
@@ -235,6 +239,8 @@ trait Experiment extends LazyLogging {
       val preprocessed = preprocessing._3
 
       val values = StopWatch.measureTime(
+        test.contrast(preprocessed, preprocessed.indices.toSet)
+        /*
         try {
           test.contrast(preprocessed, preprocessed.indices.toSet)
         } catch {
@@ -243,6 +249,7 @@ trait Experiment extends LazyLogging {
             0.0
           }
         }
+        */
         )
 
       val CPUtime = values._1
@@ -293,6 +300,8 @@ trait Experiment extends LazyLogging {
       val preprocessed = preprocessing._3
 
       val values = StopWatch.measureTime(
+        test.contrast(preprocessed, preprocessed.indices.toSet)
+        /*
         try {
           test.contrast(preprocessed, preprocessed.indices.toSet)
         } catch {
@@ -301,6 +310,7 @@ trait Experiment extends LazyLogging {
             0.0
           }
         }
+        */
         )
 
       val CPUtime = values._1
@@ -356,6 +366,8 @@ trait Experiment extends LazyLogging {
 
         val values = preprocessed.map(x => {
           StopWatch.measureTime(
+            test.contrast(x, x.indices.toSet)
+            /*
             try {
               test.contrast(x, x.indices.toSet)
             } catch {
@@ -365,8 +377,9 @@ trait Experiment extends LazyLogging {
                 0.0
               }
             }
+            */
             )
-        }).toArray
+        })
 
         val CPUtime = values.map(_._1)
         val Walltime = values.map(_._2)

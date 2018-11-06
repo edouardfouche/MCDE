@@ -27,16 +27,12 @@ import kit.edu.DependencyEstimation.ElkiTotalCorrelation
 
 case class TC(calibrate:Boolean = false, var parallelize:Int = 0) extends ExternalStats {
   val id = "TC"
-  val k = 4
+  val k = 4 // parameter for nearest-neighbor-based entropy estimation
 
   type PreprocessedData = NonIndex
 
   def preprocess(input: Array[Array[Double]]): PreprocessedData = {
     new NonIndex(input)
-  }
-
-  def score(data: Array[Array[Double]], preRank: Array[Array[Int]] = null): Double = {
-    new ElkiTotalCorrelation(data.map(_.map(x => x + Gaussian(0, 1).draw() * 0.0000000001)), k).estimate()
   }
 
   /**
@@ -46,12 +42,22 @@ case class TC(calibrate:Boolean = false, var parallelize:Int = 0) extends Extern
     * @return A contrast value
     */
   override def contrast(m: PreprocessedData, dimensions: Set[Int]): Double = {
-    val s = score(dimensions.toArray.sorted.map(x => m(x)).transpose, null)
+    val s = score(dimensions.toArray.sorted.map(x => m(x)).transpose, null) // tranpose to make it row-oriented again
 
     if (s.isNaN | s.isInfinite) {
       logger.info(s"$s value in ${this.getClass.getSimpleName} coerced to 0.0")
       0.0
     }
     else s
+  }
+
+  /**
+    *
+    * @param data A row-oriented data set
+    * @param preRank not used here
+    * @return the TC score
+    */
+  def score(data: Array[Array[Double]], preRank: Array[Array[Int]] = null): Double = {
+    new ElkiTotalCorrelation(data.map(_.map(x => x + Gaussian(0, 1).draw() * 0.0000000001)), k).estimate()
   }
 }
