@@ -16,8 +16,8 @@ trait BivariateStats extends ExternalStats {
   }
 
   def preprocess(input: Array[Array[Double]]): PreprocessedData = {
-    if (get_dim(input)._1 != 2) throw new NumberFormatException("Bivariate Measure only accepts 2-D Data")
-    else new NonIndex(input)
+    require(get_dim(input)._1 != 2, "Bivariate Measure only accepts 2-D Data")
+    new NonIndex(input)
   }
 
   def contrast(m: PreprocessedData, dimensions: Set[Int]): Double = {
