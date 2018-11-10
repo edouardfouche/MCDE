@@ -30,9 +30,9 @@ import com.edouardfouche.utils.StopWatch
 trait PowerAlphaBeta extends Experiment {
 
   val beta_range: Vector[Double]
-  override val M_range: Vector[Int] = Vector(100)
-  override val nRep = 500 // number of data sets we use to estimate rejection rate
-  override val data: Vector[DataRef] = Vector()
+  val M_range: Vector[Int] = Vector(100)
+  val nRep = 500 // number of data sets we use to estimate rejection rate
+  val data: Vector[DataRef] = Vector()
   val N_range = Vector(1000) // number of data points for each data set
   val dims = Vector(2, 3, 5)
   val noiseLevels = 30
