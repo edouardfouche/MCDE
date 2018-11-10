@@ -8,22 +8,29 @@ import com.edouardfouche.stats.external._
 import java.io.File
 import java.nio.file.{Paths, Files}
 import org.apache.commons.io.FileUtils
+import com.edouardfouche.stats.external.Bivariate._
 
 
 
 class TestDimensions extends FunSuite {
 
   val rows = 50
-  val dims = 2
+  val dims = 4
   val arr = Independent(dims, 0.0).generate(rows)
+  val bivar_arr = Independent(2, 0.0).generate(rows)
 
   // TODO: What if new Tests / Generators?
   val all_ex_stats: List[Stats] = List(CMI(), HICS(), II(), MAC(), MS(), TC(), UDS())
   val all_mcde_stats:List[Stats] = List(KS(), MWB(), MWP(), MWPi(), MWPr(), MWPs(), MWPu(), MWZ(), S())
+  val all_bivar: List[Stats] =  List(Correlation(), DistanceCorrelation(), HoeffdingsD(), HSM(), JSEquity(),
+    MCE(), MutualInformation(), Slope(), SlopeInversion(), SpearmanCorrelation(), Surfing(), KendallsTau())
 
 
   val all_indecies = List(new AdjustedRankIndex(arr), new CorrectedRankIndex(arr), new ExternalRankIndex(arr),
     new NonIndex(arr), new RankIndex(arr))
+
+  val all_bivar_indecies = List(new AdjustedRankIndex(bivar_arr), new CorrectedRankIndex(bivar_arr), new ExternalRankIndex(bivar_arr),
+    new NonIndex(bivar_arr), new RankIndex(bivar_arr))
 
   val all_gens = List(Cross(dims, 0.0).generate(rows), Cubic(1,dims, 0.0).generate(rows), DoubleLinear(1,dims, 0.0).generate(rows),
     Hourglass(dims, 0.0).generate(rows), Hypercube(dims, 0.0).generate(rows), HypercubeGraph(dims, 0.0).generate(rows),
@@ -32,6 +39,8 @@ class TestDimensions extends FunSuite {
     NonCoexistence(dims, 0.0).generate(rows), Parabolic(1, dims, 0.0).generate(rows), RandomSteps(4, dims, 0.0).generate(rows),
     Sine(1, dims, 0.0).generate(rows), Sqrt(1, dims, 0.0).generate(rows), Star(dims, 0.0).generate(rows), StraightLines(dims, 0.0).generate(rows),
     Z(dims, 0.0).generate(rows), Zinv(dims, 0.0).generate(rows))
+
+
 
   val path = s"${System.getProperty("user.home")}/datagenerator_for_scalatest/"
   val indi = Independent(dims, 0.0)
@@ -49,13 +58,20 @@ class TestDimensions extends FunSuite {
       {for{
         stat <- stats
         data = stat.preprocess(arr)
-      } yield get_dim(data.index)}.map(x => x == (rows, dims))
+      } yield get_dim(data.index)}.map(x => x == (dims, rows))
+  }
+
+  def which_row_orient_bivar_stats(stats: List[Stats]): List[Boolean] = {
+    {for{
+      stat <- stats
+      data = stat.preprocess(bivar_arr)
+    } yield get_dim(data.index)}.map(x => x == (2, rows))
   }
 
   def which_row_orient_index(ind: List[Index]):List[Boolean] = {
       {for {
         index <- ind
-      } yield get_dim(index.index)}.map(x => x == (rows, dims))
+      } yield get_dim(index.index)}.map(x => x == (dims, rows))
 
   }
 
@@ -72,14 +88,15 @@ class TestDimensions extends FunSuite {
   }
 
   test("Checking if val index is col oriented for all Stats"){
-    which_row_orient_stats(all_ex_stats).map(x => assert(!x))
-    which_row_orient_stats(all_mcde_stats).map(x => assert(!x))
+    which_row_orient_stats(all_ex_stats).map(x => assert(x))
+    which_row_orient_stats(all_mcde_stats).map(x => assert(x))
+    which_row_orient_bivar_stats(all_bivar).map(x => assert(x))
   }
 
   // To be sure we may be testing twice the same stuff
 
   test("Checking if val index is col oriented for all Indexstructures"){
-    which_row_orient_index(all_indecies).map(x => assert(!x))
+    which_row_orient_index(all_indecies).map(x => assert(x))
   }
 
   test("Checking if no of rows in saved data by saveSample != dims"){
