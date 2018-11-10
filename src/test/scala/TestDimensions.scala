@@ -49,13 +49,13 @@ class TestDimensions extends FunSuite {
       {for{
         stat <- stats
         data = stat.preprocess(arr)
-      } yield get_dim(data.index)}.map(x => x == (rows, dims))
+      } yield get_dim(data.index)}.map(x => x == (dims, rows))
   }
 
   def which_row_orient_index(ind: List[Index]):List[Boolean] = {
       {for {
         index <- ind
-      } yield get_dim(index.index)}.map(x => x == (rows, dims))
+      } yield get_dim(index.index)}.map(x => x == (dims, rows))
 
   }
 
@@ -72,14 +72,14 @@ class TestDimensions extends FunSuite {
   }
 
   test("Checking if val index is col oriented for all Stats"){
-    which_row_orient_stats(all_ex_stats).map(x => assert(!x))
-    which_row_orient_stats(all_mcde_stats).map(x => assert(!x))
+    which_row_orient_stats(all_ex_stats).map(x => assert(x))
+    which_row_orient_stats(all_mcde_stats).map(x => assert(x))
   }
 
   // To be sure we may be testing twice the same stuff
 
   test("Checking if val index is col oriented for all Indexstructures"){
-    which_row_orient_index(all_indecies).map(x => assert(!x))
+    which_row_orient_index(all_indecies).map(x => assert(x))
   }
 
   test("Checking if no of rows in saved data by saveSample != dims"){

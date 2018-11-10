@@ -72,7 +72,7 @@ val all_indecies = List(new AdjustedRankIndex(arr), new CorrectedRankIndex(arr),
 def which_row_orient_index(ind: List[Index]):List[Boolean] = {
     {for {
       index <- ind
-    } yield get_dim(index.index)}.map(x => x == (rows, dims))
+    } yield get_dim(index.index)}.map(x => x == (dims, rows))
 
 }
 
@@ -136,3 +136,15 @@ val lst_of_f = getListOfFiles(getClass.getResource("/data/").getPath).map(x => x
 } yield true}.size == lst_of_f.size
 
 // --> Data is correct
+
+val indecies = List(new ExternalRankIndex(arr))
+get_dim(indecies(0).index)
+which_row_orient_index(indecies)
+
+
+
+
+
+
+
+
