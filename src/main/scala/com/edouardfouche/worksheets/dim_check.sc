@@ -82,6 +82,7 @@ which_row_orient_index(all_indecies).map(x => !x)
 // Apply Method calls the index at dim n (see Index)
 val exRank = new ExternalRankIndex(arr)
 val noIndex = new NonIndex(arr)
+get_dim(exRank.index)
 
 exRank(0).size
 noIndex(0).size
