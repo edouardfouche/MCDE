@@ -38,7 +38,7 @@ object BiVarPowerM extends BiVarExperiments  {
       info(s"Starting com.edouardfouche.experiments with configuration M: ${m}, nDim: $nDim, n: $n")
 
       val tests = Vector(MWP(m, 0.5),  KS(m, 0.1), MWPr(m, 0.5), MWPu(m, 0.5), Correlation(), DistanceCorrelation(), HoeffdingsD(), HSM(), JSEquity(),
-        MCE(), MutualInformation(), Slope(), SlopeInversion(), SpearmanCorrelation(), Surfing())
+        MCE(), MutualInformation(), Slope(), SlopeInversion(), SpearmanCorrelation(), Surfing(), KendallsTau())
 
 
       var ThresholdMap90 = scala.collection.mutable.Map[String, Double]()

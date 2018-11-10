@@ -16,7 +16,7 @@ trait BivariateStats extends ExternalStats {
   }
 
   def preprocess(input: Array[Array[Double]]): PreprocessedData = {
-    require(get_dim(input)._1 != 2, "Bivariate Measure only accepts 2-D Data")
+    require(get_dim(input)._2 == 2, "Bivariate Measure only accepts 2-D row oriented Data")
     new NonIndex(input)
   }
 
