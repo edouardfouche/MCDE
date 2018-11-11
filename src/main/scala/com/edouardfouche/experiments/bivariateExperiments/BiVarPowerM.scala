@@ -8,7 +8,7 @@ import com.edouardfouche.stats.mcde.{KS, MWP, MWPr, MWPu}
 import com.edouardfouche.stats.external.Bivariate._
 import com.edouardfouche.utils.StopWatch
 
-object BiVarPowerM extends BiVarExperiments  {
+object BiVarPowerM extends Experiment  {
   val alpha_range = Vector()
   val nRep = 500 // number of data sets we use to estimate rejection rate
   val data: Vector[DataRef] = Vector()
@@ -16,8 +16,8 @@ object BiVarPowerM extends BiVarExperiments  {
   val noiseLevels = 30
   val generators: Vector[(Int) => (Double) => DataGenerator] = GeneratorFactory.selected
 
-  override val M_range: Vector[Int] = Vector(10, 50, 200, 500)
-  override val tests = Vector()
+  val M_range: Vector[Int] = Vector(10, 50, 200, 500)
+  val dims = Vector(2)
 
   def run(): Unit = {
     info(s"Starting com.edouardfouche.experiments - ${this.getClass.getSimpleName}")
