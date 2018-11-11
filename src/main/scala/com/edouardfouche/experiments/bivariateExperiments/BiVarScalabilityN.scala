@@ -20,7 +20,7 @@ object BiVarScalabilityN extends BiVarExperiments {
     info(s"nrep: $nRep")
     info(s"Datasets: ${data.map(_.id) mkString ","}")
     info(s"N_range: ${N_range mkString ","}")
-    info(s"nDim: 3")
+    info(s"nDim: " + dims(0))
     info(s"Started on: ${java.net.InetAddress.getLocalHost.getHostName}")
 
     info(s"Starting com.edouardfouche.experiments with configuration, nDim: 3")
@@ -32,7 +32,7 @@ object BiVarScalabilityN extends BiVarExperiments {
         r <- (1 to nRep)
       } yield {
 
-        generators.par.foreach(x => compareScalability(x, 3, n, tests, r))
+        generators.par.foreach(x => compareScalability(x, dims(0), n, tests, r))
       }
     }
     info(s"End of experiment ${this.getClass.getSimpleName} - ${formatter.format(java.util.Calendar.getInstance().getTime)}")
