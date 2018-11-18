@@ -43,7 +43,7 @@ ken.correlation(data1, data2)
 val own_ken = KendallsTau()
 own_ken.contrast(data3, Set(0,1))
 
-val corr = SpearmanCorrelation()
+val corr = Correlation()
 
 corr.contrast(data3, Set(0,1))
 
