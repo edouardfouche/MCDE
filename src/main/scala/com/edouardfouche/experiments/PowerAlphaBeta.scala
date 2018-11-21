@@ -31,10 +31,10 @@ trait PowerAlphaBeta extends Experiment {
 
   val beta_range: Vector[Double]
   val M_range: Vector[Int] = Vector(100)
-  val nRep = 500 // number of data sets we use to estimate rejection rate
+  val nRep = 1000 // number of data sets we use to estimate rejection rate
   val data: Vector[DataRef] = Vector()
   val N_range = Vector(1000) // number of data points for each data set
-  val dims = Vector(2, 3, 5)
+  val dims = Vector(2, 3, 5, 10)
   val noiseLevels = 30
   val generators: Vector[(Int) => (Double) => DataGenerator] = GeneratorFactory.all
 
