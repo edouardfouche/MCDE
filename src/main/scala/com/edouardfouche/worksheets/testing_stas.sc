@@ -50,6 +50,8 @@ corr.contrast(data3, Set(0,1))
 val mwp = MWP()
 mwp.contrast(data3, Set(0,1))
 
+val surf = Surfing()
+surf.contrast(data3, Set(0,1))
 
 
 
