@@ -24,6 +24,10 @@ import scala.annotation.tailrec
 /**
   * Simply averaging over all Z scores
   * Do not repartition on reference attribute
+  *
+  * @alpha Expected share of instances in slice (independent dimensions).
+  * @beta  Expected share of instances in marginal restriction (reference dimension).
+  *        Added with respect to the original paper to loose the dependence of beta from alpha.
   */
 // Compact and nice explanation of the Z-score: http://ictedusrv.cumbria.ac.uk/maths/SecMaths/U4/page_80.htm
 case class MWZ(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {

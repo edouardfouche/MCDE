@@ -5,7 +5,11 @@ import com.edouardfouche.stats.StatsFactory
 
 /**
   * The idea is just to look how the number of points in slices deviate from the expected number
-  * TODO: Not sure whether this is clever of not.
+  *
+  * @alpha Expected share of instances in slice (independent dimensions).
+  * @beta  Expected share of instances in marginal restriction (reference dimension).
+  *        Added with respect to the original paper to loose the dependence of beta from alpha.
+  *        TODO: Not sure whether this is clever of not.
   */
 case class S(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
   val id = "S"

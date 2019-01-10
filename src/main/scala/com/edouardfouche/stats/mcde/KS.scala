@@ -23,6 +23,11 @@ import scala.annotation.tailrec
 /**
   * This is a re-implementation  of the contrast measure as proposed in HiCS
   * Use the Kolmogorov-Smirnov test as basis. To the best of my knowledge, the most efficient existing implementation.
+  *
+  * @alpha Expected share of instances in slice (independent dimensions).
+  * @beta  Expected share of instances in marginal restriction (reference dimension).
+  *        Added with respect to the original paper to loose the dependence of beta from alpha.
+  *
   */
 //TODO: It would be actually interesting to compare MCDE with a version with the KS-test AND all the improvements proposed by MCDE
 case class KS(M: Int = 50, alpha: Double = 0.1, beta: Double = 0.1, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {

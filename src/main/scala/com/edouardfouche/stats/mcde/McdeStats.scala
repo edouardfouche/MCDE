@@ -22,6 +22,9 @@ import scala.collection.parallel.ForkJoinTaskSupport
 
 /**
   * Created by fouchee on 07.07.17.
+  * @alpha Expected share of instances in slice (independent dimensions).
+  * @beta  Expected share of instances in marginal restriction (reference dimension).
+  *        Added with respect to the original paper to loose the dependence of beta from alpha.
   */
 trait McdeStats extends Stats {
   type U

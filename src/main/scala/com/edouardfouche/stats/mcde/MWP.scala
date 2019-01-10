@@ -25,7 +25,9 @@ import scala.annotation.tailrec
   * Compute the average accross the p-values of all the slices, but this time do the tie correction
   * The tie correction is precomputed as a Map, which gives for each distinct rank a corresponding correction
   *
-  * @beta Added to loose the dependence of beta from alpha and in twoSample
+  * @alpha Expected share of instances in slice (independent dimensions).
+  * @beta  Expected share of instances in marginal restriction (reference dimension).
+  *        Added with respect to the original paper to loose the dependence of beta from alpha.
   */
 
 case class MWP(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5,  calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
