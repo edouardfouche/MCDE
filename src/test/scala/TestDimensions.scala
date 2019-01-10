@@ -23,7 +23,7 @@ class TestDimensions extends FunSuite {
   val all_ex_stats: List[Stats] = List(CMI(), HICS(), II(), MAC(), MS(), TC(), UDS())
   val all_mcde_stats:List[Stats] = List(KS(), MWB(), MWP(), MWPi(), MWPr(), MWPs(), MWPu(), MWZ(), S())
   val all_bivar: List[Stats] =  List(Correlation(), DistanceCorrelation(), HoeffdingsD(), HSM(), JSEquity(),
-    MCE(), MutualInformation(), Slope(), SlopeInversion(), SpearmanCorrelation(), Surfing(), KendallsTau())
+    MCE(), MutualInformation(), Slope(), SlopeInversion(), SpearmanCorrelation(), KendallsTau())
 
 
   val all_indecies = List(new AdjustedRankIndex(arr), new CorrectedRankIndex(arr), new ExternalRankIndex(arr),

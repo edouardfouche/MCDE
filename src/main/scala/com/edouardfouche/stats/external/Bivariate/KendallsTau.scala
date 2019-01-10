@@ -1,5 +1,6 @@
 package com.edouardfouche.stats.external.Bivariate
 
+import breeze.stats.distributions.Gaussian
 import org.apache.commons.math3.stat.correlation.KendallsCorrelation
 
 case class KendallsTau() extends BivariateStats {
@@ -7,6 +8,6 @@ case class KendallsTau() extends BivariateStats {
 
   def score(data: Array[Array[Double]], preRank: Array[Array[Int]] = null): Double = {
     val ken = new KendallsCorrelation()
-    ken.correlation(data(0), data(1))
+    ken.correlation(data(0).map(x => x + Gaussian(0, 1).draw() * 0.0000000001), data(1).map(x => x + Gaussian(0, 1).draw() * 0.0000000001))
   }
 }

@@ -10,7 +10,7 @@ trait BiVarExperiments extends Experiment {
   val m = M_range(0)
 
   val tests = Vector(MWP(m, 0.5),  KS(m, 0.1), MWPr(m, 0.5), MWPu(m, 0.5), Correlation(), DistanceCorrelation(), HoeffdingsD(), HSM(), JSEquity(),
-    MCE(), MutualInformation(), Slope(), SlopeInversion(), SpearmanCorrelation(), Surfing(), KendallsTau()) //When adding or removing a measure here, do also in BiVarPowerM!!!
+    MCE(), MutualInformation(), Slope(), SlopeInversion(), SpearmanCorrelation(), KendallsTau()) //When adding or removing a measure here, do also in BiVarPowerM!!!
 
   final val dims = Vector(2)
 }

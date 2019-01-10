@@ -2,6 +2,9 @@ import de.lmu.ifi.dbs.elki.math.statistics.dependence._
 import com.edouardfouche.stats.external.Bivariate._
 import com.edouardfouche.stats.mcde.MWP
 import org.apache.commons.math3.stat.correlation.KendallsCorrelation
+import breeze.stats.distributions.Gaussian
+
+import scala.util.Random
 
 
 val data1: Array[Double] = (1 to 10).map(_.toDouble).toArray
@@ -33,7 +36,6 @@ DistanceCorrelationDependenceMeasure.STATIC.dependence(data1, data2)
 HSMDependenceMeasure.STATIC.dependence(data1, data2)
 JensenShannonEquiwidthDependenceMeasure.STATIC.dependence(data1, data2)
 MCEDependenceMeasure.STATIC.dependence(data1, data2)
-SURFINGDependenceMeasure.STATIC.dependence(data1, data2)
 SlopeDependenceMeasure.STATIC.dependence(data1, data2)
 SlopeInversionDependenceMeasure.STATIC.dependence(data1, data2)
 
@@ -43,15 +45,18 @@ ken.correlation(data1, data2)
 val own_ken = KendallsTau()
 own_ken.contrast(data3, Set(0,1))
 
-val corr = SpearmanCorrelation()
+val corr = Correlation()
 
 corr.contrast(data3, Set(0,1))
 
-val mwp = MWP()
-mwp.contrast(data3, Set(0,1))
 
 
+val slope = Slope()
+slope.contrast(data3, Set(0,1))
 
+val randArray1:Array[Double] = Array.fill(100)(Random.nextInt).map(x => x.toDouble)
+val randArray2:Array[Double] = Array.fill(100)(Random.nextInt).map(_.toDouble)
 
+val data4: Array[Array[Double]] = Array(randArray1, randArray2).transpose
 
-
+slope.contrast(data4, Set(0,1))
