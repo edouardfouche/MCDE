@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2018 Edouard Fouché
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package com.edouardfouche.experiments
 
 import breeze.stats.DescriptiveStats.percentile
@@ -23,13 +7,10 @@ import com.edouardfouche.preprocess.DataRef
 import com.edouardfouche.stats.mcde.{KS, MWP, MWPr}
 import com.edouardfouche.utils.StopWatch
 
-/**
-  *
-  * Compare the power of approaches w.r.t. alpha and beta
-  */
-trait PowerAlphaBeta extends Experiment {
+object PowerBetaKS extends Experiment {
 
-  val beta_range: Vector[Double]
+  val alpha_range: Vector[Double] = Vector(0.1)
+  val beta_range: Vector[Double] = Vector(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
   val M_range: Vector[Int] = Vector(100)
   val nRep = 1000 // number of data sets we use to estimate rejection rate
   val data: Vector[DataRef] = Vector()
