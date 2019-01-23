@@ -42,10 +42,8 @@ object PowerBetaKS extends Experiment {
       info(s"Starting com.edouardfouche.experiments with configuration M: ${m}, nDim: $nDim, a: ${a},b: ${b} , n: $n")
 
       val ks = KS(m, a, b)
-      val mwp = MWP(m, a, b)
-      val mwpr = MWPr(m, a, b)
 
-      val tests = Vector(ks, mwp, mwpr)
+      val tests = Vector(ks)
 
       var ThresholdMap90 = scala.collection.mutable.Map[String, Double]()
       var ThresholdMap95 = scala.collection.mutable.Map[String, Double]()
