@@ -207,7 +207,7 @@ object Main extends LazyLogging {
     case "com.edouardfouche.experiments.PowerAlphaBeta" =>
       PowerAlpha.run()
       PowerBeta.run()
-      // PowerBetaKS.run()
+      PowerBetaKS.run()
 
     case "com.edouardfouche.experiments.PowerBetaKS" =>
       PowerBetaKS.run()

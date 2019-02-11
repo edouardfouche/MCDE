@@ -60,14 +60,14 @@ trait PowerAlphaBeta extends Experiment {
     } yield {
       info(s"Starting com.edouardfouche.experiments with configuration M: ${m}, nDim: $nDim, a: ${a},b: ${b} , n: $n")
 
-      // val ks = KS(m, a, b)
-      // val mwp = MWP(m, a, b)
-      // val mwpr = MWPr(m, a, b)
+      val ks = KS(m, a, b)
+      val mwp = MWP(m, a, b)
+      val mwpr = MWPr(m, a, b)
       val mwpu = MWPu(m, a, b)
       val mwps = MWPs(m, a, b)
       val mwpi = MWPi(m, a, b)
 
-      val tests = Vector(mwpu, mwps, mwpi) // ks, mwp, mwpr
+      val tests = Vector(ks, mwp, mwpr, mwpu, mwps, mwpi)
 
       var ThresholdMap90 = scala.collection.mutable.Map[String, Double]()
       var ThresholdMap95 = scala.collection.mutable.Map[String, Double]()
