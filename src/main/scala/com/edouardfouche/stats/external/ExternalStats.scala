@@ -28,6 +28,7 @@ import scala.collection.parallel.ForkJoinTaskSupport
 trait ExternalStats extends Stats with LazyLogging {
   val id: String
   val alpha = 0.0
+  val beta = 0.0
   val M = 0
   val calibrate: Boolean
   var parallelize: Int
@@ -76,7 +77,7 @@ trait ExternalStats extends Stats with LazyLogging {
     }
 
     if (calibrate) {
-      val uncalibrated = StatsFactory.getTest(this.id, this.M, this.alpha, calibrate = false, parallelize)
+      val uncalibrated = StatsFactory.getTest(this.id, this.M, this.alpha, this.beta, calibrate = false, parallelize)
       for {
         x <- cols
         y <- 0 until x
@@ -90,4 +91,5 @@ trait ExternalStats extends Stats with LazyLogging {
     parallelize = currentparallelismlevel
     matrix
   }
+
 }

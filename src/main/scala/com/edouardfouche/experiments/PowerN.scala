@@ -30,16 +30,15 @@ import com.edouardfouche.utils.StopWatch
   * Compare the power w.r.t. different data size N
   */
 object PowerN extends Experiment {
-  override val alpha_range = Vector()
-  override val M_range: Vector[Int] = Vector(50)
-  override val nRep = 500 // number of data sets we use to estimate rejection rate
-  override val data: Vector[DataRef] = Vector()
+  val alpha_range = Vector()
+  val M_range: Vector[Int] = Vector(50)
+  val nRep = 500 // number of data sets we use to estimate rejection rate
+  val data: Vector[DataRef] = Vector()
   val N_range = Vector(100, 200, 500, 1000)
   //, 2000, 5000) // number of data points for each data set
   //val dims = Vector(2, 3, 5)
   val dims = Vector(3)
   val noiseLevels = 30
-  val m = 50
   val generators: Vector[(Int) => (Double) => DataGenerator] = GeneratorFactory.selected
 
   def run(): Unit = {
@@ -54,6 +53,7 @@ object PowerN extends Experiment {
     info(s"Started on: ${java.net.InetAddress.getLocalHost.getHostName}")
 
     for {
+      m <- M_range
       n <- N_range
       nDim <- dims
     } yield {

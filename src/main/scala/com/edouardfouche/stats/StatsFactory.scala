@@ -20,12 +20,12 @@ import com.edouardfouche.stats.mcde._
 import com.edouardfouche.stats.external._
 
 object StatsFactory {
-  def getTest(test: String, m: Int, alpha: Double, calibrate: Boolean, parallelize: Int): Stats =
+  def getTest(test: String, m: Int, alpha: Double, beta: Double,  calibrate: Boolean, parallelize: Int): Stats =
   test.toLowerCase match {
-    case "ks" => KS(m, alpha, calibrate, parallelize) // preferred
-    case "mwb" => MWB(m, alpha, calibrate, parallelize) // preferred
-    case "mwz" => MWZ(m, alpha, calibrate, parallelize)
-    case "mwp" => MWP(m, alpha, calibrate, parallelize) // preferred
+    case "ks" => KS(m, alpha, beta, calibrate, parallelize) // preferred
+    case "mwb" => MWB(m, alpha, beta, calibrate, parallelize) // preferred
+    case "mwz" => MWZ(m, alpha, beta, calibrate, parallelize)
+    case "mwp" => MWP(m, alpha, beta, calibrate, parallelize) // preferred
     case "ii" => II()
     case "hics" => HICS()
     case "tc" => TC()
@@ -36,3 +36,4 @@ object StatsFactory {
   case _ => throw new Error(s"Unknown statistical test ${test}")
   }
 }
+

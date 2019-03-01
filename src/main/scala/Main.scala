@@ -100,7 +100,7 @@ object Main extends LazyLogging {
           args(mindex).toInt
         }
 
-        StatsFactory.getTest("MWP", M, 0.5, false, plevel)
+        StatsFactory.getTest("MWP", M, 0.5, 0.5, false, plevel)
       } else {
 
         val mindex = (args indexWhere (_ == "-m")) + 1
@@ -115,7 +115,7 @@ object Main extends LazyLogging {
           }
           args(mindex).toInt
         }
-        StatsFactory.getTest(args(aindex), M, 0.5, false, plevel)
+        StatsFactory.getTest(args(aindex), M, 0.5, 0.5, false, plevel)
       }
 
       val opening_CPUtime =  opening._1
@@ -200,9 +200,17 @@ object Main extends LazyLogging {
 
     case "com.edouardfouche.experiments.Power" => Power.run()
     case "com.edouardfouche.experiments.PowerAlpha" => PowerAlpha.run()
+    case "com.edouardfouche.experiments.PowerBeta" => PowerBeta.run()
     case "com.edouardfouche.experiments.PowerDiscrete" => PowerDiscrete.run()
     case "com.edouardfouche.experiments.PowerM" => PowerM.run()
     case "com.edouardfouche.experiments.PowerN" => PowerN.run()
+    case "com.edouardfouche.experiments.PowerAlphaBeta" =>
+      PowerAlpha.run()
+      PowerBeta.run()
+      PowerBetaKS.run()
+
+    case "com.edouardfouche.experiments.PowerBetaKS" =>
+      PowerBetaKS.run()
 
     case "com.edouardfouche.experiments.ScalabilityD" => ScalabilityD.run()
     case "com.edouardfouche.experiments.ScalabilityN" => ScalabilityN.run()
@@ -217,6 +225,19 @@ object Main extends LazyLogging {
       ScalabilityD.run()
       ScalabilityN.run()
     }
+    case "com.edouardfouche.experiments.BiVarPower" => BiVarPower.run()
+    case "com.edouardfouche.experiments.BiVarPowerDiscrete" => BiVarPowerDiscrete.run()
+    case "com.edouardfouche.experiments.BiVarPowerM" => BiVarPowerM.run()
+    case "com.edouardfouche.experiments.BiVarPowerN" => BiVarPowerN.run()
+    case "com.edouardfouche.experiments.BiVarScalabilityN" => BiVarScalabilityN.run()
+
+    case "com.edouardfouche.experiments.BiVar" => {
+      BiVarPower.run()
+      BiVarPowerDiscrete.run()
+      BiVarPowerM.run()
+      BiVarPowerN.run()
+      BiVarScalabilityN.run()
+    }
 
     case "com.edouardfouche.experiments.MCDE" => {
       Power.run()
@@ -225,6 +246,7 @@ object Main extends LazyLogging {
       PowerDiscrete.run()
       ScalabilityN.run()
       ScalabilityD.run()
+
       // ParallelizationN.run()
     }
 

@@ -24,6 +24,7 @@ trait Stats {
   type PreprocessedData <: Index // PreprocessedData are subtypes of Index, which are column oriented structures
   val id: String
   val alpha: Double
+  val beta: Double
   val M: Int
 
   /**
