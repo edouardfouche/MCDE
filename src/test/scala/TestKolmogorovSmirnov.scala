@@ -19,8 +19,8 @@
   * Created by fouchee on 26.06.17.
   */
 
-import com.edouardfouche.preprocess.Preprocess
-import com.edouardfouche.stats.mcde.{KS, McdeStats}
+import io.github.edouardfouche.preprocess.Preprocess
+import io.github.edouardfouche.mcde.{KS, McdeStats}
 import org.scalatest.FunSuite
 
 class TestKolmogorovSmirnov extends FunSuite with TestData {

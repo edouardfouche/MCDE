@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import com.edouardfouche.preprocess.{DataRef, Preprocess}
-import com.edouardfouche.stats.mcde.{KS, MWP}
+import io.github.edouardfouche.preprocess.{DataRef, Preprocess}
+import io.github.edouardfouche.mcde.{KS, MWP}
 
 /**
   * Created by fouchee on 12.07.17.

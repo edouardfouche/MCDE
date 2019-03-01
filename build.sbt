@@ -1,21 +1,18 @@
-name := "MCDE-experiments"
+name := "MCDE"
 
-organization:= "com.edouardfouche"
+organization:= "io.github.edouardfouche"
 
 version := "1.0"
 scalaVersion := "2.11.8"
 fork in run := true
 scalacOptions += "-feature"
 
-unmanagedJars in Compile += file("lib/uds.jar")
-
-
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
 libraryDependencies += "de.lmu.ifi.dbs.elki" % "elki" % "0.7.5"
 libraryDependencies += "org.apache.commons" % "commons-math3" % "3.6.1"
 libraryDependencies += "commons-io" % "commons-io" % "2.6"
 resolvers += "Java.net Maven2 Repository" at "http://download.java.net/maven/2/"
-
+ 
 libraryDependencies ++= Seq(
   // Last stable release
   "org.scalanlp" %% "breeze" % "0.13.1",

@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.edouardfouche.stats.StatsFactory
+import io.github.edouardfouche.mcde.StatsFactory
 import org.scalatest.FunSuite
 
 /**

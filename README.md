@@ -1,10 +1,10 @@
-# MCDE - Experiments
+# Monte Carlo Dependency Estimation (MCDE)
 
 ![illustration](img/example4.png)
 
-Welcome to the supplementary material for the paper [*Monte Carlo Dependency Estimation*](https://arxiv.org/abs/1810.02112) (MCDE) by Edouard Fouché and Klemens Böhm, Karlsruhe Institute of Technology (KIT).
-This repository contains the original implementation of MCDE/MWP and the information to reproduce the experiments in the paper. For this reason, it is partially frozen at the time of publication.
-To use the most recent and maintained implementation of MCDE/MWP, please visit this [repository](https://github.com/edouardfouche/MCDE).
+This repository contains the most recent implementation of MCDE/MWP, originally described in the paper [*Monte Carlo Dependency Estimation*](https://arxiv.org/abs/1810.02112) by Edouard Fouché and Klemens Böhm, Karlsruhe Institute of Technology (KIT).
+To reproduce the experiment from the paper, please visit this [repository](https://github.com/edouardfouche/MCDE-experiments).
+Our goal in this repository is to provide a deployable and consolidated version of the work described therein.
 
 This repository is released under the AGPLv3 license. Please see the [LICENSE.md](LICENSE.md) file. 
 
@@ -174,83 +174,10 @@ Computation time:    51.002643 ms (cpu), 1123.108306 ms (wall)
 
 ## Reproducing the experiments
 
-In this section, we explain how to reproduce the experiments from our paper. 
-The experiments creates about 20Mb of data and require about 16 hours 
-on a server with 20 cores at 2.2 Ghz, Java Open-JDK 8 and Scala 2.11.8. 
-Results are saved in the folder `experiments` as `.csv` files, along with logs.
-
-### Power
-
-Evaluate the statistical power of MCDE/MWP and of the benchmark approaches against a panel of dependencies.
-```
-sbt "run com.edouardfouche.experiments.Power"  # ~ 7 hours, 3Mb data
-```
-
-### PowerM
-
-Evaluate the influence of parameter *M* w.r.t. the statistical power of MCDE/MWP. 
-
-```
-sbt "run com.edouardfouche.experiments.PowerM" # ~ 10 minutes, 1Mb data
-```
-
-### PowerN
-
-Evaluate the sensitivity of each approach w.r.t. *n*, the number data points. 
-
-```
-sbt "run com.edouardfouche.experiments.PowerN" # ~ 2.5 hours, 4Mb data
-```
-
-### PowerDiscrete
-
-Evaluate the robustness of each approach against discrete data. 
-
-```
-sbt "run com.edouardfouche.experiments.PowerDiscrete" # ~ 3 hours, 5Mb data
-```
-
-### ScalabilityN
-
-Evaluate the scalability of each approach w.r.t. *n*, the number data points. 
-
-```
-sbt "run com.edouardfouche.experiments.ScalabilityN" # ~ 45 minutes, 5Mb data
-```
-
-### ScalabilityD
-
-Evaluate the scalability of each approach w.r.t. *d*, the number dimensions. 
-
-```
-sbt "run com.edouardfouche.experiments.ScalabilityD" # ~ 2.5 hours, 2Mb data 
-```
-
-## Visualize the results
-
-Then, you can use the Jupyter notebooks in folder `visualize` to reproduce 
-the plots from the publication. By the time of the experiments, we use the following Python packages: 
-
-```
-# Name                    Version               
-matplotlib                2.0.2             
-numpy                     1.13.1              
-pandas                    0.20.3     
-seaborn                   0.8           
-```
+Please see this [repository](https://github.com/edouardfouche/MCDE-experiments)
 
 ## Contributing
 
 We welcome contributions to the repository and bug reports on GitHub.
 
 For questions and comments, please contact `edouard.fouche@kit.edu`
-
-## Acknowledgements
-
-This repository features code from other projects. We would like to acknowledge the following contributions:
-
-- Hoang Vu Nguyen for providing the source for `HiCS`, `TC`, `II`, `MS`, `UDS`, `MAC`, `CMI` in the [code dump](http://eda.mmci.uni-saarland.de/uds/) for the paper `Nguyen, Hoang-Vu, Panagiotis Mandros, and Jilles Vreeken. "Universal dependency analysis." Proceedings of the 2016 SIAM International Conference on Data Mining. Society for Industrial and Applied Mathematics, 2016.`
-
-- The [ELKI project](https://elki-project.github.io/) for the R*-Tree index structure, that we use to accelerate the nearest neighbors queries in `TC` and `II`. 
-
-- Hendrik Braun, for the implementation of `TC`, `II`, `MS`, as a part of his Bachelor's thesis at KIT. 

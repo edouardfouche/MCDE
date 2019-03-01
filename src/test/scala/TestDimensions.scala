@@ -1,14 +1,12 @@
-import com.edouardfouche.generators._
-import com.edouardfouche.index._
-import com.edouardfouche.preprocess._
-import com.edouardfouche.stats.Stats
+import io.github.edouardfouche.generators._
+import io.github.edouardfouche.index._
+import io.github.edouardfouche.preprocess._
 import org.scalatest.FunSuite
-import com.edouardfouche.stats.mcde._
-import com.edouardfouche.stats.external._
+import io.github.edouardfouche.mcde.{Stats, _}
 import java.io.File
-import java.nio.file.{Paths, Files}
+import java.nio.file.{Files, Paths}
+
 import org.apache.commons.io.FileUtils
-import com.edouardfouche.stats.external.bivariate._
 
 import scala.language.existentials // Fixes a curious warning.
 
@@ -22,16 +20,13 @@ class TestDimensions extends FunSuite {
   val bivar_arr = Independent(2, 0.0).generate(rows)
 
   // TODO: What if new Tests / Generators?
-  val all_ex_stats: List[Stats] = List(CMI(), HICS(), II(), MAC(), MS(), TC(), UDS())
   val all_mcde_stats:List[Stats] = List(KS(), MWB(), MWP(), MWPi(), MWPr(), MWPs(), MWPu(), MWZ(), S())
-  val all_bivar: List[Stats] =  List(Correlation(), DistanceCorrelation(), HoeffdingsD(), HSM(), JSEquity(),
-    MCE(), MutualInformation(), Slope(), SlopeInversion(), SpearmanCorrelation(), KendallsTau())
 
 
-  val all_indecies = List(new AdjustedRankIndex(arr), new CorrectedRankIndex(arr), new ExternalRankIndex(arr),
+  val all_indecies = List(new AdjustedRankIndex(arr), new CorrectedRankIndex(arr),
     new NonIndex(arr), new RankIndex(arr))
 
-  val all_bivar_indecies = List(new AdjustedRankIndex(bivar_arr), new CorrectedRankIndex(bivar_arr), new ExternalRankIndex(bivar_arr),
+  val all_bivar_indecies = List(new AdjustedRankIndex(bivar_arr), new CorrectedRankIndex(bivar_arr),
     new NonIndex(bivar_arr), new RankIndex(bivar_arr))
 
   val all_gens = List(Cross(dims, 0.0).generate(rows), Cubic(1,dims, 0.0).generate(rows), DoubleLinear(1,dims, 0.0).generate(rows),
@@ -90,9 +85,7 @@ class TestDimensions extends FunSuite {
   }
 
   test("Checking if val index is col oriented for all Stats"){
-    which_row_orient_stats(all_ex_stats).map(x => assert(x))
     which_row_orient_stats(all_mcde_stats).map(x => assert(x))
-    which_row_orient_bivar_stats(all_bivar).map(x => assert(x))
   }
 
   // To be sure we may be testing twice the same stuff
@@ -114,7 +107,7 @@ class TestDimensions extends FunSuite {
   test("Checking if DataRef(...).openAndPreprocess() loads col oriented data"){
 
     for{
-      stat <- all_ex_stats ::: all_mcde_stats
+      stat <- all_mcde_stats
       data = dataclass.openAndPreprocess(stat).index
     } assert(get_dim(data)._1 == dims)
   }

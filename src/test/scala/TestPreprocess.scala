@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.edouardfouche.stats.mcde.MWP
+import io.github.edouardfouche.mcde.MWP
 import org.scalatest.FunSuite
 
 class TestPreprocess extends FunSuite with TestData {

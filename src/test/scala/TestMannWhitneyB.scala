@@ -15,8 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.edouardfouche.preprocess.Preprocess
-import com.edouardfouche.stats.mcde.MWB
+import io.github.edouardfouche.preprocess.Preprocess
+import io.github.edouardfouche.mcde.MWB
 import org.scalatest.FunSuite
 
 /**

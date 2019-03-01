@@ -15,8 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.edouardfouche.generators.Independent
-import com.edouardfouche.stats.mcde.MWP
+import io.github.edouardfouche.generators.Independent
+import io.github.edouardfouche.mcde.MWP
 import org.scalatest.FunSuite
 
 /**
