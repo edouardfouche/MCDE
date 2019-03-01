@@ -1,4 +1,4 @@
-# Monte Carlo Dependency Estimation (MCDE)
+# Monte Carlo Dependency Estimation (MCDE) - Experiments
 
 ![illustration](img/example4.png)
 
