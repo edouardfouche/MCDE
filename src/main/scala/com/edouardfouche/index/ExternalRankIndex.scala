@@ -24,6 +24,8 @@ import uds.score.UDSFunction
   *
   * @param values A row-oriented data set
   * @param parallelize Whether to parallelize or not the index computation (beta)
+  *
+  * @note ExternalRankIndex is very different from other indexes. The index is made of a "RankIndex" and a copy of the data in tuples.
   */
 class ExternalRankIndex(val values: Array[Array[Double]], val parallelize: Int = 0) extends Index  {
   type T = (Int, Float)

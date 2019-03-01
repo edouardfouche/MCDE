@@ -181,6 +181,7 @@ trait Experiment extends LazyLogging {
                       case e: Exception => {
                         info(s"Attempt3, Unexpected Exception: ${e.getMessage} ${e.toString} / test:${test.id}, gen: ${gen.id}, coerced to 0.0")
                         0.0
+
                       }
                     }
                   }

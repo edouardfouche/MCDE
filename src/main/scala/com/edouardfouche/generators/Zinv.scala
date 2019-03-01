@@ -27,7 +27,7 @@ case class Zinv(nDim: Int, noise: Double) extends DataGenerator {
       val data = (1 to nDim).toArray.map(y => {
         val v = if (y == 1) x
         else {
-          val flag = scala.util.Random.nextInt(4)
+          val flag = scala.util.Random.nextInt(3)
           if (flag == 0) (x - 0.5) * (-1) + 0.5
           else if (flag == 1) 0
           else 1
