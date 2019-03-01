@@ -4,15 +4,11 @@ import breeze.stats.DescriptiveStats.percentile
 import breeze.stats.{mean, stddev}
 import com.edouardfouche.generators.{DataGenerator, GeneratorFactory, Independent}
 import com.edouardfouche.preprocess.DataRef
-import com.edouardfouche.stats.mcde.McdeStats
+import com.edouardfouche.stats.mcde.{KS, MWP, MWPr, MWPu}
+import com.edouardfouche.stats.external.bivariate._
 import com.edouardfouche.utils.StopWatch
 
-
-/**
-  * Bivariate Version of Power Experiment
-  */
-
-object BiVarPower extends BiVarExperiments {
+object BivariatePowerM extends Experiment  {
   val alpha_range = Vector()
   val nRep = 500 // number of data sets we use to estimate rejection rate
   val data: Vector[DataRef] = Vector()
@@ -20,8 +16,11 @@ object BiVarPower extends BiVarExperiments {
   val noiseLevels = 30
   val generators: Vector[(Int) => (Double) => DataGenerator] = GeneratorFactory.selected
 
+  val M_range: Vector[Int] = Vector(10, 50, 200, 500)
+  val dims = Vector(2)
+
   def run(): Unit = {
-    info(s"${formatter.format(java.util.Calendar.getInstance().getTime)} - Starting com.edouardfouche.experiments - ${this.getClass.getSimpleName}")
+    info(s"Starting com.edouardfouche.experiments - ${this.getClass.getSimpleName}")
     info(s"Parameters:")
     info(s"M_range: q${M_range mkString ","}")
     info(s"nrep: $nRep")
@@ -32,10 +31,14 @@ object BiVarPower extends BiVarExperiments {
     info(s"Started on: ${java.net.InetAddress.getLocalHost.getHostName}")
 
     for {
+      m <- M_range
       nDim <- dims
       n <- N_range
     } yield {
       info(s"Starting com.edouardfouche.experiments with configuration M: ${m}, nDim: $nDim, n: $n")
+
+      val tests = Vector(MWP(m, 0.5),  KS(m, 0.1), MWPr(m, 0.5), MWPu(m, 0.5), Correlation(), DistanceCorrelation(), HoeffdingsD(), HSM(), JSEquity(),
+        MCE(), MutualInformation(), Slope(), SlopeInversion(), SpearmanCorrelation(), KendallsTau())
 
 
       var ThresholdMap90 = scala.collection.mutable.Map[String, Double]()
@@ -45,13 +48,12 @@ object BiVarPower extends BiVarExperiments {
       var ValueMap = scala.collection.mutable.Map[String, Array[Double]]()
 
       info(s"Computing Null Distribution")
-
       for (test <- tests.par) {
         info(s"Preparing data sets for Computing Null Distribution")
-        val preprocessing = (1 to nRep).map(x => {
-          val data = Independent(nDim, 0).generate(n) // Careful here: not transpose
+        val preprocessing = (1 to nRep).par.map(x => {
+          val data = Independent(nDim, 0.0).generate(n)
           StopWatch.measureTime(test.preprocess(data))
-        })
+        }).toArray
 
         val prepCPUtime = preprocessing.map(_._1)
         val prepWalltime = preprocessing.map(_._2)
@@ -68,10 +70,9 @@ object BiVarPower extends BiVarExperiments {
         val contrast = values.map(_._3)
         //println(s"${test.id}: ${values.take(10) mkString ";"}")
 
-        val abscontrast = contrast.map(x => math.abs(x))
-        ThresholdMap90 += (test.id -> percentile(abscontrast, 0.90))
-        ThresholdMap95 += (test.id -> percentile(abscontrast, 0.95))
-        ThresholdMap99 += (test.id -> percentile(abscontrast, 0.99))
+        ThresholdMap90 += (test.id -> percentile(contrast, 0.90))
+        ThresholdMap95 += (test.id -> percentile(contrast, 0.95))
+        ThresholdMap99 += (test.id -> percentile(contrast, 0.99))
 
         val summary = ExperimentSummary()
         summary.add("refId", "0-Hypothesis")
@@ -80,21 +81,11 @@ object BiVarPower extends BiVarExperiments {
         summary.add("n", n)
         summary.add("nRep", nRep)
         summary.add("testId", test.id)
-
-        test match {
-          case x: McdeStats => {
-            summary.add("alpha", x.alpha)
-            summary.add("M", x.M)
-          }
-          case _ => {
-            summary.add("alpha", "NULL")
-            summary.add("M", "NULL")
-          }
-        }
-
-        summary.add("powerAt90", abscontrast.count(_ > ThresholdMap90(test.id)).toDouble / nRep.toDouble)
-        summary.add("powerAt95", abscontrast.count(_ > ThresholdMap95(test.id)).toDouble / nRep.toDouble)
-        summary.add("powerAt99", abscontrast.count(_ > ThresholdMap99(test.id)).toDouble / nRep.toDouble)
+        summary.add("alpha", test.alpha)
+        summary.add("M", test.M)
+        summary.add("powerAt90", contrast.count(_ > ThresholdMap90(test.id)).toDouble / nRep.toDouble)
+        summary.add("powerAt95", contrast.count(_ > ThresholdMap95(test.id)).toDouble / nRep.toDouble)
+        summary.add("powerAt99", contrast.count(_ > ThresholdMap99(test.id)).toDouble / nRep.toDouble)
         summary.add("thresholdAt90", ThresholdMap90(test.id))
         summary.add("thresholdAt95", ThresholdMap95(test.id))
         summary.add("thresholdAt99", ThresholdMap99(test.id))
@@ -110,9 +101,8 @@ object BiVarPower extends BiVarExperiments {
         summary.add("avgPrepCPUtime", mean(prepCPUtime))
         summary.add("stdPrepCPUtime", stddev(prepCPUtime))
         summary.write(summaryPath)
-        info(s"test.id: ${test.id} -> ${mean(contrast)} - p90: ${ThresholdMap90(test.id)} - p95: ${ThresholdMap95(test.id)} - p99: ${ThresholdMap99(test.id)}")
       }
-      info(s"Done Computing Null Distribution: p95: ${ThresholdMap90}")
+      info(s"Done Computing Null Distribution")
 
       generators.par.foreach(x => comparePower(x, nDim, n, tests, ThresholdMap90, ThresholdMap95, ThresholdMap99, noiseLevels))
     }

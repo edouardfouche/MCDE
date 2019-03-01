@@ -1,4 +1,4 @@
-package com.edouardfouche.stats.external.Bivariate
+package com.edouardfouche.stats.external.bivariate
 
 import de.lmu.ifi.dbs.elki.math.statistics.dependence.CorrelationDependenceMeasure
 import breeze.stats.distributions.Gaussian

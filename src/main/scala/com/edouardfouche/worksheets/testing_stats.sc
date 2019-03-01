@@ -1,5 +1,5 @@
 import de.lmu.ifi.dbs.elki.math.statistics.dependence._
-import com.edouardfouche.stats.external.Bivariate._
+import com.edouardfouche.stats.external.bivariate._
 import com.edouardfouche.stats.mcde.MWP
 import org.apache.commons.math3.stat.correlation.KendallsCorrelation
 import breeze.stats.distributions.Gaussian

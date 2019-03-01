@@ -5,7 +5,7 @@ organization:= "com.edouardfouche"
 version := "1.0"
 scalaVersion := "2.11.8"
 fork in run := true
-
+scalacOptions += "-feature"
 
 unmanagedJars in Compile += file("lib/uds.jar")
 

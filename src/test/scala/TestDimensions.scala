@@ -8,7 +8,9 @@ import com.edouardfouche.stats.external._
 import java.io.File
 import java.nio.file.{Paths, Files}
 import org.apache.commons.io.FileUtils
-import com.edouardfouche.stats.external.Bivariate._
+import com.edouardfouche.stats.external.bivariate._
+
+import scala.language.existentials // Fixes a curious warning.
 
 
 

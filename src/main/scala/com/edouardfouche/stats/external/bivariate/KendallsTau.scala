@@ -1,4 +1,4 @@
-package com.edouardfouche.stats.external.Bivariate
+package com.edouardfouche.stats.external.bivariate
 
 import breeze.stats.distributions.Gaussian
 import org.apache.commons.math3.stat.correlation.KendallsCorrelation

@@ -5,7 +5,7 @@ import com.edouardfouche.preprocess.DataRef
 import com.edouardfouche.stats.external._
 import com.edouardfouche.stats.mcde.{KS, MWP, MWPr}
 
-object BiVarScalabilityN extends BiVarExperiments {
+object BivariateScalabilityN extends BivariateExperiments {
 
   val alpha_range = Vector()
   val nRep = 500 // number of data sets we generate to compute contrast

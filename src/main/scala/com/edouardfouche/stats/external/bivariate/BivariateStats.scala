@@ -1,4 +1,4 @@
-package com.edouardfouche.stats.external.Bivariate
+package com.edouardfouche.stats.external.bivariate
 
 import com.edouardfouche.index.NonIndex
 import com.edouardfouche.stats.external.ExternalStats
@@ -16,7 +16,7 @@ trait BivariateStats extends ExternalStats {
   }
 
   def preprocess(input: Array[Array[Double]]): PreprocessedData = {
-    require(get_dim(input)._2 == 2, "Bivariate Measure only accepts 2-D row oriented Data")
+    require(get_dim(input)._2 == 2, "bivariate Measure only accepts 2-D row oriented Data")
     new NonIndex(input)
   }
 
