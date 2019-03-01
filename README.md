@@ -3,7 +3,8 @@
 ![illustration](img/example4.png)
 
 Welcome to the supplementary material for the paper [*Monte Carlo Dependency Estimation*](https://arxiv.org/abs/1810.02112) by Edouard Fouché and Klemens Böhm, Karlsruhe Institute of Technology (KIT). 
-This repository contains the reference implementation of MCDE/MWP and the information to reproduce the experiments in the paper. 
+This repository contains the original implementation of MCDE/MWP and the information to reproduce the experiments in the paper. For this reason, it is partially frozen at the time of publication.
+To use the most recent and maintained implementation of MCDE/MWP, please visit this [repository](https://github.com/edouardfouche/MCDE).
 
 This repository is released under the AGPLv3 license. Please see the [LICENSE.md](LICENSE.md) file. 
 
