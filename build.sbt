@@ -1,4 +1,4 @@
-name := "MCDE"
+name := "MCDE-experiments"
 
 organization:= "com.edouardfouche"
 
