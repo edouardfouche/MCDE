@@ -2,8 +2,41 @@ name := "MCDE"
 
 organization:= "io.github.edouardfouche"
 
-version := "1.0"
-scalaVersion := "2.11.8"
+organizationHomepage := Some(url("https://github.com/edouardfouche"))
+
+version := "1.0-SNAPSHOT"
+scalaVersion := "2.12.8"
+
+scalacOptions += "-deprecation"
+
+useGpg := true // not working with old sbt
+pgpReadOnly := false
+
+scmInfo := Some(ScmInfo(url("https://github.com/edouardfouche/MCDE"), "scm:git@github.com:edouardfouche/MCDE.git")) // ADJUST
+developers := List(
+  Developer(
+    id    = "edouardfouche", // CHECK!!
+    name  = "Edouard Fouché",
+    email = "edouard.fouche@kit.edu",
+    url   = url("https://github.com/edouardfouche")
+  )
+)
+
+description := "Monte Carlo Dependency Estimation (MCDE)"
+licenses := Seq("AGPLv3" -> url("https://www.gnu.org/licenses/agpl-3.0.en.html")) // ADJUST
+homepage := Some(url("https://github.com/edouardfouche/MCDE")) // ADJUST
+publishMavenStyle := true
+pomIncludeRepository := { _ => false }
+publishArtifact in Test := false
+
+publishTo := {
+  val nexus = "https://oss.sonatype.org/"
+  if (isSnapshot.value) Some("snapshots" at nexus + "content/repositories/snapshots")
+  else Some("releases" at nexus + "service/local/staging/deploy/maven2")
+}
+
+
+
 fork in run := true
 scalacOptions += "-feature"
 
@@ -28,7 +61,8 @@ libraryDependencies ++= Seq(
   // "org.scalanlp" %% "breeze-viz" % "0.13.1"
 )
 
-libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0"
+//libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0"
+libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.2"
 
 //sbt-assembly
@@ -40,7 +74,14 @@ libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.2"
 //import com.github.retronym.SbtOneJar._
 //oneJarSettings
 
+test in assembly := {}
 
+//assemblyMergeStrategy in assembly := {
+//  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+//  case x => MergeStrategy.first
+//}
+
+/*
 assemblySettings
 
 import sbtassembly.Plugin.AssemblyKeys._
@@ -50,5 +91,5 @@ jarName in assembly := s"${name.value}-${version.value}.jar"
 test in assembly := {}
 
 javacOptions ++= Seq("-encoding", "UTF-8")
-
+*/
 logLevel := Level.Debug

@@ -16,14 +16,14 @@
  */
 import java.io.{BufferedWriter, File, FileWriter}
 
-import com.typesafe.scalalogging.LazyLogging
+//import com.typesafe.scalalogging.LazyLogging
 
 import scala.annotation.tailrec
 
 /**
   * Created by fouchee on 11.07.17.
   */
-package object utils extends LazyLogging {
+package object utils {
   def time[A](f: => A) = {
     val s = System.nanoTime
     val ret = f
