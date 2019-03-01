@@ -21,6 +21,7 @@ import com.edouardfouche.preprocess.Preprocess
 import com.edouardfouche.stats.mcde.{KS, MWP}
 import com.edouardfouche.stats.external.{HICS, II, MAC, UDS}
 
+
 val gen1 = Independent(2, 0).generate(10000)
 val gen2 = Linear(2, 0).generate(10000)
 Linear(2, 0).saveSample()

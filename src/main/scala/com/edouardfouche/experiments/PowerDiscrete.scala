@@ -29,15 +29,14 @@ import com.edouardfouche.utils.StopWatch
   * Compare the power of approaches w.r.t. to different discretization levels
   */
 object PowerDiscrete extends Experiment {
-  override val alpha_range = Vector(0.5)
-  override val M_range: Vector[Int] = Vector(50)
-  override val nRep = 500 // number of data sets we use to estimate rejection rate
-  override val data: Vector[DataRef] = Vector()
+  val alpha_range = Vector(0.5)
+  val M_range: Vector[Int] = Vector(50)
+  val nRep = 500 // number of data sets we use to estimate rejection rate
+  val data: Vector[DataRef] = Vector()
   val N_range = Vector(1000) // number of data points for each data set
   val dims = Vector(3)
   val discrete_range = Vector(100, 50, 10, 5, 3, 1) // 200, 20, 4, 2,
   val noiseLevels = 30
-  val m = 50
   val generators: Vector[(Int) => (Double) => DataGenerator] = GeneratorFactory.selected
 
   def run(): Unit = {
@@ -50,9 +49,11 @@ object PowerDiscrete extends Experiment {
     info(s"N_range: ${N_range mkString ","}")
     info(s"dims: ${dims mkString ","}")
     info(s"noiseLevels: $noiseLevels")
+    info(s"discrete_range: q${discrete_range mkString ","}")
     info(s"Started on: ${java.net.InetAddress.getLocalHost.getHostName}")
 
     for {
+      m <- M_range
       disc <- discrete_range
       nDim <- dims
       n <- N_range

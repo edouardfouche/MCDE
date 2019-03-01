@@ -54,7 +54,7 @@ trait Experiment extends LazyLogging {
 
   def estimateEmpiricalBound(m: Int, n: Int, d: Int, nrep: Int, linear_preprocessed: RankIndex, independent_preprocessed: RankIndex): Unit = {
     val test = MWPr(m)
-    info(s"--- Starting ${test.id}, M=${test.M}, ${test.alpha}, $n, $d, $nrep")
+    info(s"--- Starting ${test.id}, M=${test.M}, Alpha=  ${test.alpha}, Beta = ${test.beta}, $n, $d, $nrep")
     for(r <- (1 to nrep)) {
       val linear_values = StopWatch.measureTime(test.contrast(linear_preprocessed, linear_preprocessed.indices.toSet))
       val independent_values = StopWatch.measureTime(test.contrast(independent_preprocessed, independent_preprocessed.indices.toSet))
@@ -74,6 +74,7 @@ trait Experiment extends LazyLogging {
       independent_summary.add("testId", test.id)
 
       independent_summary.add("alpha", test.alpha)
+      independent_summary.add("beta", test.beta)
       independent_summary.add("M", test.M)
 
       independent_summary.add("contrast", independent_contrast)
@@ -90,6 +91,7 @@ trait Experiment extends LazyLogging {
       linear_summary.add("testId", test.id)
 
       linear_summary.add("alpha", test.alpha)
+      linear_summary.add("beta", test.beta)
       linear_summary.add("M", test.M)
 
       linear_summary.add("contrast", linear_contrast)
@@ -103,7 +105,7 @@ trait Experiment extends LazyLogging {
 
   def estimateEmpiricalVarianceBound(m: Int, n: Int, d: Int, nrep: Int, generators_datasets: Vector[(DataGenerator, Array[Array[Double]], RankIndex)]): Unit = {
     val test = MWPr(m)
-    info(s"--- Starting ${test.id}, M=${test.M}, ${test.alpha}, $n, $d, $nrep")
+    info(s"--- Starting ${test.id}, M=${test.M}, Alpha=${test.alpha}, Beta=${test.beta} ,$n, $d, $nrep")
     for(gendat <- generators_datasets) {
       for(r <- (1 to nrep)) {
         val values = StopWatch.measureTime(test.contrast(gendat._3, gendat._3.indices.toSet))
@@ -119,7 +121,7 @@ trait Experiment extends LazyLogging {
         summary.add("n", gendat._2.length)
         //summary.add("testId", test.id)
 
-        //summary.add("alpha", test.alpha)
+        //summary.add("alpha", test.alpha) TODO: Why is it commented out here?
         summary.add("M", test.M)
 
         summary.add("contrast", contrast)
@@ -207,10 +209,12 @@ trait Experiment extends LazyLogging {
         test match {
           case x: McdeStats => {
             summary.add("alpha", x.alpha)
+            summary.add("beta", x.beta)
             summary.add("M", x.M)
           }
           case _ => {
             summary.add("alpha", "NULL")
+            summary.add("beta", "NULL")
             summary.add("M", "NULL")
           }
         }
@@ -292,10 +296,12 @@ trait Experiment extends LazyLogging {
       test match {
         case x: McdeStats => {
           summary.add("alpha", x.alpha)
+          summary.add("beta", x.beta)
           summary.add("M", x.M)
         }
         case _ => {
           summary.add("alpha", "NULL")
+          summary.add("beta", "NULL")
           summary.add("M", "NULL")
         }
       }
@@ -364,6 +370,7 @@ trait Experiment extends LazyLogging {
       summary.add("nRep", nRep)
       summary.add("testId", test.id)
       summary.add("alpha", test.alpha)
+      summary.add("beta", test.beta)
       summary.add("M", test.M)
 
       summary.add("Walltime", Walltime)
@@ -489,6 +496,7 @@ trait Experiment extends LazyLogging {
         summary.add("nDim", minData.length)
         summary.add("n", n)
         summary.add("alpha", test.alpha)
+        summary.add("beta", test.beta)
         summary.add("M", test.M)
 
         summary.add("prepCPUtimeMin", prepCPUtimeMin)
@@ -530,6 +538,7 @@ trait Experiment extends LazyLogging {
       summary.add("nDim", data.numCols)
       summary.add("n", raw(0).length)
       summary.add("alpha", test.alpha)
+      summary.add("beta", test.beta)
       summary.add("M", test.M)
 
       summary.add("prepCPUtime", prepCPUtime)
@@ -563,6 +572,7 @@ trait Experiment extends LazyLogging {
         summary.add("nDim", nDim)
         summary.add("n", n)
         summary.add("alpha", test.alpha)
+        summary.add("beta", test.beta)
         summary.add("M", test.M)
 
         summary.add("prepCPUtimeMin", prepCPUtimeMin)

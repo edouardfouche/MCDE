@@ -15,6 +15,7 @@ val dims = 2
 
 val arr = Independent(dims, 0.0).generate(rows)
 val arr2 = Cross(dims, 0.0).generate(rows)
+arr.transpose
 
 val all_gens = List(Cross(dims, 0.0).generate(rows), Cubic(1,dims, 0.0).generate(rows), DoubleLinear(1,dims, 0.0).generate(rows),
   Hourglass(dims, 0.0).generate(rows), Hypercube(dims, 0.0).generate(rows), HypercubeGraph(dims, 0.0).generate(rows),
@@ -71,7 +72,7 @@ val all_indecies = List(new AdjustedRankIndex(arr), new CorrectedRankIndex(arr),
 def which_row_orient_index(ind: List[Index]):List[Boolean] = {
     {for {
       index <- ind
-    } yield get_dim(index.index)}.map(x => x == (rows, dims))
+    } yield get_dim(index.index)}.map(x => x == (dims, rows))
 
 }
 
@@ -81,6 +82,7 @@ which_row_orient_index(all_indecies).map(x => !x)
 // Apply Method calls the index at dim n (see Index)
 val exRank = new ExternalRankIndex(arr)
 val noIndex = new NonIndex(arr)
+get_dim(exRank.index)
 
 exRank(0).size
 noIndex(0).size
@@ -135,3 +137,15 @@ val lst_of_f = getListOfFiles(getClass.getResource("/data/").getPath).map(x => x
 } yield true}.size == lst_of_f.size
 
 // --> Data is correct
+
+val indecies = List(new ExternalRankIndex(arr))
+get_dim(indecies(0).index)
+which_row_orient_index(indecies)
+
+
+
+
+
+
+
+

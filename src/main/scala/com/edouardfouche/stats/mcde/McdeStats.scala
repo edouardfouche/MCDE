@@ -22,12 +22,16 @@ import scala.collection.parallel.ForkJoinTaskSupport
 
 /**
   * Created by fouchee on 07.07.17.
+  * @alpha Expected share of instances in slice (independent dimensions).
+  * @beta  Expected share of instances in marginal restriction (reference dimension).
+  *        Added with respect to the original paper to loose the dependence of beta from alpha.
   */
 trait McdeStats extends Stats {
   type U
   //val slicer: Slicer[U]
   val id: String
   val alpha: Double
+  val beta: Double // Added to loose the dependence of beta from alpha
   val M: Int
   val calibrate: Boolean
   var parallelize: Int
@@ -221,7 +225,7 @@ trait McdeStats extends Stats {
     }
 
     if (calibrate) {
-      val uncalibrated = StatsFactory.getTest(this.id, this.M, this.alpha, calibrate = false, parallelize)
+      val uncalibrated = StatsFactory.getTest(this.id, this.M, this.alpha, this.beta, calibrate = false, parallelize)
       for {
         x <- cols
         y <- 0 until x
@@ -275,7 +279,7 @@ trait McdeStats extends Stats {
     }
 
     if (calibrate) {
-      val uncalibrated = StatsFactory.getTest(this.id, this.M, this.alpha, calibrate = false, parallelize)
+      val uncalibrated = StatsFactory.getTest(this.id, this.M, this.alpha, this.beta, calibrate = false, parallelize)
       for {
         x <- cols
         y <- 0 until x

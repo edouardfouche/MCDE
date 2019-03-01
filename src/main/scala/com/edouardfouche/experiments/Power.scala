@@ -31,10 +31,19 @@ import com.edouardfouche.utils.StopWatch
   * Check the power of every approach against a selected number of generators
   */
 object Power extends Experiment {
-  override val alpha_range = Vector()
-  override val M_range: Vector[Int] = Vector(50)
-  override val nRep = 500 // number of data sets we use to estimate rejection rate
-  override val data: Vector[DataRef] = Vector()
+
+  // TODO: Create experiment with varying Alpha and mariginal restriction
+
+  /**
+    *
+    * @alpha_range Use to run for differentte levels of Alpha
+    * Adjust info for Alpha
+    */
+  val alpha_range = Vector()
+  val M_range: Vector[Int] = Vector(50)
+  val nRep = 500 // number of data sets we use to estimate rejection rate
+  val data: Vector[DataRef] = Vector()
+
   val N_range = Vector(1000) // number of data points for each data set
   val dims = Vector(2, 3, 5)
   val noiseLevels = 30
@@ -51,12 +60,21 @@ object Power extends Experiment {
     info(s"noiseLevels: $noiseLevels")
     info(s"Started on: ${java.net.InetAddress.getLocalHost.getHostName}")
 
+    /**
+      * Here the combinations of parameters are created to test for -> Include alpha_range in for and in info()
+      */
+
     for {
       m <- M_range
       nDim <- dims
       n <- N_range
     } yield {
       info(s"Starting com.edouardfouche.experiments with configuration M: ${m}, nDim: $nDim, n: $n")
+
+      /**
+        *
+        * Here mwp is created with a fixed M, why? As far as I understand mwp should be varied trough parameter m <- M_range which is to 50 anyway for this experiment
+        */
 
       //val ks = KS(50, 0.1)
       val mwp = MWP(50, 0.5)
@@ -71,6 +89,7 @@ object Power extends Experiment {
       val mac = MAC()
 
       val tests = Vector(mwp, uds, cmi, hics, ii, tc, ms, mac)
+
       //val tests = Vector(uds)
       //val tests = Vector(mwp, mwpr, mwpu)
 

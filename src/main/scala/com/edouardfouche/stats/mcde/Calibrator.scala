@@ -23,8 +23,8 @@ object Calibrator extends Preprocessing {
       alpha <- (1 to 9).map(_/10.0)
       m <- Vector(50,100,200)
       n <- Vector(100,1000)
-    } yield {
-      val instantiatedTest = StatsFactory.getTest(test, m, alpha, calibrate = false, parallelize = 0)
+    } yield { // the second alpha is because beta has been added but we do not want to manipulate beta here
+      val instantiatedTest = StatsFactory.getTest(test, m, alpha, alpha, calibrate = false, parallelize = 0)
       def res = (getMinimum(instantiatedTest, prepareMinimumData(nDim, n)), getMaximum(instantiatedTest, prepareMaximumData(nDim, n)))
       cache.getOrElseUpdate(Vector(instantiatedTest.id, instantiatedTest.alpha, nDim, n).hashCode(), res)
     }

@@ -24,9 +24,12 @@ import scala.collection.parallel.ForkJoinTaskSupport
 
 /**
   * Same as MWP but with caring for ties also in the slicing process
+  * @alpha Expected share of instances in slice (independent dimensions).
+  * @beta  Expected share of instances in marginal restriction (reference dimension).
+  *        Added with respect to the original paper to loose the dependence of beta from alpha.
   */
 
-case class MWPs(M: Int = 50, alpha: Double = 0.5, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
+case class MWPs(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
   type PreprocessedData = CorrectedRankIndex
   val id = "MWPs"
   //val slicer = Slicing3
@@ -46,9 +49,9 @@ case class MWPs(M: Int = 50, alpha: Double = 0.5, calibrate: Boolean = false, va
     */
   def twoSample(index: PreprocessedData, reference: Int, indexSelection: Array[Boolean]): Double = {
     //require(reference.length == indexSelection.length, "reference and indexSelection should have the same size")
-    val start = scala.util.Random.nextInt((indexSelection.length * (1-alpha)).toInt)
+    val start = scala.util.Random.nextInt((indexSelection.length * (1-beta)).toInt)
     val sliceStart = index.getSafeCut(start, reference)
-    val sliceEndSearchStart = (sliceStart + (indexSelection.length * alpha).toInt).min(indexSelection.length - 1)
+    val sliceEndSearchStart = (sliceStart + (indexSelection.length * beta).toInt).min(indexSelection.length - 1)
     val sliceEnd = index.getSafeCut(sliceEndSearchStart, reference)
 
     //println(s"indexSelection.length: ${indexSelection.length}, start: $start, actualStart: $sliceStart, sliceEnd: $sliceEnd, reference: $reference")
