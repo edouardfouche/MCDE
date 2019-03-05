@@ -118,7 +118,8 @@ case class MWPs(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, calibrate:
     } else {
       val iterations = (1 to M).par
       if (parallelize > 1) {
-        iterations.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(parallelize))
+        //iterations.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(parallelize))
+        iterations.tasksupport = new ForkJoinTaskSupport(new java.util.concurrent.ForkJoinPool(parallelize))
       }
       iterations.map(i => {
         val referenceDim = dimensions.toVector(scala.util.Random.nextInt(dimensions.size))

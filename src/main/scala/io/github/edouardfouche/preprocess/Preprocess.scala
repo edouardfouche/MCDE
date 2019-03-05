@@ -209,7 +209,8 @@ object Preprocess extends Preprocessing {
     else {
       val inputPar = input.par
       if (parallelize > 1) {
-        inputPar.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(parallelize))
+        //inputPar.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(parallelize))
+        inputPar.tasksupport = new ForkJoinTaskSupport(new java.util.concurrent.ForkJoinPool(parallelize))
       }
       //inputPar.map(_.zipWithIndex.sortBy(_._1).map(x => (x._2, x._1.toFloat, x._1))).toArray
       inputPar.map(_.zipWithIndex.sortBy(_._1).map(x => (x._2, x._1.toFloat))).toArray
@@ -230,7 +231,8 @@ object Preprocess extends Preprocessing {
     else {
       val inputPar = input.par
       if (parallelize > 1) {
-        inputPar.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(parallelize))
+        //inputPar.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(parallelize))
+        inputPar.tasksupport = new ForkJoinTaskSupport(new java.util.concurrent.ForkJoinPool(parallelize))
       }
       //inputPar.map(_.zipWithIndex.sortBy(_._1).map(x => (x._2, x._1.toFloat, x._1))).toArray
       inputPar.map(_.zipWithIndex.sortBy(_._1).map(x => x._2)).toArray
@@ -250,7 +252,8 @@ object Preprocess extends Preprocessing {
     else {
       val inputPar = input.par
       if (parallelize > 1) {
-        inputPar.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(parallelize))
+        //inputPar.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(parallelize))
+        inputPar.tasksupport = new ForkJoinTaskSupport(new java.util.concurrent.ForkJoinPool(parallelize))
       }
       inputPar.map(x => x.zipWithIndex.sortBy(_._1).zipWithIndex.map(y => (y._1._2, y._2.toFloat, y._1._1))).toArray // (i1,i2,realValue)
     } // Obliged to synchronize here
@@ -260,7 +263,8 @@ object Preprocess extends Preprocessing {
       else {
         val indicesPar = nonadjusted.indices.par
         if (parallelize > 1) {
-          indicesPar.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(parallelize))
+          //indicesPar.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(parallelize))
+          indicesPar.tasksupport = new ForkJoinTaskSupport(new java.util.concurrent.ForkJoinPool(parallelize))
         }
         indicesPar
       }
@@ -300,7 +304,8 @@ object Preprocess extends Preprocessing {
     else {
       val inputPar = input.par
       if (parallelize > 1) {
-        inputPar.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(parallelize))
+        //inputPar.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(parallelize))
+        inputPar.tasksupport = new ForkJoinTaskSupport(new java.util.concurrent.ForkJoinPool(parallelize))
       }
       inputPar.map(x => x.zipWithIndex.sortBy(_._1).zipWithIndex.map(y => (y._1._2, y._2.toFloat, y._1._1))).toArray // (i1,i2,realValue)
     } // Obliged to synchronize here
@@ -311,7 +316,8 @@ object Preprocess extends Preprocessing {
       else {
         val indicesPar = nonadjusted.indices.par
         if (parallelize > 1) {
-          indicesPar.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(parallelize))
+          //indicesPar.tasksupport = new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(parallelize))
+          indicesPar.tasksupport = new ForkJoinTaskSupport(new java.util.concurrent.ForkJoinPool(parallelize))
         }
         indicesPar
       }
