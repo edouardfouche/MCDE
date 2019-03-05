@@ -76,10 +76,10 @@ libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.2"
 
 test in assembly := {}
 
-//assemblyMergeStrategy in assembly := {
-//  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
-//  case x => MergeStrategy.first
-//}
+assemblyMergeStrategy in assembly := {
+  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+  case x => MergeStrategy.first
+}
 
 /*
 assemblySettings
