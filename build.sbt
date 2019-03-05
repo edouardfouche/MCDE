@@ -41,8 +41,8 @@ fork in run := true
 scalacOptions += "-feature"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
-libraryDependencies += "de.lmu.ifi.dbs.elki" % "elki" % "0.7.5"
-libraryDependencies += "org.apache.commons" % "commons-math3" % "3.6.1"
+//libraryDependencies += "de.lmu.ifi.dbs.elki" % "elki" % "0.7.5"
+//libraryDependencies += "org.apache.commons" % "commons-math3" % "3.6.1"
 libraryDependencies += "commons-io" % "commons-io" % "2.6"
 resolvers += "Java.net Maven2 Repository" at "http://download.java.net/maven/2/"
  
@@ -63,7 +63,7 @@ libraryDependencies ++= Seq(
 
 //libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0"
 libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
-libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.2"
+//libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.2"
 
 //sbt-assembly
 
