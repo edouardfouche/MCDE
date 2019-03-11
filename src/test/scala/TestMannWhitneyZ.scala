@@ -56,7 +56,7 @@ class TestMannWhitneyZ extends FunSuite with TestData {
   test("Deviation can be detected in a 2-D subspace") {
     val res1 = test.deviation(highcontrast_2D, Set(0, 1), 0)
     val res2 = test.deviation(lowcontrast_2D, Set(0, 1), 0)
-    assert(res1 > 1)
+    assert(res1 > 0.99)
     assert(res2 < 1)
   }
   test("Deviation can be detected in a 5-D subspace") {

@@ -1,6 +1,7 @@
 # Monte Carlo Dependency Estimation (MCDE)
 
-![illustration](img/example4.png)
+[![Build Status](https://travis-ci.com/edouardfouche/MCDE.svg?branch=master)](https://travis-ci.com/edouardfouche/MCDE)
+[![License AGPL-3.0](https://img.shields.io/badge/License-AGPL--3-brightgreen.svg)](https://github.com/edouardfouche/MCDE/blob/master/LICENSE.md)
 
 This repository contains the most recent implementation of MCDE/MWP, originally described in the paper [*Monte Carlo Dependency Estimation*](https://arxiv.org/abs/1810.02112) by Edouard Fouché and Klemens Böhm, Karlsruhe Institute of Technology (KIT).
 To reproduce the experiment from the paper, please visit this [repository](https://github.com/edouardfouche/MCDE-experiments).
