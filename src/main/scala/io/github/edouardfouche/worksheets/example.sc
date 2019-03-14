@@ -3,88 +3,88 @@
   */
 
 
-// Import all MWP classes or just the one you need
+// Import all MWP classes or just the one you need.
 import io.github.edouardfouche.mcde._
 // import io.github.edouardfouche.mcde.{MWP, MWB, MWPi, MWPr, MWPs, MWPu, MWZ, KS, S}
 
-// Optionally import data generators for creating given dependencies
+// Optionally import data generators for creating given dependencies.
 // For more information see: https://github.com/edouardfouche/DataGenerator
 import io.github.edouardfouche.generators.Independent
 
 // Generating linear bivariate data. Note that MWP classes expect an Array[Array[Double] which
-// is tuple oriented (Array containing Arrays which contain each row/tuple). Therefore
-// we transpose the data.
+// is tuple oriented (Array containing Arrays which contain each row/tuple). Therefore we transpose the data.
 val attribute1: Array[Double] = (1 to 100).map(_.toDouble).toArray
 val attribute2: Array[Double] = attribute1.map(x => x * 2)
-val data1: Array[Array[Double]] = Array(attribute1, attribute2).transpose
+val linear_2: Array[Array[Double]] = Array(attribute1, attribute2).transpose
 
 // Generating linear multivariate data.
 val attribute3: Array[Double] = attribute1.map(_ * 4)
 val attribute4: Array[Double] = attribute1.map(_ * 6)
-val data2: Array[Array[Double]] = Array(attribute1, attribute2, attribute3, attribute4).transpose
+val linear_4: Array[Array[Double]] = Array(attribute1, attribute2, attribute3, attribute4).transpose
 
-// Generating independent data using data generator class.
-val data3 = Independent(5, 0.0, "gaussian", 0).generate(100000)
+// Generating independent data using the data generator class.
+val independent = Independent(5, 0.0, "gaussian", 0).generate(100000)
 
 
 
 /**
   * Create an instance of MWP class. Note that MWP() is a case class.
-  * @M:Int Number of repetitions. Default = 50
-  * @alpha:Double Expected share of instances in slice (independent dimensions). Default = 0.5
-  * @beta:Double Expected share of instances in marginal restriction (reference dimension). Default = 0.5
-  * @calibrate:Boolean Default = false
-  * @parallelize:Int Level of parallelization. Default = 0
+  *
+  * @M:Int              Number of repetitions. Default = 50
+  * @alpha:Double       Expected share of instances in slice (independent dimensions). Default = 0.5
+  * @beta:Double        Expected share of instances in marginal restriction (reference dimension). Default = 0.5
+  *                     Added with respect to the original paper to loose the dependence of beta from alpha.
+  * @calibrate:Boolean  Default = false // TODO: whats that?
+  * @parallelize:Int    Level of parallelization. 0: Single Core, 1: No. of cores set automatically,
+  *                     >1: Specific no. of cores. Default = 0
   */
 
-// MWP as described in the paper Monte Carlo Dependency Estimation
 val mwp = MWP(M = 50, alpha = 0.5, beta = 0.5,  calibrate = false, parallelize = 0)
-mwp.contrast(data1, Set(0,1)) // Note that MWP should generate values close to 1.0
-mwp.contrast(data2, Set(0,1,2,3)) // Note that MWP should generate values close to 1.0
-mwp.contrast(data3, Set(0,1,2,3,4)) // Note that MWP should generate values around to 0.5
 
-// Note that you can choose to include only a subspace of your attributes e.g. only attribute 1 and 4
-mwp.contrast(data2, Set(0,3))
+/**
+  * Calling the contrast() method computes the dependency score including all specified dimensions
+  *
+  * @m:Array[Array[Double]]   data (row oriented)
+  * @dimensions:Set[Int]      Dimensions of the subspace on which the dependency should be estimated starting from 0
+  */
+
+val score:Double = mwp.contrast(m = linear_2, dimensions = Set(0,1)) // Note that MWP should generate values close to 1.0
+mwp.contrast(linear_4, Set(0,1,2,3)) // Note that MWP should generate values close to 1.0
+mwp.contrast(independent, Set(0,1,2,3,4)) // Note that MWP should generate values around to 0.5
+
+mwp.contrast(linear_4, Set(0,3)) // Include only a subspace of your dimensions e.g. only attribute 1 and 4
+mwp.contrast(linear_4, linear_4(0).indices.toSet) // Include all dimensions without explicitly specifying
+
+/**
+  * Calling the contrastMatrix() computes the dependencie matrix including all dimensions (one to one dependecies)
+  *
+  * @m:Array[Array[Double]] data (row oriented)
+  */
+
+val scoreMatrix:Array[Array[Double]] = mwp.contrastMatrix(m = linear_4)
+mwp.contrastMatrix(independent)
 
 
+/**
+  * It works equivalently for the other variations of MWP // TODO: Go through??
+  */
 
-// It works equivalently for the other variations of MWP
-val mwpi = MWPi()
-mwpi.contrast(data1, Set(0,1))
-mwpi.contrast(data2, Set(0,1,2,3))
-mwpi.contrast(data3, Set(0,1,2,3,4))
-
-val mwpr = MWPr()
-mwpr.contrast(data1, Set(0,1))
-mwpr.contrast(data2, Set(0,1,2,3))
-mwpr.contrast(data3, Set(0,1,2,3,4))
-
-val mwps = MWPs()
-mwps.contrast(data1, Set(0,1))
-mwps.contrast(data2, Set(0,1,2,3))
-mwps.contrast(data3, Set(0,1,2,3,4))
-
-val mwpu = MWPu()
-mwpu.contrast(data1, Set(0,1))
-mwpu.contrast(data2, Set(0,1,2,3))
-mwpu.contrast(data3, Set(0,1,2,3,4))
-
-val mwz = MWZ()
-mwz.contrast(data1, Set(0,1))
-mwz.contrast(data2, Set(0,1,2,3))
-mwz.contrast(data3, Set(0,1,2,3,4))
-
-val s = S()
-s.contrast(data1, Set(0,1))
-s.contrast(data2, Set(0,1,2,3))
-s.contrast(data3, Set(0,1,2,3,4))
-
+// KS: Like MWP but using Kolmogorow-Smirnow-Test for dependency estimation instead of Mann–Whitney P test
 val ks = KS()
-ks.contrast(data1, Set(0,1))
-ks.contrast(data2, Set(0,1,2,3))
-ks.contrast(data3, Set(0,1,2,3,4))
 
+// MWPi: Like MWP but not adjusting for ties (but still adjusting for ranks)
+val mwpi = MWPi()
+
+// MWPr: Like MWP but not adjusting and not correcting for ties  // TODO: what?
+val mwpr = MWPr()
+
+// MWPs: Like MWP but also adjusting for ties in the slicing process
+val mwps = MWPs()
+
+// MWPu: Like MWP but without border effects
+val mwpu = MWPu()
+
+// TODO: Delete?
+val mwz = MWZ()
+val s = S()
 val mwb = MWB()
-mwb.contrast(data1, Set(0,1))
-mwb.contrast(data2, Set(0,1,2,3))
-mwb.contrast(data3, Set(0,1,2,3,4))
