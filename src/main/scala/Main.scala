@@ -19,6 +19,7 @@ import io.github.edouardfouche.mcde.StatsFactory
 import io.github.edouardfouche.utils.StopWatch
 import com.typesafe.scalalogging.LazyLogging
 
+
 /**
   * Created by fouchee on 01.06.17.
   */

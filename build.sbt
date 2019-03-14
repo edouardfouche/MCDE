@@ -44,7 +44,10 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
 //libraryDependencies += "de.lmu.ifi.dbs.elki" % "elki" % "0.7.5"
 //libraryDependencies += "org.apache.commons" % "commons-math3" % "3.6.1"
 libraryDependencies += "commons-io" % "commons-io" % "2.6"
+libraryDependencies += "io.github.edouardfouche" %% "datagenerator" % "0.1.0"
+
 resolvers += "Java.net Maven2 Repository" at "http://download.java.net/maven/2/"
+
  
 libraryDependencies ++= Seq(
   // Last stable release

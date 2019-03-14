@@ -16,8 +16,8 @@ class TestDimensions extends FunSuite {
 
   val rows = 50
   val dims = 4
-  val arr = Independent(dims, 0.0).generate(rows)
-  val bivar_arr = Independent(2, 0.0).generate(rows)
+  val arr = Independent(dims, 0.0,"gaussian", 0).generate(rows)
+  val bivar_arr = Independent(2, 0.0,"gaussian", 0).generate(rows)
 
   // TODO: What if new Tests / Generators?
   val all_mcde_stats:List[Stats] = List(KS(), MWB(), MWP(), MWPi(), MWPr(), MWPs(), MWPu(), MWZ(), S())
@@ -29,19 +29,34 @@ class TestDimensions extends FunSuite {
   val all_bivar_indecies = List(new AdjustedRankIndex(bivar_arr), new CorrectedRankIndex(bivar_arr),
     new NonIndex(bivar_arr), new RankIndex(bivar_arr))
 
-  val all_gens = List(Cross(dims, 0.0).generate(rows), Cubic(1,dims, 0.0).generate(rows), DoubleLinear(1,dims, 0.0).generate(rows),
-    Hourglass(dims, 0.0).generate(rows), Hypercube(dims, 0.0).generate(rows), HypercubeGraph(dims, 0.0).generate(rows),
-    HyperSphere(dims, 0.0).generate(rows), Independent(dims, 0.0).generate(rows), Linear(dims, 0.0).generate(rows), LinearPeriodic(1, dims, 0.0).generate(rows),
-    LinearStairs(4, dims, 0.0).generate(rows), LinearThenDummy(dims, 0.0).generate(rows), LinearThenNoise(dims, 0.0).generate(rows),
-    NonCoexistence(dims, 0.0).generate(rows), Parabolic(1, dims, 0.0).generate(rows), RandomSteps(4, dims, 0.0).generate(rows),
-    Sine(1, dims, 0.0).generate(rows), Sqrt(1, dims, 0.0).generate(rows), Star(dims, 0.0).generate(rows), StraightLines(dims, 0.0).generate(rows),
-    Z(dims, 0.0).generate(rows), Zinv(dims, 0.0).generate(rows))
+  val all_gens = List(
+    Cross(dims, 0.0,"gaussian", 0).generate(rows),
+    Cubic(dims, 0.0,"gaussian", 0)().generate(rows),
+    DoubleLinear(dims, 0.0,"gaussian", 0)().generate(rows),
+    Hourglass(dims, 0.0,"gaussian", 0).generate(rows),
+    Hypercube(dims, 0.0,"gaussian", 0).generate(rows),
+    HypercubeGraph(dims, 0.0,"gaussian", 0).generate(rows),
+    HyperSphere(dims, 0.0,"gaussian", 0).generate(rows),
+    Independent(dims, 0.0,"gaussian", 0).generate(rows),
+    Linear(dims, 0.0,"gaussian", 0).generate(rows),
+    LinearPeriodic(dims, 0.0,"gaussian", 0)().generate(rows),
+    LinearStairs(dims, 0.0,"gaussian", 0)().generate(rows),
+    LinearThenDummy(dims, 0.0,"gaussian", 0).generate(rows),
+    LinearThenNoise(dims, 0.0,"gaussian", 0).generate(rows),
+    NonCoexistence(dims, 0.0,"gaussian", 0).generate(rows),
+    RandomSteps(4, dims,"gaussian", 0)().generate(rows),
+    Sine(dims, 0.0,"gaussian", 0)().generate(rows),
+    Star(dims, 0.0,"gaussian", 0).generate(rows),
+    StraightLines(dims, 0.0,"gaussian", 0).generate(rows),
+    Z(dims, 0.0,"gaussian", 0).generate(rows),
+    Zinv(dims, 0.0,"gaussian", 0).generate(rows))
 
 
 
   val path = s"${System.getProperty("user.home")}/datagenerator_for_scalatest/"
-  val indi = Independent(dims, 0.0)
-  indi.saveSample(path) // saveSample is final on Base Class, dir gets destructed after test
+  val dir = new File(path).mkdirs()
+  val indi = Independent(dims, 0.0,"gaussian", 0)
+  indi.save(rows,path) // saveSample is final on Base Class, dir gets destructed after test
   val data = Preprocess.open(path + indi.id + ".csv", header = 1, separator = ",", excludeIndex = false, dropClass = true)
   val dataclass = DataRef("Independent-2-0.0", path + indi.id + ".csv", 1, ",", "Test")
 
