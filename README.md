@@ -10,8 +10,40 @@ Our goal in this repository is to provide a deployable and consolidated version 
 This repository is released under the AGPLv3 license. Please see the [LICENSE.md](LICENSE.md) file. 
 
 ## Quick Start
+There are two possibilities on how use our framework, either by using it in your Scala code or by accessing MCDE through 
+a JAR from the command line. 
 
-### Build it and run it
+### Using MCDE in your code 
+
+#### Get It 
+Include ```` XXX```` to your sbt file to get the framework from maven. 
+
+#### Use It
+
+We provide a detailed guide on how to use the MCDE framework in a Scala worksheet at 
+```
+src/main/scala/io/github/edouardfouche/worksheets/usage_guide.sc
+```
+
+**Minimalistic Example**
+`````
+import io.github.edouardfouche.mcde.MWP
+
+// create data (Array of tuples)
+val attribute1: Array[Double] = (1 to 100).map(_.toDouble).toArray
+val attribute2: Array[Double] = attribute1.map(x => x * 2)
+val linear_2: Array[Array[Double]] = Array(attribute1, attribute2).transpose 
+
+val mwp = MWP()
+val score:Double = mwp.contrast(m = linear_2, dimensions = Set(0,1))
+val scoreMatrix:Array[Array[Double]] = mwp.contrastMatrix(m = linear_2)
+`````
+
+Please refer to the guide for more detailed information
+
+### Accessing MCDE from the command line 
+
+#### Build it and run it
 
 **Requirements** : ([Oracle JDK 8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) or [OpenJDK 8](http://openjdk.java.net/install/)) and [sbt](https://www.scala-sbt.org/1.0/docs/Setup.html) 
 
@@ -30,15 +62,15 @@ sbt assembly
 ```
 
 This creates a jar in the folder `target/scala-2.11/` named `MCDE-<version>.jar`, which can be run from java (no 
-sbt/scala installation required). The version of the package at the time of the experiments is 1.0.
+sbt/scala installation required). The version of the package at the time of deployment is 1.0.
 
 Once you have built the jar, you can run it as follows: 
 
 ```
-java -jar target/scala-2.11/MCDE-1.0.jar <arguments>
+java -jar target/scala-2.12/MCDE-1.0.jar <arguments>
 ```
 
-## Command line arguments for MCDE/MWP
+#### Command line arguments for MCDE/MWP
 
 The application accepts various arguments. The first two (`-t <task>` and `-f <file>`) are mandatory. Arguments are not case sensitive and can be given in any order. 
 
@@ -67,16 +99,16 @@ Additional argument for `EstimateDependency`:
 For instance, if `0,1` is selected only the first two columns of the data are taken into account, if `0,2` is selected only column 1 and 3.
 If not specified, the dependency is estimated on the full space. 
 
-## Examples
+#### Examples
 
 We provide a sample of the data used for the experiments in `src/test/resources/data` for testing purposes.
 
-### Running MCDE/MWP
+#### Running MCDE/MWP
 
 - Independent data (2-D)
 
 ```bash
-fouchee@Modena:~/git/MCDE$ java -jar target/scala-2.11/MCDE-1.0.jar -t EstimateDependency -f src/test/resources/data/Independent-2-0.0.csv -a MWP -m 50 -d 0,1
+fouchee@Modena:~/git/MCDE$ java -jar target/scala-2.12/MCDE-1.0.jar -t EstimateDependency -f src/test/resources/data/Independent-2-0.0.csv -a MWP -m 50 -d 0,1
 08:05:41.627 [main] INFO  Main$ - Working directory: /home/fouchee/git/MCDE
 08:05:41.725 [main] INFO  Main$ - Raw parameters given: ["-t", "EstimateDependency", "-f", "src/test/resources/data/Independent-2-0.0.csv", "-a", "MWP", "-m", "50", "-d", "0,1"]
 08:05:41.809 [main] WARN  Main$ - Parallelism level not specified, running on single core.
@@ -90,7 +122,7 @@ Computation time:    37.12567 ms (cpu), 37.323588 ms (wall)
 - Linear dependent data (2-D) 
 
 ```bash
-fouchee@Modena:~/git/MCDE$ java -jar target/scala-2.11/MCDE-1.0.jar -t EstimateDependency -f src/test/resources/data/Linear-2-0.0.csv -a MWP -m 50 -d 0,1
+fouchee@Modena:~/git/MCDE$ java -jar target/scala-2.12/MCDE-1.0.jar -t EstimateDependency -f src/test/resources/data/Linear-2-0.0.csv -a MWP -m 50 -d 0,1
 08:06:10.943 [main] INFO  Main$ - Working directory: /home/fouchee/git/MCDE
 08:06:11.033 [main] INFO  Main$ - Raw parameters given: ["-t", "EstimateDependency", "-f", "src/test/resources/data/Linear-2-0.0.csv", "-a", "MWP", "-m", "50", "-d", "0,1"]
 08:06:11.112 [main] WARN  Main$ - Parallelism level not specified, running on single core.
@@ -101,12 +133,12 @@ Preprocessing time:      31.995782 ms (cpu), 32.164805 ms (wall)
 Computation time:    35.695044 ms (cpu), 35.812886 ms (wall)
 ```
 
-###  Computing the 2D-matrix of MCDE/MWP
+####  Computing the 2D-matrix of MCDE/MWP
 
 - Independent data (2-D)
 
 ```bash
-fouchee@Modena:~/git/MCDE$ java -jar target/scala-2.11/MCDE-1.0.jar -t EstimateDependencyMatrix -f src/test/resources/data/Independent-5-0.0.csv -a MWP -m 50 -p 0
+fouchee@Modena:~/git/MCDE$ java -jar target/scala-2.12/MCDE-1.0.jar -t EstimateDependencyMatrix -f src/test/resources/data/Independent-5-0.0.csv -a MWP -m 50 -p 0
 08:06:46.343 [main] INFO  Main$ - Working directory: /home/fouchee/git/MCDE
 08:06:46.434 [main] INFO  Main$ - Raw parameters given: ["-t", "EstimateDependencyMatrix", "-f", "src/test/resources/data/Independent-5-0.0.csv", "-a", "MWP", "-m", "50", "-p", "0"]
 08:06:46.536 [main] WARN  Main$ - Running with parallelism level: 0
@@ -126,7 +158,7 @@ For larger tables (e.g., with 100 dimensions), parallelism provides a significan
 - Independent data (100-D, no parallelism)
 
 ```bash
-fouchee@Modena:~/git/MCDE$ java -jar target/scala-2.11/MCDE-1.0.jar -t EstimateDependencyMatrix -f src/test/resources/data/Independent-100-0.0.csv -a MWP -m 50 -p 0
+fouchee@Modena:~/git/MCDE$ java -jar target/scala-2.12/MCDE-1.0.jar -t EstimateDependencyMatrix -f src/test/resources/data/Independent-100-0.0.csv -a MWP -m 50 -p 0
 08:07:14.583 [main] INFO  Main$ - Working directory: /home/fouchee/git/MCDE
 08:07:14.670 [main] INFO  Main$ - Raw parameters given: ["-t", "EstimateDependencyMatrix", "-f", "src/test/resources/data/Independent-100-0.0.csv", "-a", "MWP", "-m", "50", "-p", "0"]
 08:07:14.961 [main] WARN  Main$ - Running with parallelism level: 0
@@ -151,7 +183,7 @@ Computation time:    2596.539562 ms (cpu), 2643.743548 ms (wall)
 - Independent data (100-D, with parallelism)
 
 ```bash
-fouchee@Modena:~/git/MCDE$ java -jar target/scala-2.11/MCDE-1.0.jar -t EstimateDependencyMatrix -f src/test/resources/data/Independent-100-0.0.csv -a MWP -m 50 -p 1
+fouchee@Modena:~/git/MCDE$ java -jar target/scala-2.12/MCDE-1.0.jar -t EstimateDependencyMatrix -f src/test/resources/data/Independent-100-0.0.csv -a MWP -m 50 -p 1
 08:07:34.170 [main] INFO  Main$ - Working directory: /home/fouchee/git/MCDE
 08:07:34.260 [main] INFO  Main$ - Raw parameters given: ["-t", "EstimateDependencyMatrix", "-f", "src/test/resources/data/Independent-100-0.0.csv", "-a", "MWP", "-m", "50", "-p", "1"]
 08:07:34.543 [main] WARN  Main$ - Running with default parallelism level.
@@ -172,6 +204,7 @@ Data Loading time:   263.604825 ms (cpu), 275.675212 ms (wall)
 Preprocessing time:      123.729107 ms (cpu), 123.756542 ms (wall)
 Computation time:    51.002643 ms (cpu), 1123.108306 ms (wall)
 ```
+
 
 ## Reproducing the experiments
 
