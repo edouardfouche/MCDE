@@ -106,11 +106,3 @@ val mwpu = MWPu()
 val ks = KS(alpha = 0.1, beta = 1.0)
 println(ks.contrast(linear_4, linear_4(0).indices.toSet))
 println(ks.contrast(independent, independent(0).indices.toSet))
-
-
-
-
-// TODO: Delete
-val mwz = MWZ()
-val s = S()
-val mwb = MWB()

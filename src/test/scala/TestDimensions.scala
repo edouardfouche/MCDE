@@ -20,7 +20,7 @@ class TestDimensions extends FunSuite {
   val bivar_arr = Independent(2, 0.0,"gaussian", 0).generate(rows)
 
   // TODO: What if new Tests / Generators?
-  val all_mcde_stats:List[Stats] = List(KS(), MWB(), MWP(), MWPi(), MWPr(), MWPs(), MWPu(), MWZ(), S())
+  val all_mcde_stats:List[Stats] = List(KS(), MWP(), MWPi(), MWPr(), MWPs(), MWPu())
 
 
   val all_indecies = List(new AdjustedRankIndex(arr), new CorrectedRankIndex(arr),
