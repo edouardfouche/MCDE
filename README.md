@@ -20,10 +20,8 @@ Include ```` XXX```` to your sbt file to get the framework from maven.
 
 #### Use It
 
-We provide a detailed guide on how to use the MCDE framework in a Scala worksheet at 
-```
-src/main/scala/io/github/edouardfouche/worksheets/usage_guide.sc
-```
+We provide a detailed guide on how to use the MCDE framework in a Scala worksheet at: 
+[src/main/scala/io/github/edouardfouche/worksheets/usage_guide.sc](src/main/scala/io/github/edouardfouche/worksheets/usage_guide.sc)
 
 **Minimalistic Example**
 `````

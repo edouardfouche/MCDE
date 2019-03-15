@@ -47,12 +47,11 @@ val independent = Independent(5, 0.0, "gaussian", 0).generate(100000)
   * @alpha:Double       Expected share of instances in slice (independent dimensions). Default = 0.5
   * @beta:Double        Expected share of instances in marginal restriction (reference dimension). Default = 0.5
   *                     Added with respect to the original paper to loose the dependence of beta from alpha.
-  * @calibrate:Boolean  Default = false // TODO: whats that?
   * @parallelize:Int    Level of parallelization. 0: Single Core, 1: No. of cores set automatically,
   *                     >1: Specific no. of cores. Default = 0
   */
 
-val mwp = MWP(M = 50, alpha = 0.5, beta = 0.5,  calibrate = false, parallelize = 0)
+val mwp = MWP(M = 50, alpha = 0.5, beta = 0.5, parallelize = 0)
 
 /**
   * ### Computing contrast scores ###
@@ -82,13 +81,13 @@ println(mwp.contrastMatrix(independent))
 
 /**
   * ### Variations of MWP ###
-  * Everything works equivalently for the other variations of MWP // TODO: Go through??
+  * Everything works equivalently for the other variations of MWP
   */
 
 // MWPi: Like MWP but not adjusting for ties (but still adjusting for ranks)
 val mwpi = MWPi()
 
-// MWPr: Like MWP but not adjusting and not correcting for ties  // TODO: what?
+// MWPr: Like MWP but not adjusting and not correcting for ties (see Paper Algorithm description)
 val mwpr = MWPr()
 
 // MWPs: Like MWP but also adjusting for ties in the slicing process
@@ -104,14 +103,14 @@ val mwpu = MWPu()
   * Note that scores around 0.1 indicate independence while score close to 0.7 indicate strong dependency.
   */
 
-val ks = KS(alpha = 0.1, beta = 0.1)
+val ks = KS(alpha = 0.1, beta = 1.0)
 println(ks.contrast(linear_4, linear_4(0).indices.toSet))
 println(ks.contrast(independent, independent(0).indices.toSet))
 
 
 
 
-// TODO: Delete?
+// TODO: Delete
 val mwz = MWZ()
 val s = S()
 val mwb = MWB()
