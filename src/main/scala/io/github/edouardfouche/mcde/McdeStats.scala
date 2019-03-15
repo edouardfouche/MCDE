@@ -31,12 +31,11 @@ trait McdeStats extends Stats {
   val alpha: Double
   val beta: Double // Added to loose the dependence of beta from alpha
   val M: Int
-  val calibrate: Boolean
   var parallelize: Int
 
   require(alpha > 0 & alpha < 1, "alpha should be greater than 0 and lower than 1")
   require(M > 0, "M should be greater than 0")
-  require(beta > 0 & beta < 1)
+  require(beta > 0 & beta <= 1)
 
   //def contrast(m: PreprocessedData, dimensions: Set[Int]): Double
   // I think this expected a number of records
@@ -226,18 +225,6 @@ trait McdeStats extends Stats {
       matrix(y)(x) = c
     }
 
-    if (calibrate) {
-      val uncalibrated = StatsFactory.getTest(this.id, this.M, this.alpha, this.beta, calibrate = false, parallelize)
-      for {
-        x <- cols
-        y <- 0 until x
-      } {
-        val calibrated = Calibrator.calibrateValue(matrix(x)(y), uncalibrated, 2, m(0).length)
-        matrix(x)(y) = calibrated
-        matrix(y)(x) = calibrated
-      }
-    }
-
     parallelize = currentparallelismlevel
     matrix
   }
@@ -279,19 +266,6 @@ trait McdeStats extends Stats {
     } yield {
       matrix(x)(y) = deviation(m, Set(x, y), x)
       matrix(y)(x) = deviation(m, Set(x, y), y)
-    }
-
-    if (calibrate) {
-      val uncalibrated = StatsFactory.getTest(this.id, this.M, this.alpha, this.beta, calibrate = false, parallelize)
-      for {
-        x <- cols
-        y <- 0 until x
-      } {
-        val calibrated1 = Calibrator.calibrateValue(matrix(x)(y), uncalibrated, 2, m(0).length)
-        matrix(x)(y) = calibrated1
-        val calibrated2 = Calibrator.calibrateValue(matrix(y)(x), uncalibrated, 2, m(0).length)
-        matrix(y)(x) = calibrated2
-      }
     }
     matrix
   }

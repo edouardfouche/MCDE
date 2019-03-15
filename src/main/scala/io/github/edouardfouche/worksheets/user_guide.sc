@@ -16,9 +16,11 @@ import io.github.edouardfouche.mcde._
 // For more information see: https://github.com/edouardfouche/DataGenerator
 import io.github.edouardfouche.generators.Independent
 
+// For loading data from a csv file
+import io.github.edouardfouche.preprocess.Preprocess
 
 /**
-  * ### Data Generation ###
+  * ### Data Generation & loading from CSV ###
   *
   * Note that MWP classes expect an Array[Array[Double] which
   * is tuple oriented (Array containing Arrays which contain each row/tuple). Therefore we transpose the data.
@@ -35,7 +37,13 @@ val attribute4: Array[Double] = attribute1.map(_ * 6)
 val linear_4: Array[Array[Double]] = Array(attribute1, attribute2, attribute3, attribute4).transpose
 
 // Generating independent data using the data generator class (https://github.com/edouardfouche/DataGenerator)
-val independent = Independent(5, 0.0, "gaussian", 0).generate(100000)
+val independent_generator = Independent(5, 0.0, "gaussian", 0)
+val independent = independent_generator.generate(100000)
+
+// Loading data from csv. Each row in the file must be tuple, each col must be attribute
+val path = s"${System.getProperty("user.dir")}/"
+independent_generator.save(100, path)
+val loaded_data = Preprocess.open(path + independent_generator.id + ".csv", header = 1, separator = ",", excludeIndex = false, dropClass = true)
 
 
 /**
@@ -99,10 +107,12 @@ val mwpu = MWPu()
 /**
   * KS: Like MWP but using Kolmogorow-Smirnow-Test for dependency estimation instead of Mann–Whitney P test
   *
-  * Note that alpha and beta default values for KS are 0.1. It is not recommended to change those values.
+  * Note that alpha and beta default values for KS are 0.1 and 1.0. It is not recommended to change those values.
+  * All other parameters are defined as for MWP.
+  *
   * Note that scores around 0.1 indicate independence while score close to 0.7 indicate strong dependency.
   */
 
-val ks = KS(alpha = 0.1, beta = 1.0)
+val ks = KS(alpha = 0.1, beta = 1.0) /////
 println(ks.contrast(linear_4, linear_4(0).indices.toSet))
 println(ks.contrast(independent, independent(0).indices.toSet))

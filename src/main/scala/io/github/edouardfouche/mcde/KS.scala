@@ -30,7 +30,7 @@ import scala.annotation.tailrec
   *
   */
 //TODO: It would be actually interesting to compare MCDE with a version with the KS-test AND all the improvements proposed by MCDE
-case class KS(M: Int = 50, alpha: Double = 0.1, beta: Double = 0.1, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
+case class KS(M: Int = 50, alpha: Double = 0.1, beta: Double = 1.0, var parallelize: Int = 0) extends McdeStats {
   type PreprocessedData = RankIndex
   val id = "KS"
 

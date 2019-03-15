@@ -28,7 +28,7 @@ import scala.collection.parallel.ForkJoinTaskSupport
   * @beta  Expected share of instances in marginal restriction (reference dimension).
   *        Added with respect to the original paper to loose the dependence of beta from alpha.
   */
-case class MWPu(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
+case class MWPu(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, var parallelize: Int = 0) extends McdeStats {
   type PreprocessedData = CorrectedRankIndex
   val id = "MWPu"
   //val slicer = Slicing3
@@ -191,9 +191,6 @@ case class MWPu(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, calibrate:
         twoSample(m, referenceDim, m.randomUniformSlice(dimensions, referenceDim, sliceSize))
       }).sum / M
     }
-
-    //if(calibrate) Calibrator.calibrateValue(result, StatsFactory.getTest(this.id, this.M, this.alpha, calibrate=false), dimensions.size, m(0).length)// calibrateValue(result, dimensions.size, alpha, M)
-    //else result
     result
   }
 }

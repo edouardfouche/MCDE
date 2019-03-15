@@ -56,7 +56,7 @@ class TestDimensions extends FunSuite {
   val path = s"${System.getProperty("user.home")}/datagenerator_for_scalatest/"
   val dir = new File(path).mkdirs()
   val indi = Independent(dims, 0.0,"gaussian", 0)
-  indi.save(rows,path) // saveSample is final on Base Class, dir gets destructed after test
+  indi.save(rows,path) // save is final on Base Class, dir gets destructed after test
   val data = Preprocess.open(path + indi.id + ".csv", header = 1, separator = ",", excludeIndex = false, dropClass = true)
   val dataclass = DataRef("Independent-2-0.0", path + indi.id + ".csv", 1, ",", "Test")
 

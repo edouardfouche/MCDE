@@ -29,7 +29,7 @@ import scala.collection.parallel.ForkJoinTaskSupport
   *        Added with respect to the original paper to loose the dependence of beta from alpha.
   */
 
-case class MWPs(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, calibrate: Boolean = false, var parallelize: Int = 0) extends McdeStats {
+case class MWPs(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, var parallelize: Int = 0) extends McdeStats {
   type PreprocessedData = CorrectedRankIndex
   val id = "MWPs"
   //val slicer = Slicing3
@@ -127,8 +127,6 @@ case class MWPs(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, calibrate:
       }).sum / M
     }
 
-    //if(calibrate) Calibrator.calibrateValue(result, StatsFactory.getTest(this.id, this.M, this.alpha, calibrate=false), dimensions.size, m(0).length)// calibrateValue(result, dimensions.size, alpha, M)
-    //else result
     result
   }
 }

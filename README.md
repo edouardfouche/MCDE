@@ -21,20 +21,17 @@ Include ```` XXX```` to your sbt file to get the framework from maven.
 #### Use It
 
 We provide a detailed guide on how to use the MCDE framework in a Scala worksheet at: 
-[src/main/scala/io/github/edouardfouche/worksheets/usage_guide.sc](src/main/scala/io/github/edouardfouche/worksheets/usage_guide.sc)
+[src/main/scala/io/github/edouardfouche/worksheets/user_guide.sc](src/main/scala/io/github/edouardfouche/worksheets/user_guide.sc)
 
 **Minimalistic Example**
 `````
 import io.github.edouardfouche.mcde.MWP
+import io.github.edouardfouche.preprocess.Preprocess
 
-// create data (Array of tuples)
-val attribute1: Array[Double] = (1 to 100).map(_.toDouble).toArray
-val attribute2: Array[Double] = attribute1.map(x => x * 2)
-val linear_2: Array[Array[Double]] = Array(attribute1, attribute2).transpose 
-
+val data = Preprocess.open("path/to/file.csv", header = 1, separator = ",", excludeIndex = false, dropClass = true)
 val mwp = MWP()
-val score:Double = mwp.contrast(m = linear_2, dimensions = Set(0,1))
-val scoreMatrix:Array[Array[Double]] = mwp.contrastMatrix(m = linear_2)
+val score:Double = mwp.contrast(m = data, dimensions = Set(0,1))
+val scoreMatrix:Array[Array[Double]] = mwp.contrastMatrix(m = data)
 `````
 
 Please refer to the guide for more detailed information

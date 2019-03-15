@@ -90,7 +90,7 @@ object Main extends LazyLogging {
         args(mindex).toInt
       }
 
-      StatsFactory.getTest("MWP", M, 0.5, 0.5, false, plevel)
+      StatsFactory.getTest("MWP", M, 0.5, 0.5, plevel)
     } else {
 
       val mindex = (args indexWhere (_ == "-m")) + 1
@@ -105,7 +105,7 @@ object Main extends LazyLogging {
         }
         args(mindex).toInt
       }
-      StatsFactory.getTest(args(aindex), M, 0.5, 0.5, false, plevel)
+      StatsFactory.getTest(args(aindex), M, 0.5, 0.5, plevel)
     }
 
     val opening_CPUtime =  opening._1
