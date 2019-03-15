@@ -40,7 +40,13 @@ val linear_4: Array[Array[Double]] = Array(attribute1, attribute2, attribute3, a
 val independent_generator = Independent(5, 0.0, "gaussian", 0)
 val independent = independent_generator.generate(100000)
 
-// Loading data from csv. Each row in the file must be tuple, each col must be attribute
+/**
+  * Loading data from csv. Each row in the file must be tuple, each col must be attribute
+  * @header Number of lines to discard (header), by default 1.
+  * @excludeIndex Whether to exclude an index (the first column) or not.
+  * @dropClass Keep always at true
+  */
+
 val path = s"${System.getProperty("user.dir")}/"
 independent_generator.save(100, path)
 val loaded_data = Preprocess.open(path + independent_generator.id + ".csv", header = 1, separator = ",", excludeIndex = false, dropClass = true)
