@@ -74,17 +74,20 @@ The application accepts various arguments. The first two (`-t <task>` and `-f <f
     - `EstimateDependencyMatrix`: Estimates the 2-D dependency matrix, i.e., the dependency of each pair in the data. 
 - `-f <file>`: the path to the data source (a comma-separated text file  with 1 line header) in your system.
 - `-a <approach>`: The approach to use for dependency estimation. Possible choices: 
-    - MCDE approaches: `MWP`(Default)
-    - Benchmark approaches (see II: Related Work): `HiCS`, `TC`, `II`, `MS`, `UDS`, `MAC`, `CMI` 
+    - `MWP` (Default): Standard MWP approach as described in the paper.
+    - `MWPi`: Like MWP but not adjusting for ties (but still adjusting for ranks).
+    - `MWPr`: Like MWP but not adjusting and not correcting for ties (see Paper, Algorithm description).
+    - `MWPs`: Like MWP but also adjusting for ties in the slicing process.
+    - `MWPu`: Like MWP but without border effects.
+    - `KS`: Like MWP but using Kolmogorow-Smirnow-Test for dependency estimation instead of Mann–Whitney P test.
+    
 - `-p <plevel>`: Level of parallelism to use. Possible choices:
-    - `0` (Default, running single core)
-    - `1` (The number of threads is set by the program automatically)
-    - Any integer >1 (The user specifies the number of threads explicitly)
+    - `0` (Default, running single core).
+    - `1` (The number of threads is set by the program automatically).
+    - Any integer >1 (The user specifies the number of threads explicitly).
     - Please note that, in the case of:
-        - `EstimateDependency`, the iterations of `MWP` will run in parallel (not supported for benchmark approaches).
-        - `EstimateDependencyMatrix`, coefficients are estimated in parallel (thus, supported for all approches).
-
-Additional argument for `MWP`:
+        - `EstimateDependency`, the iterations of MCDE will run in parallel.
+        - `EstimateDependencyMatrix`, coefficients are estimated in parallel.
 
 - `-m <M>`: the number of Monte Carlo simulations. More simulations lead to more accurate estimates (see Theorem 4), but also increases runtime linearly. Default: 50
 
