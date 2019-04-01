@@ -24,16 +24,6 @@ import com.typesafe.scalalogging.LazyLogging
   * Created by fouchee on 01.06.17.
   */
 
-// example usage: sbt "run HiCS src/test/resources/iris.csv"
-// or sbt package and then
-// scala target/scala-2.11/subspacesearch_2.11-1.0.jar GMD src/test/resources/iris.csv
-// or sbt assembly and then
-// java -jar target/scala-2.11/SubspaceSearch-assembly-1.0.jar GMD src/test/resources/iris.csv
-// A real example: scala target/scala-2.11/subspacesearch_2.11-1.0.jar GMD /home/fouchee/git/SubspaceSearch/src/test/resources/11-12_25-26_37-38-39_55-56-57_40-41-42-43_46-47-48-49_30-31-32-33-34_73-74-75-76-77_data.txt
-
-// Experiment1
-// java -jar /home/fouchee/git/SubspaceSearch/target/scala-2.11/SubspaceSearch-assembly-1.0.jar com.edouardfouche.experiments.KS_MWB_extern
-// scala /home/fouchee/git/SubspaceSearch/target/scala-2.11/subspacesearch_2.11-1.0.jar com.edouardfouche.experiments.KS_MWB
 
 // this is a nice table: http://www.normaltable.com/
 object Main extends LazyLogging {
