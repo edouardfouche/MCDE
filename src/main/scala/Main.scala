@@ -34,7 +34,7 @@ object Main extends LazyLogging {
     info("Working directory: " + System.getProperty("user.dir"))
     info("Raw parameters given: " + args.map(s => "\"" + s + "\"").mkString("[", ", ", "]"))
 
-    val MCDE_Stats = Vector("mwp")
+    val MCDE_Stats = Vector("mwp", "mwpi", "mwpr", "mwps", "mwpu", "ks")
 
     require(args.length > 0, "No arguments given. Please see README.md")
     //StopWatch.start
@@ -47,6 +47,8 @@ object Main extends LazyLogging {
     val pindex = (args indexWhere (_ == "-p")) + 1
 
     val pathindex = (args indexWhere (_ == "-f")) + 1
+
+
 
     if (tindex == 0 | (tindex == args.length)) throw new Error("Please specify the task to run using the '-t' flag.")
 
@@ -137,8 +139,6 @@ object Main extends LazyLogging {
     println(s"Data Loading time: \t ${opening_CPUtime} $unit (cpu), ${opening_Walltime} $unit (wall)")
     println(s"Preprocessing time: \t ${preprocessing_CPUtime} $unit (cpu), ${preprocessing_Walltime} $unit (wall)")
     println(s"Computation time: \t ${result._1} $unit (cpu), ${result._2} $unit (wall)")
-    //val (cpu, wall) = StopWatch.stop(unit)
-    //println(s"Total elapsed time: \t $cpu $unit (cpu), $wall $unit (wall)")
     System.exit(0)
 
 
