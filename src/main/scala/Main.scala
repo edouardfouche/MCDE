@@ -48,8 +48,6 @@ object Main extends LazyLogging {
 
     val pathindex = (args indexWhere (_ == "-f")) + 1
 
-
-
     if (tindex == 0 | (tindex == args.length)) throw new Error("Please specify the task to run using the '-t' flag.")
 
     val opening  = if (pathindex == 0 | (pathindex == args.length)) throw new Error("Please provide the path to a file using the '-f' flag.") else {
@@ -57,17 +55,17 @@ object Main extends LazyLogging {
       StopWatch.measureTime(Preprocess.open(args(pathindex), header = 1, separator = ",", excludeIndex = false, dropClass = true))
     }
 
+    if((aindex != 0 & (aindex != args.length)) & !(MCDE_Stats contains args(aindex))) throw new Error("Approch not found for -a, possible choices are MWP, KS, MWPi, MWPr, MWPs, MWPu")
+
     val plevel = if (pindex == 0 | (pindex == args.length)) {
       warn("Parallelism level not specified, running on single core.")
       0
     } else {
       val p = args(pindex).toInt
-      if((args(tindex).toLowerCase == "estimatedependency") &  !(MCDE_Stats contains args(aindex).toLowerCase)) {
-        warn("Parallelism is not supported for this approach.")
-      } else {
-        if (p == 1) warn("Running with default parallelism level.")
-        else warn(s"Running with parallelism level: $p")
-      }
+
+      if (p == 1) warn("Running with default parallelism level.")
+      else warn(s"Running with parallelism level: $p")
+
       p
     }
 
@@ -92,9 +90,6 @@ object Main extends LazyLogging {
         }
         50
       } else {
-        if(!(MCDE_Stats contains args(aindex).toLowerCase)) {
-          warn("Not an MCDE approach, the argument -m is ignored.")
-        }
         args(mindex).toInt
       }
       StatsFactory.getTest(args(aindex), M, 0.5, 0.5, plevel)
@@ -110,11 +105,8 @@ object Main extends LazyLogging {
     val preprocessed_data = preprocessing._3
 
     val result = if (args(tindex).toLowerCase == "estimatedependency") {
-      if(MCDE_Stats contains args(aindex).toLowerCase) {
-        info(s"Usage: -t EstimateDependency -f <file> -a <approach> -m <M> -d <dimensions> -p <plevel>")
-      } else {
-        info(s"Usage: -t EstimateDependency -f <file> -a <approach> -d <dimensions>")
-      }
+
+      info(s"Usage: -t EstimateDependency -f <file> -a <approach> -m <M> -d <dimensions> -p <plevel>")
 
       val dimensions = if(dindex == 0 | (dindex == args.length)) {
         warn("Dimensions not specified, computing the contrast on the full space of the input file.")
@@ -126,11 +118,8 @@ object Main extends LazyLogging {
       startJob(approach.contrast(preprocessed_data, dimensions))
     } else {
       if (args(tindex).toLowerCase == "estimatedependencymatrix") {
-        if(MCDE_Stats contains args(aindex).toLowerCase) {
-          info(s"Usage: -t EstimateDependencyMatrix -f <file> -a <approach> -m <M> -p <plevel>")
-        } else {
-          info(s"Usage: -t EstimateDependencyMatrix -f <file> -a <approach> -p <plevel>")
-        }
+        info(s"Usage: -t EstimateDependencyMatrix -f <file> -a <approach> -m <M> -p <plevel>")
+
         startJob(approach.contrastMatrix(preprocessed_data))
       } else {
         throw new Error(s"Unknown argument -t ${args(tindex)}, possible values are = ['EstimateDependency', 'EstimateDependencyMatrix']. Please see README.md.")
@@ -140,8 +129,6 @@ object Main extends LazyLogging {
     println(s"Preprocessing time: \t ${preprocessing_CPUtime} $unit (cpu), ${preprocessing_Walltime} $unit (wall)")
     println(s"Computation time: \t ${result._1} $unit (cpu), ${result._2} $unit (wall)")
     System.exit(0)
-
-
 
   }
 
