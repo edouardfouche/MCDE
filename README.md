@@ -42,7 +42,7 @@ Please refer to the guide for more detailed information
 
 **Requirements** : ([Oracle JDK 8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) or [OpenJDK 8](http://openjdk.java.net/install/)) and [sbt](https://www.scala-sbt.org/1.0/docs/Setup.html) 
 
-The project is built with sbt (version 0.13.16). You can compile, package or run the project as follows: 
+The project is built with sbt (version 1.2.8). You can compile, package or run the project as follows: 
 
 ```
 sbt compile
@@ -50,14 +50,14 @@ sbt package
 sbt "run <arguments>"
 ```
 
-You can also export a "fat" jar, including all dependencies and scala libraries using [`sbt-assembly`](https://github.com/sbt/sbt-assembly) (0.11.2):
+You can also export a "fat" jar, including all dependencies and scala libraries using [`sbt-assembly`](https://github.com/sbt/sbt-assembly) (0.14.9):
 
 ```
 sbt assembly
 ```
 
-This creates a jar in the folder `target/scala-2.11/` named `MCDE-<version>.jar`, which can be run from java (no 
-sbt/scala installation required). The version of the package at the time of deployment is 1.0.
+This creates a jar in the folder `target/scala-2.12/` named `MCDE-<version>.jar`, which can be run from java (no 
+sbt/scala installation required).
 
 Once you have built the jar, you can run it as follows: 
 
