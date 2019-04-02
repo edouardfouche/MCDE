@@ -19,6 +19,7 @@ package io.github.edouardfouche.mcde
 import io.github.edouardfouche.index.RankIndex
 
 import scala.annotation.tailrec
+import scala.math.{E, pow, sqrt}
 
 /**
   * This is a re-implementation  of the contrast measure as proposed in HiCS
@@ -52,10 +53,12 @@ case class KS(M: Int = 50, alpha: Double = 0.1, beta: Double = 1.0, var parallel
 
     val ref = index(reference)
 
-    val selectIncrement = 1.0 / indexSelection.count(_ == true)
-    val refIncrement = 1.0 / ref.length
-
+    val fullSlizeSize:Int = indexSelection.count(_ == true)
     val refLength = ref.length
+
+    val selectIncrement = 1.0 / fullSlizeSize
+    val refIncrement = 1.0 / refLength
+
 
     // This step is impossible (or difficult) to parallelize, but at least it is tail recursive
     @tailrec def cumulative(n: Int, acc: Double, currentMax: Double): Double = {
@@ -67,6 +70,19 @@ case class KS(M: Int = 50, alpha: Double = 0.1, beta: Double = 1.0, var parallel
           cumulative(n + 1, acc, currentMax max math.abs((n + 1) * refIncrement - acc))
       }
     }
-    cumulative(0, 0, 0)
+
+    def get_p_from_D(D: Double, n1: Int, n2: Int): Double = {
+      val z = D * sqrt(n1*n2 / (n1+n2))
+      def exp(k: Int):Double = pow(-1, k-1) * pow(E, -2 * pow(k,2) * pow(z, 2))
+
+      @tailrec
+      def loop(sumation: Double, i: Int, end: Int):Double = {
+        if(i == end) exp(i) + sumation
+        else loop(exp(i) + sumation, i+1, end)
+      }
+      1 - 2 * loop(0, 1, 10000)
+    }
+
+    get_p_from_D(cumulative(0, 0, 0), fullSlizeSize, refLength - fullSlizeSize)
   }
 }
