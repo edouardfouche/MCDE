@@ -119,6 +119,6 @@ val mwpu = MWPu()
   * Note that scores around 0.1 indicate independence while score close to 0.7 indicate strong dependency.
   */
 
-val ks = KS(alpha = 0.1, beta = 1.0) /////
+val ks = KS(alpha = 0.1, beta = 1.0)
 println(ks.contrast(linear_4, linear_4(0).indices.toSet))
 println(ks.contrast(independent, independent(0).indices.toSet))
