@@ -1,14 +1,14 @@
 import io.github.edouardfouche.generators.Independent
 
 import scala.math._
-import io.github.edouardfouche.mcde.KS
+import io.github.edouardfouche.mcde.{KS, MWP}
 import io.github.edouardfouche.index.RankIndex
 
 // https://stats.stackexchange.com/questions/389034/kolmogorov-smirnov-test-calculating-the-p-value-manually
 // https://en.wikipedia.org/wiki/Kolmogorov–Smirnov_test
 
 // Create linear data
-val attribute1: Array[Double] = (1 to 100).map(_.toDouble).toArray
+val attribute1: Array[Double] = (1 to 100000).map(_.toDouble).toArray
 val attribute2: Array[Double] = attribute1.map(x => x * 2)
 val attribute3: Array[Double] = attribute1.map(x => x * 4)
 val linear_2: Array[Array[Double]] = Array(attribute1, attribute2, attribute3).transpose
@@ -17,9 +17,14 @@ val linear_2: Array[Array[Double]] = Array(attribute1, attribute2, attribute3).t
 val independent_generator = Independent(5, 0.0, "gaussian", 0)
 val independent = independent_generator.generate(100)
 
-val ks = KS()
-val D1 = ks.contrast(linear_2, Set(0,1))
-val D2 = ks.contrast(independent, Set(0,1))
+val ks = KS(10000)
+val mwp = MWP(10000)
+
+// val D1 = ks.contrast(linear_2, Set(0,1,2))
+// val D2 = ks.contrast(independent, Set(0,1,2,3,4))
+val M1 = mwp.contrast(linear_2, Set(0,1,2))
+val M2 = mwp.contrast(independent, Set(0,1,2,3,4))
+
 
 
 val m = new RankIndex(independent)

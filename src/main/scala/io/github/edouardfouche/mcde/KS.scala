@@ -87,7 +87,7 @@ case class KS(M: Int = 50, alpha: Double = 0.1, beta: Double = 1.0, var parallel
         if(i == end) exp(i) + sumation
         else loop(exp(i) + sumation, i+1, end)
       }
-      1 - 2 * loop(0, 1, 10000)
+      1 - 2 * loop(0, 1, 1000)
     }
 
     get_p_from_D(cumulative(0, 0, 0), fullSlizeSize, refLength - fullSlizeSize)
