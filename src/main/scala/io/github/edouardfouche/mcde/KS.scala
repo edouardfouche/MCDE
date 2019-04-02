@@ -46,7 +46,7 @@ case class KS(M: Int = 50, alpha: Double = 0.1, beta: Double = 1.0, var parallel
     *
     * @param reference      The original position of the elements of a reference dimension ordered by their rank
     * @param indexSelection An array of Boolean where true means the value is part of the slice
-    * @return The Kolmogorov-Smirnov statistic
+    * @return The contrast score, which is 1-p of the p-value of the Kolmogorov-Smirnov statistic
     */
   def twoSample(index: PreprocessedData, reference: Int, indexSelection: Array[Boolean]): Double = {
     //require(reference.length == indexSelection.length, "reference and indexSelection should have the same size")
@@ -59,7 +59,7 @@ case class KS(M: Int = 50, alpha: Double = 0.1, beta: Double = 1.0, var parallel
     val selectIncrement = 1.0 / fullSlizeSize
     val refIncrement = 1.0 / refLength
 
-
+    // Computes D
     // This step is impossible (or difficult) to parallelize, but at least it is tail recursive
     @tailrec def cumulative(n: Int, acc: Double, currentMax: Double): Double = {
       if (n == refLength) currentMax
@@ -70,6 +70,13 @@ case class KS(M: Int = 50, alpha: Double = 0.1, beta: Double = 1.0, var parallel
           cumulative(n + 1, acc, currentMax max math.abs((n + 1) * refIncrement - acc))
       }
     }
+
+    /**
+      * @param D D value from KS test
+      * @param n1 n Datapoints in first sample
+      * @param n2 n Datapoints in second sample
+      * @return p-value of two-sided two-sample KS
+      */
 
     def get_p_from_D(D: Double, n1: Int, n2: Int): Double = {
       val z = D * sqrt(n1*n2 / (n1+n2))
