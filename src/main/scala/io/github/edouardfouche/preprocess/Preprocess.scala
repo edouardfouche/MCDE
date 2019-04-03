@@ -201,7 +201,7 @@ object Preprocess extends Preprocessing {
     * Note that the numbers might be different in the case of ties, in comparison with other implementations.
     *
     * @param input A 2-D Array of Double (data set).
-    * @return A 2-D Array of 2-D Tuple, where the first element is the original index, the second is its value (actually not in used for the KS test)
+    * @return A 2-D Array of 2-D Tuple, where the first element is the original index, the second is its value (actually not in used for the KSP test)
     */
   def ksRank(input: Array[Array[Double]], parallelize: Int = 0): Array[Array[(Int, Float)]] = {
     //if (parallelize == 0) input.map(_.zipWithIndex.sortBy(_._1).map(x => (x._2, x._1.toFloat, x._1)))

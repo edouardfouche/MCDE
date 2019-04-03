@@ -26,14 +26,14 @@ import scala.math.{E, pow, sqrt}
   * Use the Kolmogorov-Smirnov test as basis. To the best of my knowledge, the most efficient existing implementation.
   *
   * @alpha Expected share of instances in slice (independent dimensions).
-  * @beta  Expected share of instances in marginal restriction (reference dimension).
-  *        Added with respect to the original paper to loose the dependence of beta from alpha.
+  * @beta Expected share of instances in marginal restriction (reference dimension).
+  *       Added with respect to the original paper to loose the dependence of beta from alpha.
   *
   */
-//TODO: It would be actually interesting to compare MCDE with a version with the KS-test AND all the improvements proposed by MCDE
-case class KS(M: Int = 50, alpha: Double = 0.1, beta: Double = 1.0, var parallelize: Int = 0) extends McdeStats {
+//TODO: It would be actually interesting to compare MCDE with a version with the KSP-test AND all the improvements proposed by MCDE
+case class KSP(M: Int = 50, alpha: Double = 0.5, beta: Double = 1.0, var parallelize: Int = 0) extends McdeStats {
   type PreprocessedData = RankIndex
-  val id = "KS"
+  val id = "KSP"
 
   def preprocess(input: Array[Array[Double]]): PreprocessedData = {
     new RankIndex(input, 0) //TODO: seems that giving parallelize another value that 0 leads to slower execution, why?
@@ -53,43 +53,50 @@ case class KS(M: Int = 50, alpha: Double = 0.1, beta: Double = 1.0, var parallel
 
     val ref = index(reference)
 
-    val fullSlizeSize:Int = indexSelection.count(_ == true)
-    val refLength = ref.length
+    val inSlize = indexSelection.count(_ == true)
+    val outSlize = ref.length - inSlize
 
-    val selectIncrement = 1.0 / fullSlizeSize
-    val refIncrement = 1.0 / refLength
+    val selectIncrement = 1.0 / inSlize // TODO: What about division by 0?
+    val refIncrement = 1.0 / outSlize
 
-    // Computes D
+
     // This step is impossible (or difficult) to parallelize, but at least it is tail recursive
-    @tailrec def cumulative(n: Int, acc: Double, currentMax: Double): Double = {
-      if (n == refLength) currentMax
+    @tailrec def cumulative(n: Int, acc1: Double, acc2: Double, currentMax: Double): Double = {
+      // if (inSlize == 0 | outSlize == 0) 1 // This should not be nessesary, maybe keep just for performance
+      if (n == ref.length) currentMax
       else {
         if (indexSelection(ref(n)))
-          cumulative(n + 1, acc + selectIncrement, currentMax max math.abs((n + 1) * refIncrement - (acc + selectIncrement)))
+          cumulative(n + 1, acc1 + selectIncrement, acc2, currentMax max math.abs(acc2 - (acc1 + selectIncrement)))
         else
-          cumulative(n + 1, acc, currentMax max math.abs((n + 1) * refIncrement - acc))
+          cumulative(n + 1, acc1, acc2 + refIncrement, currentMax max math.abs(acc2 + refIncrement - acc1))
       }
     }
 
     /**
-      * @param D D value from KS test
+      * @param D  D value from KSP test
       * @param n1 n Datapoints in first sample
       * @param n2 n Datapoints in second sample
-      * @return p-value of two-sided two-sample KS
+      * @return p-value of two-sided two-sample KSP
       */
 
     def get_p_from_D(D: Double, n1: Int, n2: Int): Double = {
-      val z = D * sqrt(n1*n2 / (n1+n2))
-      def exp(k: Int):Double = pow(-1, k-1) * pow(E, -2 * pow(k,2) * pow(z, 2))
+      val z = D * sqrt(n1 * n2 / (n1 + n2))
+
+      def exp(k: Int): Double = pow(-1, k - 1) * pow(E, -2 * pow(k, 2) * pow(z, 2))
 
       @tailrec
-      def loop(sumation: Double, i: Int, end: Int):Double = {
-        if(i == end) exp(i) + sumation
-        else loop(exp(i) + sumation, i+1, end)
+      def loop(sumation: Double, i: Int, end: Int): Double = {
+        if (i == end) exp(i) + sumation
+        else loop(exp(i) + sumation, i + 1, end)
       }
-      1 - 2 * loop(0, 1, 1000)
+
+      1 - 2 * loop(0, 1, 10000)
     }
 
-    get_p_from_D(cumulative(0, 0, 0), fullSlizeSize, refLength - fullSlizeSize)
+    val D = cumulative(0, 0, 0, 0)
+    val score = get_p_from_D(D, inSlize, outSlize)
+    // indexSelection.map(println(_))
+    // ref.map(println(_))
+    score
   }
 }

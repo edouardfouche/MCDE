@@ -3,7 +3,7 @@ package io.github.edouardfouche.mcde
 object StatsFactory {
   def getTest(test: String, m: Int, alpha: Double, beta: Double, parallelize: Int): Stats =
   test.toLowerCase match {
-    case "ks" => KS(m, alpha, beta, parallelize) // preferred
+    case "ksp" => KSP(m, alpha, beta, parallelize) // preferred
     case "mwp" => MWP(m, alpha, beta, parallelize) // preferred
     case "mwpi" => MWPi(m, alpha, beta, parallelize)
     case "mwpr" => MWPr(m, alpha, beta, parallelize)

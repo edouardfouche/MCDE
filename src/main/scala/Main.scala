@@ -34,7 +34,7 @@ object Main extends LazyLogging {
     info("Working directory: " + System.getProperty("user.dir"))
     info("Raw parameters given: " + args.map(s => "\"" + s + "\"").mkString("[", ", ", "]"))
 
-    val MCDE_Stats = Vector("mwp", "mwpi", "mwpr", "mwps", "mwpu", "ks")
+    val MCDE_Stats = Vector("mwp", "mwpi", "mwpr", "mwps", "mwpu", "ksp")
 
     require(args.length > 0, "No arguments given. Please see README.md")
     //StopWatch.start
@@ -55,7 +55,7 @@ object Main extends LazyLogging {
       StopWatch.measureTime(Preprocess.open(args(pathindex), header = 1, separator = ",", excludeIndex = false, dropClass = true))
     }
 
-    if((aindex != 0 & (aindex != args.length)) & !(MCDE_Stats contains args(aindex))) throw new Error("Approch not found for -a, possible choices are MWP, KS, MWPi, MWPr, MWPs, MWPu")
+    if((aindex != 0 & (aindex != args.length)) & !(MCDE_Stats contains args(aindex))) throw new Error("Approch not found for -a, possible choices are MWP, KSP, MWPi, MWPr, MWPs, MWPu")
 
     val plevel = if (pindex == 0 | (pindex == args.length)) {
       warn("Parallelism level not specified, running on single core.")
