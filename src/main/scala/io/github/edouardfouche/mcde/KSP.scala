@@ -56,13 +56,14 @@ case class KSP(M: Int = 50, alpha: Double = 0.5, beta: Double = 1.0, var paralle
     val inSlize = indexSelection.count(_ == true)
     val outSlize = ref.length - inSlize
 
-    val selectIncrement = 1.0 / inSlize // TODO: What about division by 0?
+    if (inSlize == 0 || outSlize == 0) 1.0 // If one is empty they are perfectly diffrent --> score = 1 (and no prob with division by 0)
+
+    val selectIncrement = 1.0 / inSlize
     val refIncrement = 1.0 / outSlize
 
 
     // This step is impossible (or difficult) to parallelize, but at least it is tail recursive
     @tailrec def cumulative(n: Int, acc1: Double, acc2: Double, currentMax: Double): Double = {
-      // if (inSlize == 0 | outSlize == 0) 1 // This should not be nessesary, maybe keep just for performance
       if (n == ref.length) currentMax
       else {
         if (indexSelection(ref(n)))
@@ -79,24 +80,24 @@ case class KSP(M: Int = 50, alpha: Double = 0.5, beta: Double = 1.0, var paralle
       * @return p-value of two-sided two-sample KSP
       */
 
-    def get_p_from_D(D: Double, n1: Int, n2: Int): Double = {
-      val z = D * sqrt(n1 * n2 / (n1 + n2))
+    def get_p_from_D(D: Double, n1: Long, n2: Long): Double = {
+      lazy val z = D * sqrt(n1 * n2 / (n1 + n2))
 
       def exp(k: Int): Double = pow(-1, k - 1) * pow(E, -2 * pow(k, 2) * pow(z, 2))
 
+      def infi_exp(k: Int): Double = pow(-1, k-1) * pow(E, 2 * pow(k,2) * pow(D, 2)) // in case lim n1, n2 -> infi
+
+      // TODO: The part inside the summation could be done easily in parallel
       @tailrec
-      def loop(sumation: Double, i: Int, end: Int): Double = {
-        if (i == end) exp(i) + sumation
-        else loop(exp(i) + sumation, i + 1, end)
+      def loop(sumation: Double, i: Int, end: Int, f: Int => Double): Double = {
+        if (i == end) f(i) + sumation
+        else loop(f(i) + sumation, i + 1, end, f)
       }
 
-      1 - 2 * loop(0, 1, 10000)
+      if(n1 >= 3037000499L && n2 >= 3037000499L) 1 - 2 * loop(0, 1, 10000, infi_exp) // squaring n1,n2 will reach the limit of Long
+      else 1 - 2 * loop(0, 1, 10000, exp)
     }
 
-    val D = cumulative(0, 0, 0, 0)
-    val score = get_p_from_D(D, inSlize, outSlize)
-    // indexSelection.map(println(_))
-    // ref.map(println(_))
-    score
+    get_p_from_D(cumulative(0, 0, 0, 0), inSlize, outSlize)
   }
 }

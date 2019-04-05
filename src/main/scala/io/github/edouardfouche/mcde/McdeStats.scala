@@ -35,7 +35,7 @@ trait McdeStats extends Stats {
 
   require(alpha > 0 & alpha < 1, "alpha should be greater than 0 and lower than 1")
   require(M > 0, "M should be greater than 0")
-  require(beta > 0 & beta <= 1)
+  require(beta > 0 & beta <= 1, "beta should be greater than 0 and lower than 1")
 
   //def contrast(m: PreprocessedData, dimensions: Set[Int]): Double
   // I think this expected a number of records
