@@ -1,12 +1,12 @@
 /**
-  * ###### Using MWP in your code ######
+  * ###### Using MCDE in your code ######
   */
 
 
 /**
   * ### Importing ###
   *
-  * Import all MWP classes or just the one you need.
+  * Import all MCDE classes or just the one you need.
   */
 
 import io.github.edouardfouche.mcde._
@@ -22,14 +22,14 @@ import io.github.edouardfouche.preprocess.Preprocess
 /**
   * ### Data Generation & loading from CSV ###
   *
-  * Note that MWP classes expect an Array[Array[Double] which
+  * Note that MCDE classes expect an Array[Array[Double] which
   * is tuple oriented (Array containing Arrays which contain each row/tuple). Therefore we transpose the data.
   */
 
 // Generating linear bivariate data.
 val attribute1: Array[Double] = (1 to 100).map(_.toDouble).toArray
 val attribute2: Array[Double] = attribute1.map(x => x * 2)
-val linear_2: Array[Array[Double]] = Array(attribute1, attribute2).transpose
+val linear_2: Array[Array[Double]] = Array(attribute1, attribute2).transpose // Dim: 100 x 2
 
 // Generating linear multivariate data.
 val attribute3: Array[Double] = attribute1.map(_ * 4)
@@ -38,7 +38,7 @@ val linear_4: Array[Array[Double]] = Array(attribute1, attribute2, attribute3, a
 
 // Generating independent data using the data generator class (https://github.com/edouardfouche/DataGenerator)
 val independent_generator = Independent(5, 0.0, "gaussian", 0)
-val independent = independent_generator.generate(100000)
+val independent = independent_generator.generate(100000) // Dim: 100000 x 5
 
 /**
   * Loading data from csv. Each row in the file must be tuple, each col must be attribute
@@ -70,7 +70,9 @@ val mwp = MWP(M = 50, alpha = 0.5, beta = 0.5, parallelize = 0)
 /**
   * ### Computing contrast scores ###
   *
-  * Calling the contrast() method computes the dependency score including all specified dimensions
+  * Calling the contrast() method computes the dependency score including all specified dimensions. Scores may range
+  * between 0.0 and 1.0. Strong dependecies usually have scores close to 1.0. Independent data usually yields scores around
+  * 0.5. There are special cases where scores << 0.5 may arise (which also can be interpreted as independence)
   *
   * @m:Array[Array[Double]]   data (row oriented)
   * @dimensions:Set[Int]      Dimensions of the subspace on which the dependency should be estimated starting from 0
@@ -113,8 +115,9 @@ val mwpu = MWPu()
 /**
   * KSP: Like MWP but using Kolmogorow-Smirnow-Test for dependency estimation instead of Mann–Whitney P test
   *
-  * Note thatbeta default value for KSP is 1.0. It is not recommended to change this value.
+  * Note that beta default value for KSP is 1.0. It is not recommended to change this value.
   * All other parameters are defined as for MWP.
+  * KSP has a 3-4 times longer runtime then MWP
   *
   */
 

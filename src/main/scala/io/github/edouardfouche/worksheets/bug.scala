@@ -5,7 +5,7 @@ import io.github.edouardfouche.mcde.{KSP, MWP}
 object bug extends App{
   override def main(args: Array[String]): Unit = {
 
-    // TODO: Does not happen with lower n or KS, its probably because n1*n2 > maxint
+    // TODO: Does not happen with lower n or KS, its because n1*n2 > maxint (see line 81)
     /**
       * See how handled for KSP (long + lim n,m -> Infi), does something similar exists for MWP?
       */

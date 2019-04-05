@@ -72,14 +72,14 @@ The application accepts various arguments. The first two (`-t <task>` and `-f <f
 - `-t <task>`: Task to perform. Possible choices:
     - `EstimateDependency`: Estimates the dependency of a single subspace (with 2 or more dimensions).
     - `EstimateDependencyMatrix`: Estimates the 2-D dependency matrix, i.e., the dependency of each pair in the data. 
-- `-f <file>`: the path to the data source (a comma-separated text file  with 1 line header) in your system.
+- `-f <file>`: the path to the data source (a comma-separated text file  with 1 line header, row oriented) in your system.
 - `-a <approach>`: The approach to use for dependency estimation. Possible choices: 
     - `MWP` (Default): Standard MWP approach as described in the paper.
     - `MWPi`: Like MWP but not adjusting for ties (but still adjusting for ranks).
     - `MWPr`: Like MWP but not adjusting and not correcting for ties (see Paper, Algorithm description).
     - `MWPs`: Like MWP but also adjusting for ties in the slicing process.
     - `MWPu`: Like MWP but without border effects.
-    - `KS`: Like MWP but using Kolmogorow-Smirnow-Test for dependency estimation instead of Mann–Whitney P test.
+    - `KSP`: Like MWP but using Kolmogorow-Smirnow-Test for dependency estimation instead of Mann–Whitney P test.
     
 - `-p <plevel>`: Level of parallelism to use. Possible choices:
     - `0` (Default, running single core).
