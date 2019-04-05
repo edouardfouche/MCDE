@@ -94,8 +94,8 @@ case class KSP(M: Int = 50, alpha: Double = 0.5, beta: Double = 1.0, var paralle
         else loop(f(i) + sumation, i + 1, end, f)
       }
 
-      if(n1 >= 3037000499L && n2 >= 3037000499L) 1 - 2 * loop(0, 1, 10000, infi_exp) // squaring n1,n2 will reach the limit of Long
-      else 1 - 2 * loop(0, 1, 10000, exp)
+      if(n1 >= 3037000499L && n2 >= 3037000499L) 1 - 2 * loop(0, 1, 1000, infi_exp) // squaring n1,n2 will reach the limit of Long
+      else 1 - 2 * loop(0, 1, 1000, exp)
     }
 
     get_p_from_D(cumulative(0, 0, 0, 0), inSlize, outSlize)

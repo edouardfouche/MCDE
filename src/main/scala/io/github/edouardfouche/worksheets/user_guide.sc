@@ -117,7 +117,6 @@ val mwpu = MWPu()
   *
   * Note that beta default value for KSP is 1.0. It is not recommended to change this value.
   * All other parameters are defined as for MWP.
-  * KSP has a 3-4 times longer runtime then MWP
   *
   */
 
