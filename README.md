@@ -103,7 +103,7 @@ We provide a sample of the data used for the experiments in `src/test/resources/
 
 #### Running MCDE/MWP
 
-- Independent data (2-D)
+- Independent data (2-D); A score around 0.5 is expected.
 
 ```bash
 fouchee@Modena:~/git/MCDE$ java -jar target/scala-2.12/MCDE-1.0.jar -t EstimateDependency -f src/test/resources/data/Independent-2-0.0.csv -a MWP -m 50 -d 0,1
@@ -117,7 +117,7 @@ Preprocessing time:      32.325762 ms (cpu), 36.009404 ms (wall)
 Computation time:    37.12567 ms (cpu), 37.323588 ms (wall)
 ```
 
-- Linear dependent data (2-D) 
+- Linear dependent data (2-D); A score very close to 1.0 is expected.
 
 ```bash
 fouchee@Modena:~/git/MCDE$ java -jar target/scala-2.12/MCDE-1.0.jar -t EstimateDependency -f src/test/resources/data/Linear-2-0.0.csv -a MWP -m 50 -d 0,1
