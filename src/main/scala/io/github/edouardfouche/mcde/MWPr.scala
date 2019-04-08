@@ -61,25 +61,21 @@ case class MWPr(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, var parall
     val ref = index(reference)
 
     def getStat(cutStart: Int, cutEnd: Int): Double = {
-      @tailrec def cumulative(n: Int, acc: Double, count: Int): (Double, Int) = {
+      @tailrec def cumulative(n: Int, acc: Double, count: Long): (Double, Long) = {
         if (n == cutEnd) (acc - (cutStart * count), count) // correct the accumulator in case the cut does not start at 0
         else if (indexSelection(ref(n))) cumulative(n + 1, acc + n, count + 1)
         else cumulative(n + 1, acc, count)
       }
 
       lazy val cutLength = cutEnd - cutStart
-      val (r1, n1) = cumulative(cutStart, 0, 0)
+      val (r1, n1:Long) = cumulative(cutStart, 0, 0)
       //println(s"indexCount: ${indexSelection.count(_ == true)}, sliceStart: ${sliceStart}, sliceEnd: ${sliceEnd}, r1: $r1, n1: $n1, cutLength: $cutLength")
       val P = if (n1 == 0 | n1 == cutLength) { // in the case it is empty or contains them all, the value should be maximal
-        //val nA = cutLength * alpha
-        //val nB = cutLength * (1.0 - alpha)
-        //val Z = (nA * nB / 2.0) / math.sqrt((nA * nB * (cutLength + 1.0)) / 12.0) //* (cutLength.toFloat / reference.length) // without correction
-        //val res = HalfGaussian.cdf(Z)
-        //res
         1
       }
       else {
-        val n2 = cutLength - n1
+        val n2:Long = cutLength - n1
+        if(n1 >= 3037000499L && n2 >= 3037000499L) throw new Exception("Long type overflowed. Dataset has to many dataobjects. Please subsample and try again with smaller dataset.")
         val U1 = r1 - (n1 * (n1 - 1)) / 2 // -1 because our ranking starts from 0
         val std = math.sqrt((n1 * n2 * (cutLength + 1.0)) / 12.0) // without correction
         // note: n1 + n2 = n1 + cutLength - n1 = cutLength

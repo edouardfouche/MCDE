@@ -59,20 +59,21 @@ case class MWPs(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, var parall
     val ref = index(reference)
 
     def getStat(cutStart: Int, cutEnd: Int): Double = {
-      @tailrec def cumulative(n: Int, acc: Double, count: Int): (Double, Int) = {
+      @tailrec def cumulative(n: Int, acc: Double, count: Long): (Double, Long) = {
         if (n == cutEnd) (acc - (cutStart * count), count) // correct the accumulator in case the cut does not start at 0
         else if (indexSelection(ref(n)._1)) cumulative(n + 1, acc + ref(n)._2, count + 1)
         else cumulative(n + 1, acc, count)
       }
 
       lazy val cutLength = cutEnd - cutStart
-      val (r1, n1) = cumulative(cutStart, 0, 0)
+      val (r1, n1:Long) = cumulative(cutStart, 0, 0)
 
       if (n1 == 0 | n1 == cutLength) {
         1 // when one of the two sample is empty, this just means maximal possible score.
       }
       else {
-        val n2 = cutLength - n1
+        val n2:Long = cutLength - n1
+        if(n1 >= 3037000499L && n2 >= 3037000499L) throw new Exception("Long type overflowed. Dataset has to many dataobjects. Please subsample and try again with smaller dataset.")
         val U1 = r1 - (n1 * (n1 - 1)) / 2 // -1 because our ranking starts from 0
         val corrMax = ref(cutEnd-1)._3
         val corrMin = if(cutStart == 0) 0 else ref(cutStart-1)._3
