@@ -63,7 +63,8 @@ libraryDependencies ++= Seq(
 
 //libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0"
 libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
-libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3" // this is for the logging backend
+libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.2"
+// Note: from logback 1.1.5, threads do not inherit the MDC anymore
 
 //sbt-assembly
 
