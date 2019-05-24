@@ -23,10 +23,10 @@ class TestDimensions extends FunSuite {
   val all_mcde_stats:List[Stats] = List(KSP(), MWP(), MWPi(), MWPr(), MWPs(), MWPu())
 
 
-  val all_indecies = List(new AdjustedRankIndex(arr), new CorrectedRankIndex(arr),
+  val all_indices = List(new AdjustedRankIndex(arr), new CorrectedRankIndex(arr),
     new NonIndex(arr), new RankIndex(arr))
 
-  val all_bivar_indecies = List(new AdjustedRankIndex(bivar_arr), new CorrectedRankIndex(bivar_arr),
+  val all_bivar_indices = List(new AdjustedRankIndex(bivar_arr), new CorrectedRankIndex(bivar_arr),
     new NonIndex(bivar_arr), new RankIndex(bivar_arr))
 
   val all_gens = List(
@@ -106,7 +106,7 @@ class TestDimensions extends FunSuite {
   // To be sure we may be testing twice the same stuff
 
   test("Checking if val index is col oriented for all Indexstructures"){
-    which_row_orient_index(all_indecies).map(x => assert(x))
+    which_row_orient_index(all_indices).map(x => assert(x))
   }
 
   test("Checking if no of rows in saved data by saveSample != dims"){
