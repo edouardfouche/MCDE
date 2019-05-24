@@ -20,11 +20,11 @@
   */
 
 import io.github.edouardfouche.preprocess.Preprocess
-import io.github.edouardfouche.mcde.{KS, McdeStats}
+import io.github.edouardfouche.mcde.{KSP, McdeStats}
 import org.scalatest.FunSuite
 
 class TestKolmogorovSmirnov extends FunSuite with TestData {
-  val test: McdeStats = KS(1000, 0.1)
+  val test: McdeStats = KSP(1000, 0.1)
 
   test("Computing Preprocessing index structure") {
     val data = Preprocess.openCSV(getClass.getResource("/data/Independent-2-0.0.csv").getPath)
@@ -77,19 +77,19 @@ class TestKolmogorovSmirnov extends FunSuite with TestData {
     assert(!res.isEmpty)
   }
 
-  test("Check that KS values are always between 0 and 1, alpha=0.1") {
-    val preprocessed = KS(1, 0.1).preprocess(lowcontrast_2D)
-    val res = for {x <- 0 until 10000} yield KS(1, 0.1).contrast(preprocessed, dimensions = Set(0, 1))
+  test("Check that KSP values are always between 0 and 1, alpha=0.1") {
+    val preprocessed = KSP(1, 0.1).preprocess(lowcontrast_2D)
+    val res = for {x <- 0 until 10000} yield KSP(1, 0.1).contrast(preprocessed, dimensions = Set(0, 1))
     assert(!res.exists(x => x < 0 | (x-1 > 0.001)))
   }
-  test("Check that KS values are always between 0 and 1, alpha=0.5") {
-    val preprocessed = KS(1, 0.1).preprocess(lowcontrast_2D)
-    val res = for {x <- 0 until 10000} yield KS(1, 0.5).contrast(preprocessed, dimensions = Set(0, 1))
+  test("Check that KSP values are always between 0 and 1, alpha=0.5") {
+    val preprocessed = KSP(1, 0.1).preprocess(lowcontrast_2D)
+    val res = for {x <- 0 until 10000} yield KSP(1, 0.5).contrast(preprocessed, dimensions = Set(0, 1))
     assert(!res.exists(x => x < 0 | (x-1 > 0.001)))
   }
-  test("Check that KS values are always between 0 and 1, alpha=0.9") {
-    val preprocessed = KS(1, 0.1).preprocess(lowcontrast_2D)
-    val res = for {x <- 0 until 10000} yield KS(1, 0.9).contrast(preprocessed, dimensions = Set(0, 1))
+  test("Check that KSP values are always between 0 and 1, alpha=0.9") {
+    val preprocessed = KSP(1, 0.1).preprocess(lowcontrast_2D)
+    val res = for {x <- 0 until 10000} yield KSP(1, 0.9).contrast(preprocessed, dimensions = Set(0, 1))
     assert(!res.exists(x => x < 0 | (x-1 > 0.001)))
   }
 }

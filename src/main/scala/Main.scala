@@ -19,20 +19,11 @@ import io.github.edouardfouche.mcde.StatsFactory
 import io.github.edouardfouche.utils.StopWatch
 import com.typesafe.scalalogging.LazyLogging
 
+
 /**
   * Created by fouchee on 01.06.17.
   */
 
-// example usage: sbt "run HiCS src/test/resources/iris.csv"
-// or sbt package and then
-// scala target/scala-2.11/subspacesearch_2.11-1.0.jar GMD src/test/resources/iris.csv
-// or sbt assembly and then
-// java -jar target/scala-2.11/SubspaceSearch-assembly-1.0.jar GMD src/test/resources/iris.csv
-// A real example: scala target/scala-2.11/subspacesearch_2.11-1.0.jar GMD /home/fouchee/git/SubspaceSearch/src/test/resources/11-12_25-26_37-38-39_55-56-57_40-41-42-43_46-47-48-49_30-31-32-33-34_73-74-75-76-77_data.txt
-
-// Experiment1
-// java -jar /home/fouchee/git/SubspaceSearch/target/scala-2.11/SubspaceSearch-assembly-1.0.jar com.edouardfouche.experiments.KS_MWB_extern
-// scala /home/fouchee/git/SubspaceSearch/target/scala-2.11/subspacesearch_2.11-1.0.jar com.edouardfouche.experiments.KS_MWB
 
 // this is a nice table: http://www.normaltable.com/
 object Main extends LazyLogging {
@@ -43,7 +34,7 @@ object Main extends LazyLogging {
     info("Working directory: " + System.getProperty("user.dir"))
     info("Raw parameters given: " + args.map(s => "\"" + s + "\"").mkString("[", ", ", "]"))
 
-    val MCDE_Stats = Vector("mwp")
+    val MCDE_Stats = Vector("mwp", "mwpi", "mwpr", "mwps", "mwpu", "ksp")
 
     require(args.length > 0, "No arguments given. Please see README.md")
     //StopWatch.start
@@ -64,17 +55,17 @@ object Main extends LazyLogging {
       StopWatch.measureTime(Preprocess.open(args(pathindex), header = 1, separator = ",", excludeIndex = false, dropClass = true))
     }
 
+    if((aindex != 0 & (aindex != args.length)) & !(MCDE_Stats contains args(aindex))) throw new Error("Approch not found for -a, possible choices are MWP, KSP, MWPi, MWPr, MWPs, MWPu")
+
     val plevel = if (pindex == 0 | (pindex == args.length)) {
       warn("Parallelism level not specified, running on single core.")
       0
     } else {
       val p = args(pindex).toInt
-      if((args(tindex).toLowerCase == "estimatedependency") &  !(MCDE_Stats contains args(aindex).toLowerCase)) {
-        warn("Parallelism is not supported for this approach.")
-      } else {
-        if (p == 1) warn("Running with default parallelism level.")
-        else warn(s"Running with parallelism level: $p")
-      }
+
+      if (p == 1) warn("Running with default parallelism level.")
+      else warn(s"Running with parallelism level: $p")
+
       p
     }
 
@@ -89,7 +80,7 @@ object Main extends LazyLogging {
         args(mindex).toInt
       }
 
-      StatsFactory.getTest("MWP", M, 0.5, 0.5, false, plevel)
+      StatsFactory.getTest("MWP", M, 0.5, 0.5, plevel)
     } else {
 
       val mindex = (args indexWhere (_ == "-m")) + 1
@@ -99,12 +90,9 @@ object Main extends LazyLogging {
         }
         50
       } else {
-        if(!(MCDE_Stats contains args(aindex).toLowerCase)) {
-          warn("Not an MCDE approach, the argument -m is ignored.")
-        }
         args(mindex).toInt
       }
-      StatsFactory.getTest(args(aindex), M, 0.5, 0.5, false, plevel)
+      StatsFactory.getTest(args(aindex), M, 0.5, 0.5, plevel)
     }
 
     val opening_CPUtime =  opening._1
@@ -117,11 +105,8 @@ object Main extends LazyLogging {
     val preprocessed_data = preprocessing._3
 
     val result = if (args(tindex).toLowerCase == "estimatedependency") {
-      if(MCDE_Stats contains args(aindex).toLowerCase) {
-        info(s"Usage: -t EstimateDependency -f <file> -a <approach> -m <M> -d <dimensions> -p <plevel>")
-      } else {
-        info(s"Usage: -t EstimateDependency -f <file> -a <approach> -d <dimensions>")
-      }
+
+      info(s"Usage: -t EstimateDependency -f <file> -a <approach> -m <M> -d <dimensions> -p <plevel>")
 
       val dimensions = if(dindex == 0 | (dindex == args.length)) {
         warn("Dimensions not specified, computing the contrast on the full space of the input file.")
@@ -133,11 +118,8 @@ object Main extends LazyLogging {
       startJob(approach.contrast(preprocessed_data, dimensions))
     } else {
       if (args(tindex).toLowerCase == "estimatedependencymatrix") {
-        if(MCDE_Stats contains args(aindex).toLowerCase) {
-          info(s"Usage: -t EstimateDependencyMatrix -f <file> -a <approach> -m <M> -p <plevel>")
-        } else {
-          info(s"Usage: -t EstimateDependencyMatrix -f <file> -a <approach> -p <plevel>")
-        }
+        info(s"Usage: -t EstimateDependencyMatrix -f <file> -a <approach> -m <M> -p <plevel>")
+
         startJob(approach.contrastMatrix(preprocessed_data))
       } else {
         throw new Error(s"Unknown argument -t ${args(tindex)}, possible values are = ['EstimateDependency', 'EstimateDependencyMatrix']. Please see README.md.")
@@ -146,11 +128,7 @@ object Main extends LazyLogging {
     println(s"Data Loading time: \t ${opening_CPUtime} $unit (cpu), ${opening_Walltime} $unit (wall)")
     println(s"Preprocessing time: \t ${preprocessing_CPUtime} $unit (cpu), ${preprocessing_Walltime} $unit (wall)")
     println(s"Computation time: \t ${result._1} $unit (cpu), ${result._2} $unit (wall)")
-    //val (cpu, wall) = StopWatch.stop(unit)
-    //println(s"Total elapsed time: \t $cpu $unit (cpu), $wall $unit (wall)")
     System.exit(0)
-
-
 
   }
 

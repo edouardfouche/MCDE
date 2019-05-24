@@ -24,7 +24,7 @@ import org.scalatest.FunSuite
   */
 class TestParallelMatrix extends FunSuite with TestData {
 
-  val data = MWP().preprocess(Independent(3, 0.0).generate(1000).transpose)
+  val data = MWP().preprocess(Independent(3, 0.0, "gaussian", 0).generate(1000).transpose)
 
   test(s"CMatrix+MWP with parallelism level = 0") {
     val test = MWP(50, parallelize = 0)

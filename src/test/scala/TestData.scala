@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import io.github.edouardfouche.preprocess.{DataRef, Preprocess}
-import io.github.edouardfouche.mcde.{KS, MWP}
+import io.github.edouardfouche.mcde.{KSP, MWP}
 
 /**
   * Created by fouchee on 12.07.17.
