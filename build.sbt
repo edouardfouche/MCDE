@@ -44,6 +44,8 @@ libraryDependencies += "io.github.edouardfouche" %% "datagenerator" % "0.1.0"
 
 resolvers += "Java.net Maven2 Repository" at "http://download.java.net/maven/2/"
 
+libraryDependencies += "org.jzy3d" % "jzy3d-api" % "1.0.0" //from "http://maven.jzy3d.org/releases/"
+resolvers += "Jzy3d Maven Release Repository" at "http://maven.jzy3d.org/releases"
  
 libraryDependencies ++= Seq(
   "org.scalanlp" %% "breeze" % "0.13.1",

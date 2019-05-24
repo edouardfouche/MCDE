@@ -16,10 +16,10 @@ This repository is released under the AGPLv3 license. Please see the [LICENSE.md
 There are two possibilities on how use our framework, either by using it in your Scala code or by accessing MCDE through 
 a JAR from the command line. 
 
-### Using MCDE in your code 
+### Importing MCDE
 
 #### Get It 
-Include ```` XXX```` to your sbt file to get the framework from maven. 
+Include ```` XXX```` (TODO) to your sbt file to get the framework from maven.
 
 #### Use It
 
