@@ -13,13 +13,13 @@ Our goal in this repository is to provide a deployable and consolidated version 
 This repository is released under the AGPLv3 license. Please see the [LICENSE.md](LICENSE.md) file. 
 
 ## Quick Start
-There are two possibilities on how use our framework, either by using it in your Scala code or by accessing MCDE through 
-a JAR from the command line. 
+
+You can either import MCDE in your own scala project or use our external API, from the command line.
 
 ### Importing MCDE
 
 #### Get It 
-Include ```` XXX```` (TODO) to your sbt file to get the framework from maven.
+Include ```` XXX```` to your sbt file to get the framework from maven. (TODO -> Publish to the central repository)
 
 #### Use It
 
@@ -27,15 +27,19 @@ We provide a detailed guide on how to use the MCDE framework in a Scala workshee
 [src/main/scala/io/github/edouardfouche/worksheets/user_guide.sc](src/main/scala/io/github/edouardfouche/worksheets/user_guide.sc)
 
 **Minimalistic Example**
-`````
+```
 import io.github.edouardfouche.mcde.MWP
 import io.github.edouardfouche.preprocess.Preprocess
 
+// Open a data set
 val data = Preprocess.open("path/to/file.csv", header = 1, separator = ",", excludeIndex = false, dropClass = true)
+// Instantiate a MWP instance with default parameters
 val mwp = MWP()
+// Compute the MWP score between a set of attributes (here the first and the second one)
 val score:Double = mwp.contrast(m = data, dimensions = Set(0,1))
+// Compute the MWP matrix on this data set
 val scoreMatrix:Array[Array[Double]] = mwp.contrastMatrix(m = data)
-`````
+```
 
 Please refer to the guide for more detailed information
 
@@ -61,14 +65,13 @@ sbt assembly
 
 This creates a jar in the folder `target/scala-2.12/` named `MCDE-<version>.jar`, which can be run from java (no 
 sbt/scala installation required).
-
 Once you have built the jar, you can run it as follows: 
 
 ```
 java -jar target/scala-2.12/MCDE-1.0.jar <arguments>
 ```
 
-#### Command line arguments for MCDE/MWP
+#### External API for MCDE/MWP (via command line)
 
 The application accepts various arguments. The first two (`-t <task>` and `-f <file>`) are mandatory. Arguments are not case sensitive and can be given in any order. 
 
@@ -102,7 +105,7 @@ If not specified, the dependency is estimated on the full space.
 
 #### Examples
 
-We provide a sample of the data used for the experiments in `src/test/resources/data` for testing purposes.
+We provide a sample of the data used for the experiments in `src/test/resources/data` for testing.
 
 #### Running MCDE/MWP
 
@@ -209,7 +212,7 @@ Computation time:    51.002643 ms (cpu), 1123.108306 ms (wall)
 
 ## Reproducing the experiments
 
-Please see this [repository](https://github.com/edouardfouche/MCDE-experiments)
+Please see this [repository](https://github.com/edouardfouche/MCDE-experiments).
 
 ## Contributing
 
