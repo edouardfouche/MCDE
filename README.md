@@ -41,7 +41,7 @@ val score:Double = mwp.contrast(m = data, dimensions = Set(0,1))
 val scoreMatrix:Array[Array[Double]] = mwp.contrastMatrix(m = data)
 ```
 
-Please refer to the guide for more detailed information
+Please refer to the guide for more detailed information.
 
 ### Accessing MCDE from the command line 
 
