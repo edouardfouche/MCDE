@@ -3,7 +3,6 @@
   <component name="ScalaCompilerConfiguration">
     <profile name="sbt 1" modules="mcde_4242" />
     <profile name="sbt 2" modules="MCDE">
-      <option name="deprecationWarnings" value="true" />
       <option name="featureWarnings" value="true" />
     </profile>
   </component>

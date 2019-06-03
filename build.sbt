@@ -1,39 +1,12 @@
-name := "MCDE"
+import sbt.url
 
+name := "MCDE"
 organization:= "io.github.edouardfouche"
 
-organizationHomepage := Some(url("https://github.com/edouardfouche"))
-
 version := "1.0-SNAPSHOT"
+
 scalaVersion := "2.12.8"
-
-scalacOptions += "-deprecation"
-
-useGpg := true 
-pgpReadOnly := false
-
-scmInfo := Some(ScmInfo(url("https://github.com/edouardfouche/MCDE"), "scm:git@github.com:edouardfouche/MCDE.git")) // ADJUST
-developers := List(
-  Developer(
-    id    = "edouardfouche", 
-    name  = "Edouard Fouché",
-    email = "edouard.fouche@kit.edu",
-    url   = url("https://github.com/edouardfouche")
-  )
-)
-
-description := "Monte Carlo Dependency Estimation (MCDE)"
-licenses := Seq("AGPLv3" -> url("https://www.gnu.org/licenses/agpl-3.0.en.html")) 
-homepage := Some(url("https://github.com/edouardfouche/MCDE")) 
-publishMavenStyle := true
-pomIncludeRepository := { _ => false }
-publishArtifact in Test := false
-
-publishTo := {
-  val nexus = "https://oss.sonatype.org/"
-  if (isSnapshot.value) Some("snapshots" at nexus + "content/repositories/snapshots")
-  else Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
+//scalacOptions += "-deprecation"
 
 fork in run := true
 scalacOptions += "-feature"
@@ -56,8 +29,6 @@ libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2"
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.1.2"
 // Note: from logback 1.1.5, threads do not inherit the MDC anymore
 
-
-
 assemblyJarName in assembly := s"${name.value}-${version.value}.jar"
 test in assembly := {}
 
@@ -71,4 +42,40 @@ assemblyMergeStrategy in assembly ~= { old =>
 
 javacOptions ++= Seq("-encoding", "UTF-8")
 
+////// Sonatype
 
+useGpg := true
+pgpReadOnly := false
+
+ThisBuild / organization := "io.github.edouardfouche.MCDE"
+ThisBuild / organizationName := "edouardfouche"
+ThisBuild / organizationHomepage := Some(url("https://github.com/edouardfouche"))
+
+ThisBuild /scmInfo := Some(ScmInfo(url("https://github.com/edouardfouche/MCDE"), "scm:git@github.com:edouardfouche/MCDE.git"))
+
+ThisBuild / developers := List(
+  Developer(
+    id    = "edouardfouche",
+    name  = "Edouard Fouché",
+    email = "edouard.fouche@kit.edu",
+    url   = url("https://github.com/edouardfouche")
+  )
+)
+
+ThisBuild / description := "Monte Carlo Dependency Estimation (MCDE)"
+ThisBuild / licenses := Seq("AGPLv3" -> url("https://www.gnu.org/licenses/agpl-3.0.en.html"))
+ThisBuild / homepage := Some(url("https://github.com/edouardfouche/MCDE"))
+
+ThisBuild /pomIncludeRepository := { _ => false }
+
+ThisBuild / publishTo := {
+  val nexus = "https://oss.sonatype.org/"
+  if (isSnapshot.value) Some("snapshots" at nexus + "content/repositories/snapshots")
+  else Some("releases" at nexus + "service/local/staging/deploy/maven2")
+}
+ThisBuild /publishMavenStyle := true
+
+publishConfiguration := publishConfiguration.value.withOverwrite(true)
+publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true)
+
+//publishArtifact in Test := false

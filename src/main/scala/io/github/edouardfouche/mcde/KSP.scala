@@ -25,8 +25,8 @@ import scala.math.{E, pow, sqrt}
   * This is a re-implementation  of the contrast measure as proposed in HiCS
   * Use the Kolmogorov-Smirnov test as basis. To the best of my knowledge, the most efficient existing implementation.
   *
-  * @alpha Expected share of instances in slice (independent dimensions).
-  * @beta Expected share of instances in marginal restriction (reference dimension).
+  * @param alpha Expected share of instances in slice (independent dimensions).
+  * @param beta Expected share of instances in marginal restriction (reference dimension).
   *       Added with respect to the original paper to loose the dependence of beta from alpha.
   *
   */
@@ -74,12 +74,13 @@ case class KSP(M: Int = 50, alpha: Double = 0.5, beta: Double = 1.0, var paralle
     }
 
     /**
+      * Convert the D value into a p-value
+      *
       * @param D  D value from KSP test
       * @param n1 n Datapoints in first sample
       * @param n2 n Datapoints in second sample
       * @return p-value of two-sided two-sample KSP
       */
-
     def get_p_from_D(D: Double, n1: Long, n2: Long): Double = {
       lazy val z = D * sqrt(n1 * n2 / (n1 + n2))
 

@@ -25,8 +25,8 @@ import scala.annotation.tailrec
   * Compute the average accross the p-values of all the slices, but this time do the tie correction
   * The tie correction is precomputed as a Map, which gives for each distinct rank a corresponding correction
   *
-  * @alpha Expected share of instances in slice (independent dimensions).
-  * @beta  Expected share of instances in marginal restriction (reference dimension).
+  * @param alpha Expected share of instances in slice (independent dimensions).
+  * @param beta  Expected share of instances in marginal restriction (reference dimension).
   *        Added with respect to the original paper to loose the dependence of beta from alpha.
   */
 

@@ -24,8 +24,8 @@ import scala.collection.parallel.ForkJoinTaskSupport
 
 /**
   * Same as MWP but with caring for ties also in the slicing process
-  * @alpha Expected share of instances in slice (independent dimensions).
-  * @beta  Expected share of instances in marginal restriction (reference dimension).
+  * @param alpha Expected share of instances in slice (independent dimensions).
+  * @param beta  Expected share of instances in marginal restriction (reference dimension).
   *        Added with respect to the original paper to loose the dependence of beta from alpha.
   */
 
