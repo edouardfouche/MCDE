@@ -18,7 +18,7 @@ You can either import MCDE in your own scala project or use our external API, fr
 
 ### Importing MCDE
 
-The data generator is available on the central repository (scala 2.11 and 2.12).
+MCDE is available on the central repository (scala 2.11 and 2.12).
 
 You can add it as a dependency in your own project, for example, via sbt:
 
