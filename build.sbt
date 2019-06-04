@@ -1,11 +1,10 @@
-import sbt.url
-
 name := "MCDE"
 organization:= "io.github.edouardfouche"
 
-version := "1.0-SNAPSHOT"
+version := "0.1.0"
 
 scalaVersion := "2.12.8"
+crossScalaVersions := Seq("2.11.8", "2.12.8") // prefix with "+" to perform for both .e.g, "+ compile"
 //scalacOptions += "-deprecation"
 
 fork in run := true
@@ -51,7 +50,12 @@ ThisBuild / organization := "io.github.edouardfouche.MCDE"
 ThisBuild / organizationName := "edouardfouche"
 ThisBuild / organizationHomepage := Some(url("https://github.com/edouardfouche"))
 
-ThisBuild /scmInfo := Some(ScmInfo(url("https://github.com/edouardfouche/MCDE"), "scm:git@github.com:edouardfouche/MCDE.git"))
+ThisBuild / scmInfo := Some(
+  ScmInfo(
+    url("https://github.com/edouardfouche/MCDE"),
+    "scm:git@github.com:edouardfouche/MCDE.git"
+  )
+)
 
 ThisBuild / developers := List(
   Developer(
@@ -67,7 +71,6 @@ ThisBuild / licenses := Seq("AGPLv3" -> url("https://www.gnu.org/licenses/agpl-3
 ThisBuild / homepage := Some(url("https://github.com/edouardfouche/MCDE"))
 
 ThisBuild /pomIncludeRepository := { _ => false }
-
 ThisBuild / publishTo := {
   val nexus = "https://oss.sonatype.org/"
   if (isSnapshot.value) Some("snapshots" at nexus + "content/repositories/snapshots")
