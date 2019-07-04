@@ -78,10 +78,10 @@ case class MWP(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5,  calibrate:
         val corrMax = ref(cutEnd-1)._3
         val corrMin = if(cutStart == 0) 0 else ref(cutStart-1)._3
         val correction = (corrMax - corrMin) / (cutLength * (cutLength - 1))
-        val std = math.sqrt((n1 * n2 / 12.0) * (cutLength + 1 - correction)) // handle ties https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test
+        val std = math.sqrt((n1.toDouble * n2.toDouble / 12.0) * (cutLength + 1 - correction)) // handle ties https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test
         if(std == 0) 0 // This happens in the extreme case that the cut consists in only one unique value
         else {
-          val mean = (n1 * n2) / 2.0
+          val mean = (n1.toDouble * n2.toDouble) / 2.0
           val Z = math.abs((U1 - mean) / std)
           val res = HalfGaussian.cdf(Z)
           if (res.isNaN) {
