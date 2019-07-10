@@ -77,9 +77,10 @@ case class MWP(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, var paralle
         if(n1 >= 3037000499L && n2 >= 3037000499L) throw new Exception("Long type overflowed. Dataset has to many dataobjects. Please subsample and try again with smaller dataset.")
         val U1 = r1 - (n1 * (n1 - 1)) / 2 // -1 because our ranking starts from 0
         val corrMax = ref(cutEnd-1)._3
-        val corrMin = if(cutStart == 0) 0 else ref(cutStart-1)._3
-        val correction = (corrMax - corrMin) / (cutLength * (cutLength - 1))
-        val std = math.sqrt((n1.toDouble * n2.toDouble / 12.0) * (cutLength + 1 - correction)) // handle ties https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test
+        val corrMin = if(cutStart == 0) 0.0 else ref(cutStart-1)._3
+        val correction = (corrMax - corrMin) / (cutLength.toDouble * (cutLength.toDouble - 1.0))
+        val std = math.sqrt((n1.toDouble * n2.toDouble / 12.0) * (cutLength.toDouble + 1.0 - correction)) // handle ties https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test
+        
         if(std == 0) 0 // This happens in the extreme case that the cut consists in only one unique value
         else {
           val mean = (n1.toDouble * n2.toDouble) / 2.0
