@@ -121,6 +121,9 @@ target/
 src/main/scala/com/edouardfouche/worksheets_playground/
 src/main/scala/com/edouardfouche/worksheets_playground/*
 
+# Exclude Bioliq data if available
+src/test/resources/Bioliq_S-MAB
+
 # Exclude the experiment's results, as they are heavy
 experiments/*
 !experiments/.keep
