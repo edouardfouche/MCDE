@@ -74,7 +74,7 @@ case class MWP(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, var paralle
       }
       else {
         val n2:Long = cutLength - n1
-        if(n1 >= 3037000499L && n2 >= 3037000499L) throw new Exception("Long type overflowed. Dataset has to many dataobjects. Please subsample and try again with smaller dataset.")
+        if (n1 >= 3037000499L && n2 >= 3037000499L) throw new Exception("Long type overflowed. Too many objects: Please subsample and try again with smaller data set.")
         val U1 = r1 - (n1 * (n1 - 1)) / 2 // -1 because our ranking starts from 0
         val corrMax = ref(cutEnd-1)._3
         val corrMin = if(cutStart == 0) 0.0 else ref(cutStart-1)._3

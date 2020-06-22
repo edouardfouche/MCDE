@@ -7,7 +7,8 @@ This repository contains the most recent implementation of MCDE/MWP, originally 
 
 -  Edouard Fouché & Klemens Böhm. 2019. Monte Carlo Dependency Estimation. In 31st International Conference on Scientific and Statistical Database Management (SSDBM ’19), July 23–25, 2019, Santa Cruz, CA, USA. ACM, New York, NY, USA, 12 pages. https://doi.org/10.1145/3335783.3335795
 
-To reproduce the experiment from the paper, please visit this [repository](https://github.com/edouardfouche/MCDE-experiments).
+To reproduce the experiment from the paper, please visit this [repository](https://github.com/edouardfouche/MCDE-experiments). 
+See also the experiments from our [follow-up study](https://github.com/edouardfouche/MCDE-EXTENDED). 
 Our goal in this repository is to provide a deployable and consolidated version of the work described therein.
 
 This repository is released under the AGPLv3 license. Please see the [LICENSE.md](LICENSE.md) file. 
