@@ -75,7 +75,8 @@ case class MWPr(M: Int = 50, alpha: Double = 0.5, beta: Double = 0.5, var parall
       }
       else {
         val n2:Long = cutLength - n1
-        if(n1 >= 3037000499L && n2 >= 3037000499L) throw new Exception("Long type overflowed. Dataset has to many dataobjects. Please subsample and try again with smaller dataset.")
+        val two_times_sqrt_max_long = 6074000999L
+        if(n1 + n2 > two_times_sqrt_max_long) throw new Exception("Long type overflowed. Dataset has to many dataobjects. Please subsample and try again with smaller dataset.")
         val U1 = r1 - (n1 * (n1 - 1)) / 2 // -1 because our ranking starts from 0
         val std = math.sqrt((n1 * n2 * (cutLength + 1.0)) / 12.0) // without correction
         // note: n1 + n2 = n1 + cutLength - n1 = cutLength
